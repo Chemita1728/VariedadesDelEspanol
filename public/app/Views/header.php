@@ -62,10 +62,11 @@
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <!--<h6 class="collapse-header">Ajustes de Usuarios:</h6>-->
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/activos">Usuarios Activos</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/noActivos">Usuarios Desactivados</a>
                                 <?php if (session('role') == 2) { ?>
                                     <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/misColaboradores">Mis Colaboradores</a>
                                 <?php } ?>
-                                <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios">Ver Todos</a>
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/nuevoUsuario">Registrar Usuario</a>
                             </div>
                         </div>

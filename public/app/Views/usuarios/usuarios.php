@@ -5,9 +5,9 @@
 		
 		<h1 class="h3 mb-1 text-gray-800"><?php echo $titulo; ?></h1>
 		
-		<form class="mr-4 navbar-search">
+		<form method="POST" action="<?php echo base_url(); ?>/usuarios/buscar" class="mr-4 navbar-search">
 			<div class="input-group">
-				<input method="POST" type="text" name="info" id="info" action="<?php echo base_url(); ?>/usuarios/buscar" class="form-control bg-light small" placeholder="Buscar...">  
+				<input type="text" onchange="<?php echo base_url(); ?>/usuarios/buscar" name="info" id="info" class="form-control bg-light small" placeholder="Buscar...">  
 				<div class="input-group-append">
 					<button type="submit" class="btn btn-primary" type="button">
 						<i class="fas fa-search fa-sm"></i>
@@ -66,7 +66,12 @@
 							<td><?php echo $dato['birthPlace'] ?></td>
 							<td><?php echo $dato['respMail'] ?></td>
 							<td><a href="<?php echo base_url(); ?>/usuarios/editar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
-							<td><a href="<?php echo base_url(); ?>/usuarios/eliminar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>
+							<?php if ( $tipo['funcion'] == 0 ) { ?>
+								<td><a href="<?php echo base_url(); ?>/usuarios/desactivar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas <?php echo $tipo['flecha']; ?>"></i></a></td>
+							<?php } ?> 
+							<?php if ($tipo['funcion'] == 1) { ?>
+								<td><a href="<?php echo base_url(); ?>/usuarios/activar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas <?php echo $tipo['flecha']; ?>"></i></a></td>
+							<?php } ?>  
 						</tr>
 					<?php } ?>
 				</tbody>

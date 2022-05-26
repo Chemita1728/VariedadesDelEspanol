@@ -2,7 +2,20 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+		
 		<h1 class="h3 mb-0 text-gray-800"><?php echo $titulo; ?></h1>
+
+		<form method="POST" action="<?php echo base_url(); ?>/usuarios/buscarColaboradores" class="mr-4 navbar-search">
+			<div class="input-group">
+				<input type="text" onchange="<?php echo base_url(); ?>/usuarios/buscar" name="info" id="info" class="form-control bg-light small" placeholder="Buscar...">  
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-primary" type="button">
+						<i class="fas fa-search fa-sm"></i>
+					</button>
+				</div>
+			</div>
+		</form>
+
     </div>
     
     <!-- Content Row -->

@@ -14,25 +14,61 @@ class Usuarios extends BaseController
         $this->usuarios = new UsuariosModel();
     }
 
-    //PAGINA DE USUARIOS
-    public function index($activo = 1)
+    public function index()
+    {
+        echo view('header');
+        echo view('inicio');
+        echo view('footer');
+    }
+    
+    //PAGINA DE USUARIOS ACTIVOS
+    public function activos()
     {
         $rolRegistrado = session('role');
         $mailRegistrado = session('email');
         
         if( $rolRegistrado == 3 ){
-            $usuarios = $this->usuarios->where('activo',$activo)
+            $usuarios = $this->usuarios->where('activo', 1)
                                         ->where('email <>', $mailRegistrado)
                                         ->orderBy("role", "desc", "apellidos", "asc")
                                         ->findAll();   
         } else {
-            $usuarios = $this->usuarios->where('activo',$activo)
+            $usuarios = $this->usuarios->where('activo', 1)
                                         ->where('email <>', $mailRegistrado)
                                         ->where('role <>', 3)
-                                        ->orderBy("role", "desc", "apellidos", "asc")
+                                        ->orderBy("role", "asc", "apellidos", "asc")
                                         ->findAll();
         }
-        $data = ['titulo' => 'Usuarios', 'datos' => $usuarios];
+
+        $tipo = (['funcion' => 0, 'flecha' => 'fa-arrow-down']);
+        $data = ['titulo' => 'Usuarios', 'datos' => $usuarios, 'tipo' => $tipo];
+
+        echo view('header');
+        echo view('usuarios/usuarios', $data);
+        echo view('footer');
+    }
+
+    //PAGINA DE USUARIOS NO ACTIVOS
+    public function noActivos()
+    {
+        $rolRegistrado = session('role');
+        $mailRegistrado = session('email');
+        
+        if( $rolRegistrado == 3 ){
+            $usuarios = $this->usuarios->where('activo', 0)
+                                        ->where('email <>', $mailRegistrado)
+                                        ->orderBy("role", "desc", "apellidos", "asc")
+                                        ->findAll();   
+        } else {
+            $usuarios = $this->usuarios->where('activo', 0)
+                                        ->where('email <>', $mailRegistrado)
+                                        ->where('role <>', 3)
+                                        ->orderBy("role", "asc", "apellidos", "asc")
+                                        ->findAll();
+        }
+
+        $tipo = (['funcion' => 1, 'flecha' => 'fa-arrow-up']);
+        $data = ['titulo' => 'Usuarios', 'datos' => $usuarios, 'tipo' => $tipo];
 
         echo view('header');
         echo view('usuarios/usuarios', $data);
@@ -46,20 +82,21 @@ class Usuarios extends BaseController
         $busqueda = $this->request->getPost('info');
 
         if( $rolRegistrado == 3 ){
-            $usuarios = $this->usuarios->where('activo',$activo)
+            $usuarios = $this->usuarios->where('activo', 1)
                                         ->where('email <>', $mailRegistrado)
                                         ->like('apellidos', $busqueda)
                                         ->orderBy("role", "desc", "apellidos", "asc")
                                         ->findAll();
         } else {
-            $usuarios = $this->usuarios->where('activo',$activo)
+            $usuarios = $this->usuarios->where('activo', 1)
                                         ->where('email <>', $mailRegistrado)
                                         ->where('role <>', 3)
-                                        ->like('apellidos', 'lo')
-                                        ->orderBy("role", "desc", "apellidos", "asc")
+                                        ->like('apellidos', $busqueda)
+                                        ->orderBy("role", "asc", "apellidos", "asc")
                                         ->findAll();
         }
-        $data = ['titulo' => 'Usuarios pene', 'datos' => $usuarios];
+        $titulo = 'Usuarios que contienen "' . $busqueda .'"';
+        $data = ['titulo' => $titulo, 'datos' => $usuarios];
 
         echo view('header');
         echo view('usuarios/usuarios', $data);
@@ -71,13 +108,30 @@ class Usuarios extends BaseController
     //PAGINA DE USUARIOS QUE PERTENECEN A UN EXPERTO
     public function misColaboradores()
     {
-
         $responsable = session('email');
         $usuarios = $this->usuarios->where('respMail',$responsable)
                                     ->orderBy("apellidos", "asc")
                                     ->findAll();
 
-        $data = ['titulo' => 'Usuarios', 'datos' => $usuarios];
+        $data = ['titulo' => 'Mis colaboradores', 'datos' => $usuarios];
+
+        echo view('header');
+        echo view('usuarios/misColaboradores', $data);
+        echo view('footer');
+    }
+
+    public function buscarColaboradores()
+    {
+        $responsable = session('email');
+        $busqueda = $this->request->getPost('info');
+
+        $usuarios = $this->usuarios->where('respMail',$responsable)
+                                    ->like('apellidos', $busqueda)
+                                    ->orderBy("apellidos", "asc")
+                                    ->findAll();
+
+        $titulo = 'Mis colaboradores que contienen "' . $busqueda .'"';
+        $data = ['titulo' => $titulo, 'datos' => $usuarios];
 
         echo view('header');
         echo view('usuarios/misColaboradores', $data);
@@ -158,7 +212,7 @@ class Usuarios extends BaseController
                                     'university' => $this->request->getPost('university'),
                                     'birthPlace' => $this->request->getPost('birthPlace'),
                                     'password' => $password,
-                                    'active' => 1,
+                                    'activo' => 1,
                                     'tempId' => 0 ]);        
         return redirect()->to(base_url());
     }
@@ -265,10 +319,15 @@ class Usuarios extends BaseController
         return redirect()->to(base_url().'/usuarios');
     }
 
-    public function eliminar($id)
+    public function desactivar($id)
     {
         $this->usuarios->update( $id, ['activo' => 0]);
-        return redirect()->to(base_url().'/usuarios');
+        return redirect()->to(base_url().'/usuarios/activos');
+    }
+    public function activar($id)
+    {
+        $this->usuarios->update( $id, ['activo' => 1]);
+        return redirect()->to(base_url().'/usuarios/noActivos');
     }
 
     public function login()
