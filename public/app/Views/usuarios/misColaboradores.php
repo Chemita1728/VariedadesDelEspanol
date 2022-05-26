@@ -40,7 +40,7 @@
 							<td><?php echo $dato['university'] ?></td>
 							<td><?php echo $dato['birthPlace'] ?></td>
 							<td><a href="<?php echo base_url(); ?>/usuarios/editar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
-							<td><a href="<?php echo base_url(); ?>/usuarios/eliminar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-down-arrow"></i></a></td>
+							<td><a href="<?php echo base_url(); ?>/usuarios/eliminar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>
 						</tr>
 					<?php } ?>
 				</tbody>

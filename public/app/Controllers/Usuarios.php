@@ -18,25 +18,54 @@ class Usuarios extends BaseController
     public function index($activo = 1)
     {
         $rolRegistrado = session('role');
+        $mailRegistrado = session('email');
         
         if( $rolRegistrado == 3 ){
             $usuarios = $this->usuarios->where('activo',$activo)
+                                        ->where('email <>', $mailRegistrado)
                                         ->orderBy("role", "desc", "apellidos", "asc")
-                                        ->findAll();
-            $data = ['titulo' => 'Usuarios', 'datos' => $usuarios];
+                                        ->findAll();   
         } else {
             $usuarios = $this->usuarios->where('activo',$activo)
+                                        ->where('email <>', $mailRegistrado)
                                         ->where('role <>', 3)
                                         ->orderBy("role", "desc", "apellidos", "asc")
                                         ->findAll();
-            $data = ['titulo' => 'Usuarios', 'datos' => $usuarios];
         }
-        
+        $data = ['titulo' => 'Usuarios', 'datos' => $usuarios];
 
         echo view('header');
         echo view('usuarios/usuarios', $data);
         echo view('footer');
     }
+
+    public function buscar()
+    {
+        $rolRegistrado = session('role');
+        $mailRegistrado = session('email');
+        $busqueda = $this->request->getPost('info');
+
+        if( $rolRegistrado == 3 ){
+            $usuarios = $this->usuarios->where('activo',$activo)
+                                        ->where('email <>', $mailRegistrado)
+                                        ->like('apellidos', $busqueda)
+                                        ->orderBy("role", "desc", "apellidos", "asc")
+                                        ->findAll();
+        } else {
+            $usuarios = $this->usuarios->where('activo',$activo)
+                                        ->where('email <>', $mailRegistrado)
+                                        ->where('role <>', 3)
+                                        ->like('apellidos', 'lo')
+                                        ->orderBy("role", "desc", "apellidos", "asc")
+                                        ->findAll();
+        }
+        $data = ['titulo' => 'Usuarios pene', 'datos' => $usuarios];
+
+        echo view('header');
+        echo view('usuarios/usuarios', $data);
+        echo view('footer');
+    }
+
     /////////////////////////////////////////////
 
     //PAGINA DE USUARIOS QUE PERTENECEN A UN EXPERTO
@@ -51,7 +80,7 @@ class Usuarios extends BaseController
         $data = ['titulo' => 'Usuarios', 'datos' => $usuarios];
 
         echo view('header');
-        echo view('usuarios/usuarios', $data);
+        echo view('usuarios/misColaboradores', $data);
         echo view('footer');
     }
     /////////////////////////////////////////////

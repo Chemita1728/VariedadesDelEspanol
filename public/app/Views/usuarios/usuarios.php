@@ -2,7 +2,19 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800"><?php echo $titulo; ?></h1>
+		
+		<h1 class="h3 mb-1 text-gray-800"><?php echo $titulo; ?></h1>
+		
+		<form class="mr-4 navbar-search">
+			<div class="input-group">
+				<input method="POST" type="text" name="info" id="info" action="<?php echo base_url(); ?>/usuarios/buscar" class="form-control bg-light small" placeholder="Buscar...">  
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-primary" type="button">
+						<i class="fas fa-search fa-sm"></i>
+					</button>
+				</div>
+			</div>
+		</form>
     </div>
 	<!-- Page Heading -->
     
@@ -24,7 +36,6 @@
 				return $valor[$numero -1];
 			}
 		?>
-
 		
 		<div class="table-responsive">
 			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -37,6 +48,7 @@
 						<th>Nivel de Español</th>
 						<th>Universidad</th>
 						<th>Lugar de Nacimiento</th>
+						<th>Responsable</th>
 						<th></th>
 						<th></th>
 					</tr>
@@ -52,8 +64,9 @@
 							<td><?php echo cambioNivelEsp($dato['spanishlvl']) ?></td>
 							<td><?php echo $dato['university'] ?></td>
 							<td><?php echo $dato['birthPlace'] ?></td>
+							<td><?php echo $dato['respMail'] ?></td>
 							<td><a href="<?php echo base_url(); ?>/usuarios/editar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
-							<td><a href="<?php echo base_url(); ?>/usuarios/eliminar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-down-arrow"></i></a></td>
+							<td><a href="<?php echo base_url(); ?>/usuarios/eliminar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>
 						</tr>
 					<?php } ?>
 				</tbody>
