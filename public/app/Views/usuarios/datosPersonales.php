@@ -4,6 +4,10 @@
 		<h1 class="h3 mb-0 text-gray-800"><?php echo $titulo; ?></h1>
     </div>
 	<!-- Page Heading -->
+
+	<?php if( session('msg') ): ?>
+		<p><?php echo session('msg'); ?><p>
+	<?php endif; ?>
     
     <form method="POST" action="<?php echo base_url(); ?>/usuarios/actualizar" autocomplere="off">
 

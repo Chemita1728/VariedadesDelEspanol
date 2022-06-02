@@ -5,9 +5,19 @@
 		
 		<h1 class="h3 mb-1 text-gray-800"><?php echo $titulo; ?></h1>
 		
-		<form method="POST" action="<?php echo base_url(); ?>/usuarios/buscar" class="mr-4 navbar-search">
+		<?php if ( $tipo['funcion'] == 0 ) { ?>
+			<form method="POST" action="<?php echo base_url(); ?>/usuarios/buscarActivo" class="mr-4 navbar-search">
+		<?php } ?> 
+		<?php if ( $tipo['funcion'] == 1 ) { ?>
+			<form method="POST" action="<?php echo base_url(); ?>/usuarios/buscarNoActivo" class="mr-4 navbar-search">
+		<?php } ?> 
 			<div class="input-group">
-				<input type="text" onchange="<?php echo base_url(); ?>/usuarios/buscar" name="info" id="info" class="form-control bg-light small" placeholder="Buscar...">  
+				<select class="form-control bg-light" id="donde" name="donde">
+					<option value="apellidos">Apellido</option>
+					<option value="nombre">Nombre</option>
+					<option value="email">Correo</option>
+				</select>
+				<input type="text" name="info" id="info" class="form-control bg-light" placeholder="Buscar...">  
 				<div class="input-group-append">
 					<button type="submit" class="btn btn-primary" type="button">
 						<i class="fas fa-search fa-sm"></i>
@@ -17,7 +27,11 @@
 		</form>
     </div>
 	<!-- Page Heading -->
-    
+
+	<?php if( session('msg') ): ?>
+		<p><?php echo session('msg'); ?><p>
+	<?php endif; ?>
+
 	<div>
 		<p>
 			<a href="<?php echo base_url(); ?>/usuarios/nuevoUsuario" class="btn btn-info">Nuevo Usuario</a>
@@ -65,8 +79,9 @@
 							<td><?php echo $dato['university'] ?></td>
 							<td><?php echo $dato['birthPlace'] ?></td>
 							<td><?php echo $dato['respMail'] ?></td>
+
 							<td><a href="<?php echo base_url(); ?>/usuarios/editar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
-							<?php if ( $tipo['funcion'] == 0 ) { ?>
+							<?php if ( $tipo['funcion'] == 0 && $dato['role'] != 3 ) { ?>
 								<td><a href="<?php echo base_url(); ?>/usuarios/desactivar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas <?php echo $tipo['flecha']; ?>"></i></a></td>
 							<?php } ?> 
 							<?php if ($tipo['funcion'] == 1) { ?>

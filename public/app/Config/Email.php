@@ -6,6 +6,8 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
+    // variedadesEsp@gmail.com
+    // variedadesadmin
     /**
      * @var string
      */
@@ -48,6 +50,7 @@ class Email extends BaseConfig
      * @var string
      */
     public $SMTPHost = 'smtp.mailtrap.io';
+    //public $SMTPHost = 'smtp.gmail.com';
 
     /**
      * SMTP Username
@@ -55,6 +58,7 @@ class Email extends BaseConfig
      * @var string
      */
     public $SMTPUser = '9b95fbe1c447b5';
+    //public $SMTPUser = 'variedadesEsp@gmail.com';
 
     /**
      * SMTP Password
@@ -62,6 +66,7 @@ class Email extends BaseConfig
      * @var string
      */
     public $SMTPPass = 'c3339fec54cc9d';
+    //public $SMTPPass = 'variedadesadmin';
 
     /**
      * SMTP Port
@@ -69,7 +74,8 @@ class Email extends BaseConfig
      * @var int
      */
     public $SMTPPort = 2525;
-
+    //public $SMTPPort = 465;
+    
     /**
      * SMTP Timeout (in seconds)
      *

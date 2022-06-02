@@ -7,6 +7,11 @@
 
 		<form method="POST" action="<?php echo base_url(); ?>/usuarios/buscarColaboradores" class="mr-4 navbar-search">
 			<div class="input-group">
+				<select class="form-control bg-light" id="donde" name="donde">
+					<option value="apellidos">Apellido</option>
+					<option value="nombre">Nombre</option>
+					<option value="email">Correo</option>
+				</select>
 				<input type="text" onchange="<?php echo base_url(); ?>/usuarios/buscar" name="info" id="info" class="form-control bg-light small" placeholder="Buscar...">  
 				<div class="input-group-append">
 					<button type="submit" class="btn btn-primary" type="button">
@@ -17,6 +22,11 @@
 		</form>
 
     </div>
+
+	<?php if( session('msg') ): ?>
+		<p><?php echo session('msg'); ?><p>
+	<?php endif; ?>
+
     
     <!-- Content Row -->
     <div class="row">
@@ -52,8 +62,10 @@
 							<td><?php echo cambioNivelEsp($dato['spanishlvl']) ?></td>
 							<td><?php echo $dato['university'] ?></td>
 							<td><?php echo $dato['birthPlace'] ?></td>
+
+							<input type="hidden" name="origen" id="origen" value="misColaboradores">
 							<td><a href="<?php echo base_url(); ?>/usuarios/editar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
-							<td><a href="<?php echo base_url(); ?>/usuarios/eliminar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>
+							<td><a href="<?php echo base_url(); ?>/usuarios/desactivar/<?php echo $dato['id']; ?>" class="btn btn-dark"><i class="fas <?php echo $tipo['flecha']; ?>"></i></a></td>
 						</tr>
 					<?php } ?>
 				</tbody>

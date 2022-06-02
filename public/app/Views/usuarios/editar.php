@@ -4,7 +4,7 @@
 		<h1 class="h3 mb-0 text-gray-800"><?php echo $titulo; ?></h1>
     </div>
 	<!-- Page Heading -->
-    
+
     <form method="POST" action="<?php echo base_url(); ?>/usuarios/actualizar" autocomplere="off">
 	
 	<div class="contaired-fluid">

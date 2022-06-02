@@ -2,9 +2,13 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800"><?php echo $titulo; ?></h1>
+		<h1 class="h3 mb-0 text-gray-800">Nuevo Usuario</h1>
     </div>
 	<!-- Page Heading -->
+
+	<?php if( session('msg') ): ?>
+		<p><?php echo session('msg'); ?><p>
+	<?php endif; ?>
     
 	<form method="POST" action="<?php echo base_url(); ?>/usuarios/registroTemporal" autocomplere="off">
 	
