@@ -1,4 +1,4 @@
-<h2>Hola <?= $nombre ?>, el experto <?= $respNombre ?> <?= $respApellidos ?> ha solicitado su registro en la aplicación Variantes del Español<h4>
+<h2>Hola <?= $nombre ?>, el experto <?= $respNombre ?> <?= $respApellidos ?> ha solicitado su registro en la aplicación Variedades del Español<h4>
 <h3>Datos que han sido introducidos: <h3>
     <p>Nombre: <?= $nombre ?><p>
     <p>Apellidos: <?= $apellidos ?><p>

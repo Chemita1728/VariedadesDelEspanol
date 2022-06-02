@@ -198,6 +198,31 @@ class Usuarios extends BaseController
         $this->cargarVista("nuevoUsuario", $data);
     }
 
+    /*
+    public function mensaje()
+    {
+        $mensaje = 'Resultado:<br>';
+        $data = ['titulo' => 'Nuevo Usuario'];
+
+        $controller = \Config\Services::email();
+        $controller->setTo('chema172839@gmail.com');
+        $controller->setFrom('variedadesesp@gmail.com', "Antonio" );
+
+        $controller->setSubject('Solicitud de Registro');
+        $controller->setMessage("Hola wey");
+        
+        if($controller->send()){
+            $mensaje = $mensaje . "-El usuario ha sido avisado correctamente<br>";
+        } else{
+            $mensaje = $mensaje . "-No va<br>";
+        }
+
+        $session = session();
+        $session->setFlashdata('msg',$mensaje);
+        $this->cargarVista("nuevoUsuario",$data);
+    }
+    */
+
     public function registroTemporal()
     {
         
@@ -213,6 +238,7 @@ class Usuarios extends BaseController
         $mensaje = 'Resultado:<br>';
         $usuarioIgual = $this->usuarios->where('email', $email)->findAll();
         $data=(['','']);
+
         if( count($usuarioIgual) != 0 ){
             $mensaje = $mensaje . "-El correo del usuario que has introducido ya existe<br>";   
         }
@@ -234,7 +260,7 @@ class Usuarios extends BaseController
                         'tempId' => $num]);
     
             $controller = \Config\Services::email();
-            $controller->setFrom($respMail, $respNombre. $respApellidos );
+            $controller->setFrom('variedadesesp@gmail.com', $respNombre. $respApellidos );
             $controller->setTo($email);
     
             $controller->setSubject('Solicitud de Registro');
@@ -500,7 +526,7 @@ class Usuarios extends BaseController
                                 'tempId' => $num]);
             
                     $controller = \Config\Services::email();
-                    $controller->setFrom($respMail, $respNombre. $respApellidos );
+                    $controller->setFrom('variedadesesp@gmail.com', $respNombre. $respApellidos );
                     $controller->setTo($datos[2]);
             
                     $controller->setSubject('Solicitud de Registro');
@@ -510,7 +536,7 @@ class Usuarios extends BaseController
                 }
             }  
 
-            if( $correctos == 0 ){
+            if( $correctos != 0 ){
                 $mensaje = $mensaje . "-La solucitud ha sido mandada a $correctos usuarios correctamente";
             }
             $session = session();

@@ -49,39 +49,40 @@ class Email extends BaseConfig
      *
      * @var string
      */
-    public $SMTPHost = 'smtp.mailtrap.io';
-    //public $SMTPHost = 'smtp.gmail.com';
+    //public $SMTPHost = 'smtp.mailtrap.io';
+    public $SMTPHost = 'smtp.googlemail.com';
 
     /**
      * SMTP Username
      *
      * @var string
      */
-    public $SMTPUser = '9b95fbe1c447b5';
-    //public $SMTPUser = 'variedadesEsp@gmail.com';
+    //public $SMTPUser = '9b95fbe1c447b5';
+    public $SMTPUser = 'variedadesesp@gmail.com';
 
     /**
      * SMTP Password
      *
      * @var string
      */
-    public $SMTPPass = 'c3339fec54cc9d';
-    //public $SMTPPass = 'variedadesadmin';
+    //public $SMTPPass = 'c3339fec54cc9d';
+    public $SMTPPass = 'ltunkynvipuxyigc';
 
     /**
      * SMTP Port
      *
      * @var int
      */
-    public $SMTPPort = 2525;
-    //public $SMTPPort = 465;
+    //public $SMTPPort = 2525;
+    public $SMTPPort = 465;
     
     /**
      * SMTP Timeout (in seconds)
      *
      * @var int
      */
-    public $SMTPTimeout = 5;
+    //public $SMTPTimeout = 5;
+    public $SMTPTimeout = 60;
 
     /**
      * Enable persistent SMTP connections
@@ -95,7 +96,7 @@ class Email extends BaseConfig
      *
      * @var string
      */
-    public $SMTPCrypto = 'tls';
+    public $SMTPCrypto = 'ssl';
 
     /**
      * Enable word-wrap
