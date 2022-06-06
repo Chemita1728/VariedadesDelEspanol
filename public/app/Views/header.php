@@ -70,7 +70,27 @@
                             </div>
                         </div>
                     </li>
-                <?php } ?>  
+                <?php } ?> 
+
+                <?php if (session('role') >= 1) { ?>
+                    <!-- Nav Item - Pages Collapse Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                            aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fas fa-users"></i>
+                            <span>Recursos</span>
+                        </a>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <!--<h6 class="collapse-header">Ajustes de Usuarios:</h6>-->
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevoRecurso">Nuevo Recurso</a>
+                                <?php if (session('role') >= 2) { ?>
+                                    <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/aRevisar">Recursos que Revisar</a>    
+                                <?php } ?> 
+                            </div>
+                        </div>
+                    </li>
+                <?php } ?> 
 
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">

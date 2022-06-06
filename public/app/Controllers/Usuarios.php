@@ -458,7 +458,8 @@ class Usuarios extends BaseController
                         "role" => $usuario['role'],
                         "spanishlvl" => $usuario['spanishlvl'],
                         "university" => $usuario['university'],
-                        "birthPlace" => $usuario['birthPlace']
+                        "birthPlace" => $usuario['birthPlace'],
+                        "respMail" => $usuario['respMail']
                     ];
 
             $session = session();
