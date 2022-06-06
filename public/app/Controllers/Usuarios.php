@@ -260,7 +260,8 @@ class Usuarios extends BaseController
                         'tempId' => $num]);
     
             $controller = \Config\Services::email();
-            $controller->setFrom('variedadesesp@gmail.com', $respNombre. $respApellidos );
+            // $controller->setFrom('variedadesesp@gmail.com', $respNombre. $respApellidos );
+            $controller->setFrom('variedadesesp@gmail.com', "Variedades Del Español" );
             $controller->setTo($email);
     
             $controller->setSubject('Solicitud de Registro');
@@ -445,6 +446,7 @@ class Usuarios extends BaseController
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
     
+        //////////CAMBIAR
         $usuario = $this->usuarios->where('email',$email)->first();
 
         if(password_verify($password, $usuario['password'])){
@@ -526,7 +528,8 @@ class Usuarios extends BaseController
                                 'tempId' => $num]);
             
                     $controller = \Config\Services::email();
-                    $controller->setFrom('variedadesesp@gmail.com', $respNombre. $respApellidos );
+                    //$controller->setFrom('variedadesesp@gmail.com', $respNombre. $respApellidos );
+                    $controller->setFrom('variedadesesp@gmail.com', "Variedades Del Español" );
                     $controller->setTo($datos[2]);
             
                     $controller->setSubject('Solicitud de Registro');

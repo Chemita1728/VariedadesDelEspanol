@@ -99,3 +99,5 @@
 [Mon May 30 08:03:52.436556 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 [Tue May 31 16:22:22.544910 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
 [Tue May 31 16:22:22.549024 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Fri Jun 03 09:56:57.791460 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
+[Fri Jun 03 09:56:57.792817 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
