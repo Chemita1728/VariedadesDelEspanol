@@ -16,8 +16,14 @@ class Recursos extends BaseController
 
     public function index()
     {
+        $recursos = $this->recursos->where('state', 4)
+                                    ->orderBy("created_at", "asc")
+                                    ->findAll();     
+
+        $data = ['recursos' => $recursos];
+        
         echo view('header');
-        echo view('inicio');
+        echo view('inicio', $data);
         echo view('footer');
     }
 
@@ -107,6 +113,16 @@ class Recursos extends BaseController
 
         $data = ['titulo' => 'Recursos a Revisar', 'recursos' => $mios];
         $this->cargarVista("aRevisar",$data);
+    }
+
+    public function validarRecurso($id)
+    {
+        $recurso = $this->recursos->where('state', 1)
+                                    ->where('resourceID', $id)
+                                    ->first();     
+
+        $data = ['recurso' => $recurso];
+        $this->cargarVista("validarRecurso",$data);
     }
 }
 

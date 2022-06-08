@@ -40,7 +40,6 @@
                         <th>Responsable</th>
                         <th>Mandado</th>
 						<th></th>
-						<th></th>
 					</tr>
 				</thread>
 				<tbody>
@@ -51,8 +50,7 @@
 							<td><?php echo $recurso['description'] ?></td>
                             <td><?php echo $recurso['editor'] ?></td>
                             <td><?php echo $recurso['created_at'] ?></td>
-							<td><a href="<?php echo base_url(); ?>/recursos/aceptar/<?php echo $recurso['resourceID']; ?>" class="btn btn-dark"><i class="fas fa-arrow-up"></i></a></td>
-							<td><a href="<?php echo base_url(); ?>/recursos/cancelar/<?php echo $recurso['resourceID']; ?>" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>
+							<td><a href="<?php echo base_url(); ?>/recursos/validarRecurso/<?php echo $recurso['resourceID']; ?>" class="btn btn-dark"><i class="fas fa-pen"></i></a></td>
 						</tr>
 					<?php } ?>
 				</tbody>

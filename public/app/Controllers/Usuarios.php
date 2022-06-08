@@ -464,11 +464,10 @@ class Usuarios extends BaseController
 
             $session = session();
             $session->set($data);
-            return redirect()->to(base_url('/'));
+            return redirect()->to(base_url('/recursos'));
         
         } else {
-            echo("no va");
-            //return redirect()->to(base_url('/'));
+            return redirect()->to(base_url('/recursos'));
         }
     }
 
@@ -476,7 +475,7 @@ class Usuarios extends BaseController
     {
         $session = session();
         $session->destroy();
-        return redirect()->to(base_url('/'));
+        return redirect()->to(base_url('/recursos'));
     }
 
 ////////////////////////////////////////////////////////////////////////////////////

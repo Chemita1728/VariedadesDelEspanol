@@ -103,3 +103,5 @@
 [Fri Jun 03 09:56:57.792817 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 [Mon Jun 06 15:29:17.693047 2022] [php7:error] [pid 22] [client 172.24.0.1:62918] PHP Fatal error:  Cannot declare class App\\Controllers\\Usuarios, because the name is already in use in /var/www/html/app/Controllers/Recursos.php on line 0, referer: http://localhost/
 [Mon Jun 06 15:30:59.463748 2022] [php7:error] [pid 19] [client 172.24.0.1:62922] PHP Fatal error:  Cannot declare class App\\Controllers\\Usuarios, because the name is already in use in /var/www/html/app/Controllers/Recursos.php on line 0, referer: http://localhost/
+[Wed Jun 08 09:06:01.704396 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
+[Wed Jun 08 09:06:01.707446 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'

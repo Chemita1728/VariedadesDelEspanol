@@ -31,7 +31,7 @@
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo base_url(); ?>/">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo base_url(); ?>/recursos">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
                     </div>
@@ -43,7 +43,7 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="<?php echo base_url(); ?>/">
+                    <a class="nav-link" href="<?php echo base_url(); ?>/recursos">
                         <i class="fas fa-home"></i>
                         <span>Pagina Principal</span></a>
                 </li>
@@ -72,6 +72,9 @@
                     </li>
                 <?php } ?> 
 
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
+                
                 <?php if (session('role') >= 1) { ?>
                     <!-- Nav Item - Pages Collapse Menu -->
                     <li class="nav-item">
