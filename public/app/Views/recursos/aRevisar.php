@@ -45,12 +45,22 @@
 				<tbody>
 					<?php foreach($recursos as $recurso) { ?>
 						<tr>
-							<td><?php echo $recurso['title'] ?></td>
+							<?php if ( $recurso['state'] < 3 ) { ?>
+								<td><?php echo $recurso['title'] ?></td>
+							<?php } ?>
+							<?php if ( $recurso['state'] >= 3 ) { ?>
+								<td style="color: black" ><?php echo $recurso['title'] ?></td>
+							<?php } ?>
 							<td><?php echo $recurso['autor'] ?></td>
 							<td><?php echo $recurso['description'] ?></td>
                             <td><?php echo $recurso['editor'] ?></td>
                             <td><?php echo $recurso['created_at'] ?></td>
-							<td><a href="<?php echo base_url(); ?>/recursos/validarRecurso/<?php echo $recurso['resourceID']; ?>" class="btn btn-dark"><i class="fas fa-pen"></i></a></td>
+							<?php if ( $tipo == 1) { ?>
+								<td><a href="<?php echo base_url(); ?>/recursos/revisarRecurso/<?php echo $recurso['resourceID']; ?>" class="btn btn-dark"><i class="fas fa-pen"></i></a></td>
+							<?php } ?> 
+							<?php if ( $tipo == 2) { ?>
+								<td><a href="<?php echo base_url(); ?>/recursos/validarRecurso/<?php echo $recurso['resourceID']; ?>" class="btn btn-dark"><i class="fas fa-pen"></i></a></td>
+							<?php } ?> 
 						</tr>
 					<?php } ?>
 				</tbody>

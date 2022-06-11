@@ -86,10 +86,8 @@
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <!--<h6 class="collapse-header">Ajustes de Usuarios:</h6>-->
-                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevoRecurso">Nuevo Recurso</a>
-                                <?php if (session('role') >= 2) { ?>
-                                    <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/aRevisar">Recursos que Revisar</a>    
-                                <?php } ?> 
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevoRecurso">Nuevo Recurso</a>    
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/aRevisar/<?php echo session('role'); ?>">Recursos que Revisar</a>    
                             </div>
                         </div>
                     </li>

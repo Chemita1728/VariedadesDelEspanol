@@ -4,20 +4,29 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\UsuariosModel;
+use App\Models\RecursosModel;
 
 class Usuarios extends BaseController
 {
     protected $usuarios;
+    protected $recursos;
 
     public function __construct()
     {
         $this->usuarios = new UsuariosModel();
+        $this->recursos = new RecursosModel();
     }
 
     public function index()
     {
+        $recursos = $this->recursos->where('state', 4)
+                                    ->orderBy("created_at", "asc")
+                                    ->findAll();     
+
+        $data = ['recursos' => $recursos];
+        
         echo view('header');
-        echo view('inicio');
+        echo view('inicio', $data);
         echo view('footer');
     }
 
