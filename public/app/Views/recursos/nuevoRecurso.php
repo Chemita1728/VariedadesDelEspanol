@@ -31,18 +31,16 @@
 				<div class="col-12 col-sm-6">
 					<label>Variedad</label>
 					<select class="form-control" id="variety" name="variety">
-						<option value="1">var1</option>
-						<option value="2">var2</option>
-						<option value="3">var3</option>
-						<option value="4">var4</option>
-						<option value="5">var5</option>
-						<option value="6">var6</option>
-						<option value="7">var7</option>
-						<option value="8">var8</option>
-						<option value="9">var9</option>
-						<option value="10">var10</option>
-						<option value="11">var11</option>
-						<option value="12">var12</option>
+						<option value="1">Castellano</option>
+						<option value="2">Andaluz</option>
+						<option value="3">Canario</option>
+						<option value="4">Caribeño</option>
+						<option value="5">Mexicano-Centroamericano</option>
+						<option value="6">Andino</option>
+						<option value="7">Austral</option>
+						<option value="8">Chileno</option>
+						<option value="9">Español de Guinea Ecuatorial</option>
+						<option value="10">Judeoespañol</option>
 					</select>
 				</div>
 			</div>	
@@ -63,6 +61,70 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="row">
+
+			<?php for ($i = 1; $i <= 3; $i++) { ?>
+				<div class="col-lg-4">
+					<div class="card shadow mb-4">
+						<!-- Card Header - Accordion -->
+						<a href="#gramatica" class="d-block card-header py-3" data-toggle="collapse"
+							role="button" aria-expanded="true" aria-controls="gramatica">
+							<?php if($i == 1) { ?>
+								<h6 class="m-0 font-weight-bold">Pronunciación</h6>
+							<?php } ?>
+							<?php if($i == 2) { ?>
+								<h6 class="m-0 font-weight-bold">Gramatica</h6>
+							<?php } ?>
+							<?php if($i == 3) { ?>
+								<h6 class="m-0 font-weight-bold">Vocabulario</h6>
+							<?php } ?>
+						</a>
+						<!-- Card Content - Collapse -->
+						<div class="collapse" id="gramatica">
+							<div class="card-body">
+								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+									<tbody>
+										<?php if($i == 1) { ?>
+											<?php foreach($valores as $valor) { ?>
+												<tr>
+													<?php if($valor['charID'] == 1) { ?>
+														<td><?php echo $valor['at1'] ?></td>
+														<td><input type="checkbox" name="pro[]" value="<?php echo $valor['valID'] ?>"/></td>
+													<?php }?>
+												</tr>
+											<?php } ?>
+										<?php } ?>
+										<?php if($i == 2) { ?>
+											<?php foreach($valores as $valor) { ?>
+												<tr>
+													<?php if($valor['charID'] == 2) { ?>
+														<td><?php echo $valor['at1'] ?></td>
+														<td><input type="checkbox" name="gra[]" value="<?php echo $valor['valID'] ?>"/></td>
+													<?php }?>
+												</tr>
+											<?php } ?>
+										<?php } ?>
+										<?php if($i == 3) { ?>
+											<?php foreach($valores as $valor) { ?>
+												<tr>
+													<?php if($valor['charID'] == 3) { ?>
+														<td><?php echo $valor['at1'] ?></td>
+														<td><input type="checkbox" name="voc[]" value="<?php echo $valor['valID'] ?>"/></td>
+													<?php }?>
+												</tr>
+											<?php } ?>
+										<?php } ?>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php } ?>
+			
+		</div>
+
         <?php if (session('role') == 1) { ?>
             <button type="submit" class="btn btn-success">Mandar para Verificación</button>
         <?php } ?> 

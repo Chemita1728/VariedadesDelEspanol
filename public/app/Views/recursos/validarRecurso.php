@@ -10,6 +10,10 @@
 			$valor = array ( 'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo' );
 			return $valor[$numero -1];
 		}
+        function cambioVariedad($numero){
+            $valor = array ( 'Castellano', 'Andaluz', 'Canario', 'Caribeño', 'Mexicano-Centroamericano', 'Andino', 'Austral', 'Chileno', 'Español de Guinea Ecuatorial', 'Judeoespañol');
+            return $valor[$numero -1];
+        }
     ?>
 
     <script type="text/javascript">
@@ -34,15 +38,15 @@
                     <h6 class="m-0 font-weight-bold"><?php echo $recurso['title'] ?></h6>
                 </div>
                 <div class="card-body">
+                    <p>*ID: <?php echo $recurso['resourceID']; ?></p>
                     <p>Fuente: <?php echo $recurso['font']; ?></p>
                     <p>Descripción: <?php echo $recurso['description']; ?></p>
-                    <p>Nivel de Español: <?php echo $recurso['spanishlvl']; ?></p>
-                    <p>Variedad del Español: <?php echo $recurso['variety']; ?></p>
+                    <p>Nivel de Español: <?php echo cambioNivelEsp($recurso['spanishlvl']); ?></p>
+                    <p>Variedad del Español: <?php echo cambioVariedad($recurso['variety']); ?></p>
                     <p>Fichero: <?php echo $recurso['file']; ?></p>
                     <p>Link: <?php echo $recurso['link']; ?></p>
                     <p>Autor: <?php echo $recurso['autor']; ?></p>
                     <p>Editor: <?php echo $recurso['editor']; ?></p>
-                    <p>Nivel de Español: <?php echo cambioNivelEsp($recurso['spanishlvl']) ?></p> 
                 </div>
 			</div>
 		</div>

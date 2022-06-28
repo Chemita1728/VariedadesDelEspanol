@@ -4,6 +4,9 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\RecursosModel;
+use App\Models\ValoresModel;
+use App\Models\CompuestoModel;
+use App\Models\CaracteristicasModel;
 
 class Recursos extends BaseController
 {
@@ -12,6 +15,9 @@ class Recursos extends BaseController
     public function __construct()
     {
         $this->recursos = new RecursosModel();
+        $this->valores = new ValoresModel();
+        $this->compuestos = new CompuestoModel();
+        $this->caracteristicas = new CaracteristicasModel();
     }
 
     public function index()
@@ -35,10 +41,39 @@ class Recursos extends BaseController
         echo view('footer');
     }
 
+    // Función que carga la pagina para ver un recurso
+    public function recurso($id)
+    {
+        $recurso = $this->recursos->where('resourceID', $id)
+                                    ->first(); 
+
+        $idRec = $recurso['resourceID'];
+        $relaciones = $this->compuestos->where('resID', $idRec)
+                                        ->findAll();
+        
+        $caracteristicas = $this->caracteristicas->findAll();
+        $valores = [];
+
+        if( count($relaciones) != 0 ){
+            foreach( $relaciones as $relacion){
+                // echo ($relacion['charID']);
+                // echo ($relacion['valID']);
+                $idChar = $relacion['charID'];
+                $idVal = $relacion['valID'];
+                $valor = $this->valores->where('charID', $idChar)->where('valID', $idVal)->first();
+                array_push($valores, $valor);
+            }
+        }
+
+        $data = ['recurso' => $recurso, 'valores' => $valores, 'caracteristicas' => $caracteristicas ];
+        $this->cargarVista("Recurso",$data);
+    }
+
     // Función que carga la pagina para crear un nuevo recurso
     public function nuevoRecurso()
     {
-        $data = ['titulo' => 'Nuevo Recurso'];
+        $valores = $this->valores->findAll();
+        $data = ['titulo' => 'Nuevo Recurso', 'valores' => $valores];
 
         $this->cargarVista("nuevoRecurso",$data);
     }
@@ -54,44 +89,65 @@ class Recursos extends BaseController
         $variety = $this->request->getPost('variety');
 
         $autor = session('nombre'). " " .session('apellidos');
-
+        
         $mensaje = 'Resultado:<br>';
         $data=(['','']);
-
+        
         if (session('role') == 1){
             $this->recursos->insert(['title' => $title,
-                                    'description' => $description,
-                                    'state' => 1,
-                                    'font' => $font,
-                                    'variety' => $variety,
-                                    'spanishlvl' => session('spanishlvl'),
-                                    'autor' => $autor,
-                                    'editor' => session('respMail'),
-                                    'proposerMail' => session('email'),
-                                    'publisherMail' => session('respMail')]);
-
+            'description' => $description,
+            'state' => 1,
+            'font' => $font,
+            'variety' => $variety,
+            'spanishlvl' => session('spanishlvl'),
+            'autor' => $autor,
+            'editor' => session('respMail'),
+            'proposerMail' => session('email'),
+            'publisherMail' => session('respMail')]);
+            
             $mensaje = $mensaje . "-El recurso ha sido mandado para supervisión<br>";
         }
         if (session('role') > 1){
             $this->recursos->insert(['title' => $title,
-                                    'description' => $description,
-                                    'state' => 4,
-                                    'font' => $font,
-                                    'variety' => $variety,
-                                    'spanishlvl' => session('spanishlvl'),
-                                    'autor' => $autor,
-                                    'editor' => session('email'),
-                                    'proposerMail' => session('email'),
-                                    'publisherMail' => session('email'),
-                                    'publishDate' => date('Y-m-d')]);
-
+            'description' => $description,
+            'state' => 5,
+            'font' => $font,
+            'variety' => $variety,
+            'spanishlvl' => session('spanishlvl'),
+            'autor' => $autor,
+            'editor' => session('email'),
+            'proposerMail' => session('email'),
+            'publisherMail' => session('email'),
+            'publishDate' => date('Y-m-d')]);
+            
             $mensaje = $mensaje . "-El recurso se ha publicado<br>";
         }
+
+        $recurso = $this->recursos->where('title', $title)
+                                    ->where("description", $description)
+                                    ->first(); 
+
+        if(!empty($_POST['pro'])) {
+            foreach($_POST['pro'] as $value){
+                $this->compuestos->insert(['resID' => $recurso['resourceID'], 'charID' => 1, 'valID' => $value ]);
+            }
+        }
+        if(!empty($_POST['gra'])) {
+            foreach($_POST['gra'] as $value){
+                $this->compuestos->insert(['resID' => $recurso['resourceID'], 'charID' => 2, 'valID' => $value ]);
+            }
+        }
+        if(!empty($_POST['voc'])) {
+            foreach($_POST['voc'] as $value){
+                $this->compuestos->insert(['resID' => $recurso['resourceID'], 'charID' => 3, 'valID' => $value ]);
+            }
+        }
+
         $session = session();
         $session->setFlashdata('msg',$mensaje);
-        $this->cargarVista("nuevoRecurso",$data);
+        return redirect()->to(base_url().'/recursos/nuevoRecurso');
     }
-
+    
     // -Funcion que carga la vista de los recursos a revisar
     // -Si la persona registrada es un colaborador se cargan los recursos que le ha
     // devuelto editor para volver a revisar con su comentario respectivamente
@@ -144,10 +200,19 @@ class Recursos extends BaseController
     // -Función que carga la vista de un recurso a revisar por un experto o administrador
     public function validarRecurso($id)
     {
-        $where = "state=1 OR state=3";
+        //forma1
+        // $where = "state=3 OR state=1";
+        // $recurso = $this->recursos->where('resourceID', $id)
+        //                             ->where($where)
+        //                             ->first();
+        //forma2
+        // $recurso = $this->recursos->where('resourceID', $id)
+        //                             ->where('state', 1)
+        //                             ->orWhere('state', 3)
+        //                             ->first();     
+
         $recurso = $this->recursos->where('resourceID', $id)
-                                    ->where($where)
-                                    ->first();     
+                                    ->first(); 
 
         $data = ['recurso' => $recurso];
         $this->cargarVista("validarRecurso",$data);
@@ -202,10 +267,13 @@ class Recursos extends BaseController
     public function revisarRecurso($id)
     {
 
-        $where = "state=2 OR state=4";
+        // $where = "state=4 OR state=2";
+        // $recurso = $this->recursos->where('resourceID', $id)
+        //                             ->where($where)
+        //                             ->first(); 
+        
         $recurso = $this->recursos->where('resourceID', $id)
-                                    ->where($where)
-                                    ->first();     
+                                    ->first();
 
         $data = ['recurso' => $recurso];
         $this->cargarVista("revisarRecurso",$data);

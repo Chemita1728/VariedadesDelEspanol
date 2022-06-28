@@ -34,6 +34,7 @@
 			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 				<thread>
 					<tr>
+						<th>ID</th>
 						<th>Titulo</th>
 						<th>Autor</th>
 						<th>Descripción</th>
@@ -45,6 +46,7 @@
 				<tbody>
 					<?php foreach($recursos as $recurso) { ?>
 						<tr>
+							<td><?php echo $recurso['resourceID'] ?></td>
 							<?php if ( $recurso['state'] < 3 ) { ?>
 								<td><?php echo $recurso['title'] ?></td>
 							<?php } ?>

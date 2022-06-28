@@ -5,13 +5,6 @@
     </div>
 	<!-- Page Heading -->
 
-    <?php
-        function cambioNivelEsp($numero){
-			$valor = array ( 'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo' );
-			return $valor[$numero -1];
-		}
-    ?>
-
     <script type="text/javascript">
         function desocultar() {
             var form = document.getElementById("formEntero");
@@ -43,6 +36,19 @@
 	
 	<div class="contaired-fluid" style="display: none" id="formEntero">
 		<div class="form-group">
+
+			<?php
+				$selected = $recurso['variety'];
+				function cambioNivelEsp($numero){
+					$valor = array ( 'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo' );
+					return $valor[$numero -1];
+				}
+				function cambioVariedad($numero){
+					$valor = array ( 'Castellano', 'Andaluz', 'Canario', 'Caribeño', 'Mexicano-Centroamericano', 'Andino', 'Austral', 'Chileno', 'Español de Guinea Ecuatorial', 'Judeoespañol');
+					return $valor[$numero -1];
+				}
+			?> 
+
 			<div class="row">
                 <input type="hidden" id="state"  name="state" value="<?php echo $recurso['state']; ?>"/>    
 				<div class="col-12 col-sm-6">
@@ -60,22 +66,18 @@
 				</div>
 				<div class="col-12 col-sm-6">
 					<label>Variedad</label>
-                    <?php
-						$selected = $recurso['variety'];
-					?> 
+                    
 					<select class="form-control" id="variety" name="variety">
-						<option <?php if($selected == '1'){echo("selected");}?> value="1">var1</option>
-						<option <?php if($selected == '2'){echo("selected");}?> value="2">var2</option>
-						<option <?php if($selected == '3'){echo("selected");}?> value="3">var3</option>
-						<option <?php if($selected == '4'){echo("selected");}?> value="4">var4</option>
-						<option <?php if($selected == '5'){echo("selected");}?> value="5">var5</option>
-						<option <?php if($selected == '6'){echo("selected");}?> value="6">var6</option>
-						<option <?php if($selected == '7'){echo("selected");}?> value="7">var7</option>
-						<option <?php if($selected == '8'){echo("selected");}?> value="8">var8</option>
-						<option <?php if($selected == '9'){echo("selected");}?> value="9">var9</option>
-						<option <?php if($selected == '10'){echo("selected");}?> value="10">var10</option>
-						<option <?php if($selected == '11'){echo("selected");}?> value="11">var11</option>
-						<option <?php if($selected == '12'){echo("selected");}?> value="12">var12</option>
+						<option <?php if($selected == '1'){echo("selected");}?> value="1">Castellano</option>
+						<option <?php if($selected == '2'){echo("selected");}?> value="2">Andaluz</option>
+						<option <?php if($selected == '3'){echo("selected");}?> value="3">Canario</option>
+						<option <?php if($selected == '4'){echo("selected");}?> value="4">Caribeño</option>
+						<option <?php if($selected == '5'){echo("selected");}?> value="5">Mexicano-Centroamericano</option>
+						<option <?php if($selected == '6'){echo("selected");}?> value="6">Andino</option>
+						<option <?php if($selected == '7'){echo("selected");}?> value="7">Austral</option>
+						<option <?php if($selected == '8'){echo("selected");}?> value="8">Chileno</option>
+						<option <?php if($selected == '9'){echo("selected");}?> value="9">Español de Guinea Ecuatorial</option>
+						<option <?php if($selected == '10'){echo("selected");}?> value="10">Judeoespañol</option>
 					</select>
 				</div>
 			</div>	
