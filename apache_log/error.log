@@ -124,3 +124,16 @@
 [Sun Jun 26 10:42:16.166332 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 [Sun Jun 26 17:50:02.402054 2022] [php7:error] [pid 17] [client 172.24.0.1:63286] PHP Fatal error:  Cannot declare class App\\Models\\CaracteristicasModel, because the name is already in use in /var/www/html/app/Models/ValoresModel.php on line 0, referer: http://localhost/
 [Sun Jun 26 17:50:03.555743 2022] [php7:error] [pid 21] [client 172.24.0.1:63282] PHP Fatal error:  Cannot declare class App\\Models\\CaracteristicasModel, because the name is already in use in /var/www/html/app/Models/ValoresModel.php on line 0, referer: http://localhost/
+[Thu Jun 30 08:14:15.965600 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
+[Thu Jun 30 08:14:15.968001 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Jun 30 09:06:38.323185 2022] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Jun 30 09:19:01.549686 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
+[Thu Jun 30 09:19:01.556066 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Jun 30 13:30:20.585073 2022] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Jun 30 14:40:05.638971 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
+[Thu Jun 30 14:40:05.642401 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Jun 30 19:19:40.873475 2022] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Fri Jul 01 10:14:32.959062 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
+[Fri Jul 01 10:14:32.960784 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Mon Jul 04 13:40:09.965983 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
+[Mon Jul 04 13:40:09.970084 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'

@@ -64,57 +64,31 @@
 
 		<div class="row">
 
-			<?php for ($i = 1; $i <= 3; $i++) { ?>
-				<div class="col-lg-4">
+			<?php for ($i = 1; $i <= 2; $i++) { ?>
+				<?php 
+					if($i == 1) { $vector="pro[]"; $nombre = "Pronunciacion"; }
+					if($i == 2) { $vector="gra[]"; $nombre = "Gramatica"; }
+				?>
+				<div class="col-lg-6">
 					<div class="card shadow mb-4">
 						<!-- Card Header - Accordion -->
-						<a href="#gramatica" class="d-block card-header py-3" data-toggle="collapse"
-							role="button" aria-expanded="true" aria-controls="gramatica">
-							<?php if($i == 1) { ?>
-								<h6 class="m-0 font-weight-bold">Pronunciación</h6>
-							<?php } ?>
-							<?php if($i == 2) { ?>
-								<h6 class="m-0 font-weight-bold">Gramatica</h6>
-							<?php } ?>
-							<?php if($i == 3) { ?>
-								<h6 class="m-0 font-weight-bold">Vocabulario</h6>
-							<?php } ?>
+						<a href="#<?php echo $nombre ?>" class="d-block card-header py-3" data-toggle="collapse"
+						role="button" aria-expanded="true" aria-controls="<?php echo $nombre ?>">
+						<h6 class="m-0 font-weight-bold"><?php echo $nombre ?></h6>
 						</a>
 						<!-- Card Content - Collapse -->
-						<div class="collapse" id="gramatica">
+						<div class="collapse" id="<?php echo $nombre ?>">
 							<div class="card-body">
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 									<tbody>
-										<?php if($i == 1) { ?>
 											<?php foreach($valores as $valor) { ?>
 												<tr>
-													<?php if($valor['charID'] == 1) { ?>
+													<?php if($valor['charID'] == $i) { ?>
 														<td><?php echo $valor['at1'] ?></td>
-														<td><input type="checkbox" name="pro[]" value="<?php echo $valor['valID'] ?>"/></td>
+														<td><input type="checkbox" name="<?php echo $vector ?>" value="<?php echo $valor['valID'] ?>"/></td>
 													<?php }?>
 												</tr>
 											<?php } ?>
-										<?php } ?>
-										<?php if($i == 2) { ?>
-											<?php foreach($valores as $valor) { ?>
-												<tr>
-													<?php if($valor['charID'] == 2) { ?>
-														<td><?php echo $valor['at1'] ?></td>
-														<td><input type="checkbox" name="gra[]" value="<?php echo $valor['valID'] ?>"/></td>
-													<?php }?>
-												</tr>
-											<?php } ?>
-										<?php } ?>
-										<?php if($i == 3) { ?>
-											<?php foreach($valores as $valor) { ?>
-												<tr>
-													<?php if($valor['charID'] == 3) { ?>
-														<td><?php echo $valor['at1'] ?></td>
-														<td><input type="checkbox" name="voc[]" value="<?php echo $valor['valID'] ?>"/></td>
-													<?php }?>
-												</tr>
-											<?php } ?>
-										<?php } ?>
 									</tbody>
 								</table>
 							</div>
@@ -122,8 +96,167 @@
 					</div>
 				</div>
 			<?php } ?>
+
+			
+			<div class="col-lg-12">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Accordion -->
+					<a href="#vocabulario" class="d-block card-header py-3" data-toggle="collapse"
+					role="button" aria-expanded="true" aria-controls="vocabulario">
+					<h6 class="m-0 font-weight-bold">Vocabulario</h6>
+				</a>
+				<!-- Card Content - Collapse -->
+				<div class="collapse" id="vocabulario">
+					<div class="card-body">
+						<div class="input-group col-lg-4 mb-4">
+							<input type="text" name="buscarVoc" id="buscarVoc" class="form-control bg-light" placeholder="Buscar..."> 
+							<div class="input-group-append">
+								<button class="btn btn-secondary" disabled>
+									<i class="fas fa-search fa-sm"></i>
+								</button>
+							</div> 
+						</div>
+						<div id="botonNuevoVocabulario" class="input-group col-lg-4" style="display: none">
+							<button type="button" onclick="desocultar()" class="btn btn-success">Añadir nuevo vocabulario</button>
+						</div>
+						<table class="table table-bordered" id="tablaVocabulario" width="100%" cellspacing="0">
+							<tbody></tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<table class="table table-bordered" id="vocabularioFinal" width="100%" cellspacing="0" style="display: none">
+				<tbody></tbody>
+			</table>
+
+			<div id="nuevoVocabulario" class="col-lg-12" style="display: none">
+                <!-- Approach -->
+                <div class="card shadow mb-4">
+					<div class="card-body">
+
+						<label>Lema</label>
+						<div class="input-group col-lg-6 mb-4">
+							<input class="form-control" id="vocLema" name="vocLema" type="text" autofocus require />
+						</div>
+						<label>Forma</label>
+						<div class="input-group col-lg-6 mb-4">
+							<input class="form-control" id="vocForma" name="vocForma" type="text" autofocus require />
+						</div>
+						<label>Significado</label>
+						<div class="input-group col-lg-12 mb-4">
+							<input class="form-control" id="vocSignificado" name="vocSignificado" type="text" autofocus require />
+						</div>
+
+						<button type="button" onclick="introducirVocabulario()" class="btn btn-success">Añadir Vocabulario</button>
+						
+					</div>
+                </div>
+            </div>
 			
 		</div>
+
+		<script>
+
+			buscarVocabulario();
+
+			var seleccionados = [];
+			function ordenarArray(a, b) {
+				return a - b;
+			}
+			$(document).on('click', "input:checkbox", getChecked);
+			function getChecked(){
+				//esta variable son los checkboxes que se ven
+				var voc=document.getElementsByName("voc[]");
+				//recorremos estos checkboxes
+				for(var i=0; i<voc.length; i++){
+					if( voc[i].checked == true && !seleccionados.includes(voc[i].value) ){
+						//metemos en el array de seleccionados el valor del checkbox
+						seleccionados.push(voc[i].value);
+					} else if( voc[i].checked == false && seleccionados.includes(voc[i].value) ) {
+						seleccionados.splice(seleccionados.indexOf(voc[i].value),1);
+					}
+				}
+				seleccionados.sort(ordenarArray)
+				//console.log(seleccionados);
+				//borramos la tabla que almacena el vocabulario seleccionado
+				$("#vocabularioFinal tr").remove(); 
+				for(var i=0; i<seleccionados.length; i++){
+					//hacemos una fila en la tabla invisible para poder almacenar el dato en un input del html
+					document.getElementById("vocabularioFinal").insertRow(-1).innerHTML = '<td id="voc'+seleccionados[i]+'"><td><input type="checkbox" name="vocFinal[]" value="'+seleccionados[i]+'" checked/></td>';
+					$('#voc'+seleccionados[i]+'').html(seleccionados[i]);			
+				}
+
+			}
+
+			function desocultar() {
+				var form = document.getElementById("nuevoVocabulario");
+				if ( form.style.display === "none" ) {
+					form.style.display = "block";
+				} else {
+					form.style.display = "none";
+				}
+			}
+
+			$(document).on('keyup', '#buscarVoc', function(){
+				var palabra = $(this).val();
+				if( palabra != "" ){
+					buscarVocabulario(palabra);
+				}else{
+					buscarVocabulario();
+				}
+			});
+
+			function buscarVocabulario(palabra){
+				$.ajax({
+					url: "<?php echo base_url(); ?>/recursos/buscarVocabulario",
+					method: "POST",
+					data: {palabra: palabra}
+				}).done(function(res){
+					var datos = JSON.parse(res);
+					$("#tablaVocabulario tr").remove(); 
+					datos.forEach(function(dato, index) {
+						var num = index+1;
+						var checked = false;
+						//vemos si esta seleccionado
+						for(var i=0; i<seleccionados.length && checked == false; i++){
+							if( dato.valID == seleccionados[i] ) checked = true;
+						}
+						if( checked == true ){
+							document.getElementById("tablaVocabulario").insertRow(-1).innerHTML = '<td id="'+index+'1"></td><td id="'+index+'2"></td><td id="'+index+'3"></td><td><input type="checkbox" name="voc[]" value="'+dato.valID+'" checked/></td>';
+						} else {
+							document.getElementById("tablaVocabulario").insertRow(-1).innerHTML = '<td id="'+index+'1"></td><td id="'+index+'2"></td><td id="'+index+'3"></td><td><input type="checkbox" name="voc[]" value="'+dato.valID+'"/></td>';
+						}
+						$('#'+index+'1').html(dato.at1);
+						$('#'+index+'2').html(dato.at2);
+						$('#'+index+'3').html(dato.at3);
+					});
+					if( datos.length === 0){
+						var boton = document.getElementById("botonNuevoVocabulario");
+						if ( boton.style.display === "none" ) {
+							boton.style.display = "block";
+						} else {
+							boton.style.display = "none";
+						}
+					}
+				})
+			}
+
+			function introducirVocabulario(){
+				var lema = document.getElementById("vocLema").value;
+				var forma = document.getElementById("vocForma").value;
+				var sign = document.getElementById("vocSignificado").value;
+				$.ajax({
+					url: "<?php echo base_url(); ?>/recursos/introducirVocabulario",
+					method: "POST",
+					data: {lema: lema, forma: forma, sign: sign}
+				}).done(function(){
+					desocultar();
+				})
+			}
+
+		</script>
 
         <?php if (session('role') == 1) { ?>
             <button type="submit" class="btn btn-success">Mandar para Verificación</button>

@@ -20,6 +20,10 @@
     <!-- Custom styles for this template-->
     <link href="<?php echo base_url(); ?>/css/sb-admin-2.min.css" rel="stylesheet">
 
+    <script src="<?php echo base_url(); ?>/js/busquedas.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
 </head> 
 
 <body id="page-top">

@@ -51,11 +51,23 @@
 			</div>
 		</div>
 
+        <?php foreach($valores as $valor) { ?>
+            <div class="card shadow mb-4"> 
+                <div class="card-body">
+                    <p><?php echo $caracteristicas[$valor['charID'] - 1]['title1'] ?></p>
+                    <p><?php echo $valor['at1'] ?></p>
+                    <p><?php echo $caracteristicas[$valor['charID'] - 1]['title2'] ?></p>
+                    <p><?php echo $valor['at2'] ?></p>
+                    <p><?php echo $caracteristicas[$valor['charID'] - 1]['title3'] ?></p>
+                    <p><?php echo $valor['at3'] ?></p>
+                </div>
+            </div>
+        <?php } ?>
+
         <button onclick="desocultar()" class="btn btn-warning"> Hacer Comentario </button>
         <a href="<?php echo base_url(); ?>/recursos/publicar/<?php echo $recurso['resourceID']; ?>" class="btn btn-warning">Validar/Publicar Recurso</a>
 	
 	</div>
-
     
     <div class="contaired-fluid mb-4 col-sm-8" style="display: none" id="mensaje">
         <div class="form-group">
