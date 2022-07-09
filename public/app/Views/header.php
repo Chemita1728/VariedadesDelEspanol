@@ -66,8 +66,8 @@
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <!--<h6 class="collapse-header">Ajustes de Usuarios:</h6>-->
-                                <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/activos">Usuarios Activos</a>
-                                <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/noActivos">Usuarios No Activos</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/usuariosActivos">Usuarios Activos</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/usuariosNoActivos">Usuarios No Activos</a>
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/misColaboradores">Mis Colaboradores</a>
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/nuevoUsuario">Registrar Usuario</a>
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/registroMasivo">Registrar Masivo</a>

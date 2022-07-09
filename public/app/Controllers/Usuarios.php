@@ -38,23 +38,54 @@ class Usuarios extends BaseController
         echo view('footer');
     }
     
-    //PAGINA DE USUARIOS ACTIVOS
-    public function activos()
+    public function usuariosActivos(){
+        $data = ['titulo' => 'Usuarios Activos'];
+        $this->cargarVista("usuariosActivos",$data);
+    }
+    public function usuariosNoActivos(){
+        $data = ['titulo' => 'Usuarios No Activos'];
+        $this->cargarVista("usuariosNoActivos",$data);
+    }
+    public function misColaboradores(){
+        $data = ['titulo' => 'Mis Colaboradores'];
+        $this->cargarVista("misColaboradores",$data);
+    }
+
+    public function buscarUsuarios()
     {
         $rolRegistrado = session('role');
         $mailRegistrado = session('email');
-        
-        if( $rolRegistrado == 3 ){
-            $usuarios = $this->usuarios->where('activo', 1)
-                                        ->where('email <>', $mailRegistrado)
-                                        ->orderBy("role", "asc", "respMail", "asc", "apellidos", "asc")
-                                        ->findAll();   
+
+        if( isset($_POST['palabra']) ) {
+            $palabra = $this->request->getPost('palabra');
+            $parametro = $this->request->getPost('parametro');
+            if( $rolRegistrado == 3 ){
+                $usuarios = $this->usuarios->where('activo', 1)
+                                            ->where('email <>', $mailRegistrado)
+                                            ->like($parametro, $palabra)
+                                            ->orderBy("role", "asc", "respMail", "asc", "apellidos", "asc")
+                                            ->findAll();   
+            } else {
+                $usuarios = $this->usuarios->where('activo', 1)
+                                            ->where('email <>', $mailRegistrado)
+                                            ->where('role <>', 3)
+                                            ->like($parametro, $palabra)
+                                            ->orderBy("role", "asc", "respMail", "asc", "apellidos", "asc")
+                                            ->findAll();
+            }
         } else {
-            $usuarios = $this->usuarios->where('activo', 1)
-                                        ->where('email <>', $mailRegistrado)
-                                        ->where('role <>', 3)
-                                        ->orderBy("role", "asc", "respMail", "asc", "apellidos", "asc")
-                                        ->findAll();
+            if( $rolRegistrado == 3 ){
+                $usuarios = $this->usuarios->where('activo', 1)
+                                            ->where('email <>', $mailRegistrado)
+                                            ->orderBy("role", "asc", "respMail", "asc", "apellidos", "asc")
+                                            ->findAll();   
+            } else {
+                $usuarios = $this->usuarios->where('activo', 1)
+                                            ->where('email <>', $mailRegistrado)
+                                            ->where('role <>', 3)
+                                            ->orderBy("role", "asc", "respMail", "asc", "apellidos", "asc")
+                                            ->findAll();
+            }
         }
 
         foreach($usuarios as $usuario){
@@ -67,137 +98,80 @@ class Usuarios extends BaseController
         foreach( $otros as $otro ){
             $mios[] = $otro;
         }
+        echo json_encode($mios);
 
-
-        $tipo = (['funcion' => 0, 'flecha' => 'fa-arrow-down']);
-        $data = ['titulo' => 'Usuarios', 'datos' => $mios, 'tipo' => $tipo];
-
-        $this->cargarVista("usuarios",$data);
     }
 
     //PAGINA DE USUARIOS NO ACTIVOS
-    public function noActivos()
+    public function buscarUsuariosNoActivos()
     {
         $rolRegistrado = session('role');
         $mailRegistrado = session('email');
-        
-        if( $rolRegistrado == 3 ){
-            $usuarios = $this->usuarios->where('activo', 0)
-                                        ->where('tempId', 0)
-                                        ->where('email <>', $mailRegistrado)
-                                        ->orderBy("role", "asc", "apellidos", "asc")
-                                        ->findAll();   
+
+        if( isset($_POST['palabra']) ) {
+            $palabra = $this->request->getPost('palabra');
+            $parametro = $this->request->getPost('parametro');
+
+            if( $rolRegistrado == 3 ){
+                $usuarios = $this->usuarios->where('activo', 0)
+                                            ->where('tempId', 0)
+                                            ->where('email <>', $mailRegistrado)
+                                            ->like($parametro, $palabra)
+                                            ->orderBy("role", "asc", "apellidos", "asc")
+                                            ->findAll();   
+            } else {
+                $usuarios = $this->usuarios->where('activo', 0)
+                                            ->where('tempId', 0)
+                                            ->where('email <>', $mailRegistrado)
+                                            ->where('role <>', 3)
+                                            ->like($parametro, $palabra)
+                                            ->orderBy("role", "asc", "apellidos", "asc")
+                                            ->findAll();
+            }
         } else {
-            $usuarios = $this->usuarios->where('activo', 0)
-                                        ->where('tempId', 0)
-                                        ->where('email <>', $mailRegistrado)
-                                        ->where('role <>', 3)
-                                        ->orderBy("role", "asc", "apellidos", "asc")
-                                        ->findAll();
+            if( $rolRegistrado == 3 ){
+                $usuarios = $this->usuarios->where('activo', 0)
+                                            ->where('tempId', 0)
+                                            ->where('email <>', $mailRegistrado)
+                                            ->orderBy("role", "asc", "apellidos", "asc")
+                                            ->findAll();   
+            } else {
+                $usuarios = $this->usuarios->where('activo', 0)
+                                            ->where('tempId', 0)
+                                            ->where('email <>', $mailRegistrado)
+                                            ->where('role <>', 3)
+                                            ->orderBy("role", "asc", "apellidos", "asc")
+                                            ->findAll();
+            }
         }
-
-        $tipo = (['funcion' => 1, 'flecha' => 'fa-arrow-up']);
-        $data = ['titulo' => 'Usuarios No Activos', 'datos' => $usuarios, 'tipo' => $tipo];
-
-        $this->cargarVista("usuarios",$data);
+        echo json_encode($usuarios);
     }
-
-    public function buscarActivo()
-    {
-        $rolRegistrado = session('role');
-        $mailRegistrado = session('email');
-        $busqueda = $this->request->getPost('info');
-        $dondeBuscar = $this->request->getPost('donde');
-
-        if( $rolRegistrado == 3 ){
-            $usuarios = $this->usuarios->where('activo', 1)
-                                        ->where('email <>', $mailRegistrado)
-                                        ->like($dondeBuscar, $busqueda)
-                                        ->orderBy("role", "desc", "apellidos", "asc")
-                                        ->findAll();
-        } else {
-            $usuarios = $this->usuarios->where('activo', 1)
-                                        ->where('email <>', $mailRegistrado)
-                                        ->where('role <>', 3)
-                                        ->like($dondeBuscar, $busqueda)
-                                        ->orderBy("role", "asc", "apellidos", "asc")
-                                        ->findAll();
-        }
-
-        $titulo = 'Usuarios que contienen "' . $busqueda .'"';
-        $tipo = (['funcion' => 0, 'flecha' => 'fa-arrow-down']);
-        $titulo = 'Usuarios Activos que contienen "' . $busqueda .'"';
-        $data = ['titulo' => $titulo, 'datos' => $usuarios, 'tipo' => $tipo];
-
-        $this->cargarVista("usuarios",$data);
-    }
-    public function buscarNoActivo()
-    {
-        $rolRegistrado = session('role');
-        $mailRegistrado = session('email');
-        $busqueda = $this->request->getPost('info');
-        $dondeBuscar = $this->request->getPost('donde');
-
-        if( $rolRegistrado == 3 ){
-            $usuarios = $this->usuarios->where('activo', 0)
-                                        ->where('tempId', 0)
-                                        ->where('email <>', $mailRegistrado)
-                                        ->like($dondeBuscar, $busqueda)
-                                        ->orderBy("role", "desc", "apellidos", "asc")
-                                        ->findAll();
-        } else {
-            $usuarios = $this->usuarios->where('activo', 0)
-                                        ->where('tempId', 0)
-                                        ->where('email <>', $mailRegistrado)
-                                        ->where('role <>', 3)
-                                        ->like($dondeBuscar, $busqueda)
-                                        ->orderBy("role", "asc", "apellidos", "asc")
-                                        ->findAll();
-        }
-        $titulo = 'Usuarios que contienen "' . $busqueda .'"';
-        $tipo = (['funcion' => 1, 'flecha' => 'fa-arrow-up']);
-        $titulo = 'Usuarios No Activos que contienen "' . $busqueda .'"';
-        $data = ['titulo' => $titulo, 'datos' => $usuarios, 'tipo' => $tipo];
-
-        $this->cargarVista("usuarios",$data);
-    }
-
-    /////////////////////////////////////////////
 
     //PAGINA DE USUARIOS QUE PERTENECEN A UN EXPERTO
-    public function misColaboradores()
+    public function buscarMisColaboradores()
     {
         $responsable = session('email');
-        $usuarios = $this->usuarios->where('activo', 1)
-                                    ->where('role', 1)
-                                    ->where('respMail',$responsable)
-                                    ->where('tempId', 0)
-                                    ->orderBy("apellidos", "asc")
-                                    ->findAll();
-
-        $tipo = (['flecha' => 'fa-arrow-down']);
-        $data = ['titulo' => 'Mis colaboradores', 'datos' => $usuarios, 'tipo' => $tipo];
-
-        $this->cargarVista("misColaboradores",$data);
+        if( isset($_POST['palabra']) ) {
+            $palabra = $this->request->getPost('palabra');
+            $parametro = $this->request->getPost('parametro');
+            $usuarios = $this->usuarios->where('activo', 1)
+                                ->where('role', 1)
+                                ->where('respMail',$responsable)
+                                ->where('tempId', 0)
+                                ->like($parametro, $palabra)
+                                ->orderBy("apellidos", "asc")
+                                ->findAll();  
+        } else {
+            $usuarios = $this->usuarios->where('activo', 1)
+                                ->where('role', 1)
+                                ->where('respMail',$responsable)
+                                ->where('tempId', 0)
+                                ->orderBy("apellidos", "asc")
+                                ->findAll(); 
+        }
+        echo json_encode($usuarios);
     }
 
-    public function buscarColaboradores()
-    {
-        $responsable = session('email');
-        $busqueda = $this->request->getPost('info');
-        $dondeBuscar = $this->request->getPost('donde');
-
-        $usuarios = $this->usuarios->where('respMail',$responsable)
-                                    ->like($dondeBuscar, $busqueda)
-                                    ->orderBy("apellidos", "asc")
-                                    ->findAll();
-
-        $titulo = 'Mis colaboradores que contienen "' . $busqueda .'"';
-        $tipo = (['flecha' => 'fa-arrow-down']);
-        $data = ['titulo' => $titulo, 'datos' => $usuarios, 'tipo' => $tipo];
-
-        $this->cargarVista("misColaboradores",$data);
-    }
     /////////////////////////////////////////////
 
     //NUEVO USUARIO
@@ -421,20 +395,6 @@ class Usuarios extends BaseController
         return redirect()->to(base_url().'/usuarios');
     }
 
-    public function desactivar($id)
-    {
-
-        $this->usuarios->update( $id, ['activo' => 0]);
-        $usuario = $this->usuarios->where('id',$id)->first();
-
-        $mensaje = 'Resultado:<br>';
-
-        $mensaje = $mensaje . "-El usuario ".$usuario['nombre']." ".$usuario['apellidos']." ha sido desactivado<br>"; 
-        $session = session();
-        $session->setFlashdata('msg',$mensaje);
-
-        return redirect()->to(base_url().'/usuarios/activos');
-    }
     public function activar($id)
     {
         $this->usuarios->update( $id, ['activo' => 1]);
@@ -447,7 +407,22 @@ class Usuarios extends BaseController
         $session = session();
         $session->setFlashdata('msg',$mensaje);
 
-        return redirect()->to(base_url().'/usuarios/noActivos');
+        return redirect()->to(base_url().'/usuarios/usuariosNoActivos');
+    }
+
+    public function desactivar($id)
+    {
+
+        $this->usuarios->update( $id, ['activo' => 0]);
+        $usuario = $this->usuarios->where('id',$id)->first();
+
+        $mensaje = 'Resultado:<br>';
+
+        $mensaje = $mensaje . "-El usuario ".$usuario['nombre']." ".$usuario['apellidos']." ha sido desactivado<br>"; 
+        $session = session();
+        $session->setFlashdata('msg',$mensaje);
+
+        return redirect()->to(base_url().'/usuarios/usuariosActivos');
     }
 
     public function login()
