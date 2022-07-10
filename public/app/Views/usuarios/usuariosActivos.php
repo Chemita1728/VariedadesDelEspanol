@@ -69,55 +69,55 @@
 
 	<script>
 
-			buscarUsuarios();
+		buscarUsuarios();
 
-			function cambiarRol(numero){
-				valor = ['Colaborador', 'Experto', 'Administrador'];
-				return valor[numero - 1];
-			}
-			function cambiarNivelEsp(numero){
-				valor = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo'];
-				return valor[numero -1];
-			}
+		function cambiarRol(numero){
+			valor = ['Colaborador', 'Experto', 'Administrador'];
+			return valor[numero - 1];
+		}
+		function cambiarNivelEsp(numero){
+			valor = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo'];
+			return valor[numero -1];
+		}
 
-			$(document).on('keyup', '#buscarUsuario', function(){
-				var palabra = $(this).val();
-				if( palabra != "" ){
-					buscarUsuarios(palabra);
-				}else{
-					buscarUsuarios();
-				}
-			});
-			
-			function buscarUsuarios(palabra){
-				var parametro = document.getElementById("parametro").value;
-				$.ajax({
-					url: "<?php echo base_url(); ?>/usuarios/buscarUsuarios",
-					method: "POST",
-					data: {palabra: palabra, parametro: parametro}
-				}).done(function(res){
-					var datos = JSON.parse(res);
-					$("#tablaUsuarios tr").remove(); 
-					datos.forEach(function(dato, index) {
-						// <td><a href="'+window.location.origin+'/usuarios/editar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
-						// <td><a href="'+window.location.origin+'/usuarios/activar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>
-						if( dato.role < 3 ){
-							document.getElementById("tablaUsuarios").insertRow(-1).innerHTML = '<td id="'+index+'1"></td><td id="'+index+'2"></td><td id="'+index+'3"></td><td id="'+index+'4"></td><td id="'+index+'5"></td><td id="'+index+'6"></td><td id="'+index+'7"></td></td><td id="'+index+'8"></td><td><a href="'+window.location.origin+'/usuarios/editar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td><td><a href="'+window.location.origin+'/usuarios/desactivar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>';
-						} else {
-							document.getElementById("tablaUsuarios").insertRow(-1).innerHTML = '<td id="'+index+'1"></td><td id="'+index+'2"></td><td id="'+index+'3"></td><td id="'+index+'4"></td><td id="'+index+'5"></td><td id="'+index+'6"></td><td id="'+index+'7"></td></td><td id="'+index+'8"></td><td><a href="'+window.location.origin+'/usuarios/editar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>';
-						}
-						$('#'+index+'1').html(dato.nombre);
-						$('#'+index+'2').html(dato.apellidos);
-						$('#'+index+'3').html(dato.email);
-						$('#'+index+'4').html(cambiarRol(dato.role));
-						$('#'+index+'5').html(cambiarNivelEsp(dato.spanishlvl));
-						$('#'+index+'6').html(dato.university);
-						$('#'+index+'7').html(dato.birthPlace);
-						$('#'+index+'8').html(dato.respMail);
-					});
-				})
+		$(document).on('keyup', '#buscarUsuario', function(){
+			var palabra = $(this).val();
+			if( palabra != "" ){
+				buscarUsuarios(palabra);
+			}else{
+				buscarUsuarios();
 			}
+		});
+		
+		function buscarUsuarios(palabra){
+			var parametro = document.getElementById("parametro").value;
+			$.ajax({
+				url: "<?php echo base_url(); ?>/usuarios/buscarUsuarios",
+				method: "POST",
+				data: {palabra: palabra, parametro: parametro}
+			}).done(function(res){
+				var datos = JSON.parse(res);
+				$("#tablaUsuarios tr").remove(); 
+				datos.forEach(function(dato, index) {
+					// <td><a href="'+window.location.origin+'/usuarios/editar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
+					// <td><a href="'+window.location.origin+'/usuarios/activar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>
+					if( dato.role < 3 ){
+						document.getElementById("tablaUsuarios").insertRow(-1).innerHTML = '<td id="'+index+'1"></td><td id="'+index+'2"></td><td id="'+index+'3"></td><td id="'+index+'4"></td><td id="'+index+'5"></td><td id="'+index+'6"></td><td id="'+index+'7"></td></td><td id="'+index+'8"></td><td><a href="'+window.location.origin+'/usuarios/editar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td><td><a href="'+window.location.origin+'/usuarios/desactivar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-arrow-down"></i></a></td>';
+					} else {
+						document.getElementById("tablaUsuarios").insertRow(-1).innerHTML = '<td id="'+index+'1"></td><td id="'+index+'2"></td><td id="'+index+'3"></td><td id="'+index+'4"></td><td id="'+index+'5"></td><td id="'+index+'6"></td><td id="'+index+'7"></td></td><td id="'+index+'8"></td><td><a href="'+window.location.origin+'/usuarios/editar/'+dato.id+'" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a></td>';
+					}
+					$('#'+index+'1').html(dato.nombre);
+					$('#'+index+'2').html(dato.apellidos);
+					$('#'+index+'3').html(dato.email);
+					$('#'+index+'4').html(cambiarRol(dato.role));
+					$('#'+index+'5').html(cambiarNivelEsp(dato.spanishlvl));
+					$('#'+index+'6').html(dato.university);
+					$('#'+index+'7').html(dato.birthPlace);
+					$('#'+index+'8').html(dato.respMail);
+				});
+			})
+		}
 
-		</script>
+	</script>
 
 </div>

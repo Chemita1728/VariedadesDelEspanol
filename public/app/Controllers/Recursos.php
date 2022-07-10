@@ -87,26 +87,37 @@ class Recursos extends BaseController
         $recurso = $this->recursos->where('resourceID', $id)
                                     ->first(); 
 
-        $idRec = $recurso['resourceID'];
-        $relaciones = $this->compuestos->where('resID', $idRec)
-                                        ->findAll();
-        
-        $caracteristicas = $this->caracteristicas->findAll();
-        $valores = [];
+        $data = ['recurso' => $recurso];
+        $this->cargarVista("Recurso",$data);
+    }
 
-        if( count($relaciones) != 0 ){
-            foreach( $relaciones as $relacion){
-                // echo ($relacion['charID']);
-                // echo ($relacion['valID']);
-                $idChar = $relacion['charID'];
-                $idVal = $relacion['valID'];
-                $valor = $this->valores->where('charID', $idChar)->where('valID', $idVal)->first();
-                array_push($valores, $valor);
-            }
+    //Funcion para cargar los nombres de cada caracteristica
+    public function cargarCaracteristicas(){
+        $parametro = $this->request->getPost('parametro');
+        $caracteristica = $this->caracteristicas->where('charID', $parametro)
+                                                    ->first();
+        echo json_encode($caracteristica);                                            
+    }
+
+    //Funcion para cargar los valores pertenecientes a un recurso dependiendo de la caracteristica elegida
+    public function cargarValores(){
+        $id = $this->request->getPost('id');
+        $parametro = $this->request->getPost('parametro');
+
+        $relaciones = $this->compuestos->where('resID', $id)
+                                        ->where('charID', $parametro)
+                                        ->findAll();
+
+        $valores = [];
+        foreach( $relaciones as $relacion){
+            $idVal = $relacion['valID'];
+            $valor = $this->valores->where('charID', $parametro)
+                                    ->where('valID', $idVal)
+                                    ->first();
+            array_push($valores, $valor);
         }
 
-        $data = ['recurso' => $recurso, 'valores' => $valores, 'caracteristicas' => $caracteristicas ];
-        $this->cargarVista("Recurso",$data);
+        echo json_encode($valores);  
     }
 
     // Función que carga la pagina para crear un nuevo recurso
