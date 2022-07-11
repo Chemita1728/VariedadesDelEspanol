@@ -31,6 +31,8 @@
 		<p><?php echo session('msg'); ?><p>
 	<?php endif; ?>
 
+    <input type="hidden" type="text" id="idRec"  name="idRec" value="<?php echo $recurso['resourceID']; ?>"/>
+
 	<div class="contaired-fluid mb-4">
 		<div class="form-group">
             <div class="card shadow mb-4">
@@ -38,7 +40,6 @@
                     <h6 class="m-0 font-weight-bold"><?php echo $recurso['title'] ?></h6>
                 </div>
                 <div class="card-body">
-                    <p>*ID: <?php echo $recurso['resourceID']; ?></p>
                     <p>Fuente: <?php echo $recurso['font']; ?></p>
                     <p>Descripción: <?php echo $recurso['description']; ?></p>
                     <p>Nivel de Español: <?php echo cambioNivelEsp($recurso['spanishlvl']); ?></p>
@@ -51,18 +52,24 @@
 			</div>
 		</div>
 
-        <?php foreach($valores as $valor) { ?>
-            <div class="card shadow mb-4"> 
-                <div class="card-body">
-                    <p><?php echo $caracteristicas[$valor['charID'] - 1]['title1'] ?></p>
-                    <p><?php echo $valor['at1'] ?></p>
-                    <p><?php echo $caracteristicas[$valor['charID'] - 1]['title2'] ?></p>
-                    <p><?php echo $valor['at2'] ?></p>
-                    <p><?php echo $caracteristicas[$valor['charID'] - 1]['title3'] ?></p>
-                    <p><?php echo $valor['at3'] ?></p>
-                </div>
-            </div>
-        <?php } ?>
+        <select class="form-control bg-light mb-4" id="parametro" name="parametro" onchange="cargarCaracteristicas()">
+            <option disabled selected>Selecciona una opción</option>    
+            <option value=1>Pronunciación</option>
+            <option value=2>Gramatica</option>
+            <option value=3>Vocabulario</option>
+        </select>
+        <div class="table-responsive" id="tablaCaracteristicas" style="display: none">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thread id="tablaNombres">
+                    <tr>
+                        <th id="nombreCar1"></th>
+                        <th id="nombreCar2"></th>
+                        <th id="nombreCar3"></th>
+                    </tr>
+                </thread>
+                <tbody id="tablaValores"></tbody>
+            </table>
+        </div>
 
         <button onclick="desocultar()" class="btn btn-warning"> Hacer Comentario </button>
         <a href="<?php echo base_url(); ?>/recursos/publicar/<?php echo $recurso['resourceID']; ?>" class="btn btn-warning">Validar/Publicar Recurso</a>
@@ -88,9 +95,46 @@
 
         <button type="submit" class="btn btn-success">Mandar Comentario</button>
     </div>
-    
-	</div>
-    </div>
+
+    <script>
+
+        function cargarCaracteristicas(){
+            var parametro = document.getElementById("parametro").value;
+            $.ajax({
+                url: "<?php echo base_url(); ?>/recursos/cargarCaracteristicas",
+                method: "POST",
+                data: {parametro: parametro}
+            }).done(function(res){
+                
+                document.getElementById("tablaCaracteristicas").style.display = "block";
+
+                var caracteristica = JSON.parse(res);
+                $('#nombreCar1').html(caracteristica.title1);
+                $('#nombreCar2').html(caracteristica.title2);
+                $('#nombreCar3').html(caracteristica.title3);
+                cargarValores(parametro);
+            });
+        }
+
+        function cargarValores(parametro){
+            var id = document.getElementById("idRec").value;
+            $.ajax({
+                url: "<?php echo base_url(); ?>/recursos/cargarValores",
+                method: "POST",
+                data: {id: id, parametro: parametro}
+            }).done(function(res){
+                var valores = JSON.parse(res);
+                $("#tablaValores tr").remove(); 
+				valores.forEach(function(valor, index) {
+                    document.getElementById("tablaValores").insertRow(-1).innerHTML = '<td id="val'+index+'1"></td><td id="val'+index+'2"></td><td id="val'+index+'3"></td>';
+                    $('#val'+index+'1').html(valor.at1);
+                    $('#val'+index+'2').html(valor.at2);
+                    $('#val'+index+'3').html(valor.at3);
+                });
+            })
+        }
+
+    </script>
 
 </div>
 
