@@ -2,6 +2,14 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
 		<h1 class="h3 mb-0 text-gray-800">Recurso</h1>
+
+
+        <?php if ( session('role') > 1 || session('email') == $recurso['proposerMail'] ) { ?>
+            <a href="<?php echo base_url(); ?>/recursos/editarRecurso/<?php echo $recurso['resourceID']; ?>" class="btn btn-dark">
+                <i class="fas fa-pencil-alt"></i>
+            </a>     
+        <?php } ?> 
+
     </div>
 	<!-- Page Heading -->
 

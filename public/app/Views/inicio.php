@@ -22,9 +22,11 @@
                 <div class="card shadow mb-4">
                     <a href="<?php echo base_url(); ?>/recursos/recurso/<?php echo $recurso['resourceID']; ?>" style='color:grey; text-decoration:none;'>
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold"><?php echo $recurso['title'] ?></h6>
-                            <p class="m-0">id: <?php echo $recurso['resourceID'] ?></p>
-                            <p class="m-0">Autor: <?php echo $recurso['autor'] ?></p>
+                            <div class="dropdown no-arrow">
+                                <h6 class="m-0 font-weight-bold"><?php echo $recurso['title'] ?></h6>
+                                <p class="m-0">id: <?php echo $recurso['resourceID'] ?></p>
+                                <p class="m-0">Autor: <?php echo $recurso['autor'] ?></p>
+                            </div>
                         </div>
                     </a>
                     <div class="card-body">

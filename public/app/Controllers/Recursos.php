@@ -257,37 +257,9 @@ class Recursos extends BaseController
     // -Función que carga la vista de un recurso a revisar por un experto o administrador
     public function validarRecurso($id)
     {
-        //forma1 NO FUNCIONA
-        // $where = "state=3 OR state=1";
-        // $recurso = $this->recursos->where('resourceID', $id)
-        //                             ->where($where)
-        //                             ->first();
-        //forma2 NO FUNCIONA
-        // $recurso = $this->recursos->where('resourceID', $id)
-        //                             ->where('state', 1)
-        //                             ->orWhere('state', 3)
-        //                             ->first();     
-
         $recurso = $this->recursos->where('resourceID', $id)
                                     ->first(); 
-
-        $idRec = $recurso['resourceID'];
-        $relaciones = $this->compuestos->where('resID', $idRec)
-                                        ->findAll();
-        
-        $caracteristicas = $this->caracteristicas->findAll();
-        $valores = [];
-
-        if( count($relaciones) != 0 ){
-            foreach( $relaciones as $relacion){
-                $idChar = $relacion['charID'];
-                $idVal = $relacion['valID'];
-                $valor = $this->valores->where('charID', $idChar)->where('valID', $idVal)->first();
-                array_push($valores, $valor);
-            }
-        }
-
-        $data = ['recurso' => $recurso, 'valores' => $valores, 'caracteristicas' => $caracteristicas ];
+        $data = ['recurso' => $recurso];
         $this->cargarVista("validarRecurso",$data);
     }
 
@@ -339,12 +311,6 @@ class Recursos extends BaseController
     //-Función que carga la vista de un recurso a revisar por un colaborador
     public function revisarRecurso($id)
     {
-
-        // $where = "state=4 OR state=2";
-        // $recurso = $this->recursos->where('resourceID', $id)
-        //                             ->where($where)
-        //                             ->first(); 
-        
         $recurso = $this->recursos->where('resourceID', $id)
                                     ->first();
 
@@ -493,6 +459,163 @@ class Recursos extends BaseController
             }
         }
         echo json_encode($vocabularioDeRecurso);
+    }
+
+    public function editarRecurso($id){
+        $recurso = $this->recursos->where('resourceID', $id)
+                                    ->first();
+
+        $idRec = $recurso['resourceID'];
+        $relaciones = $this->compuestos->where('resID', $idRec)
+                                        ->findAll();
+        
+        $caracteristicas = $this->caracteristicas->findAll();
+        $todosLosValores = $this->valores->findAll();
+        $valoresDeRecurso = [];
+
+        if( count($relaciones) != 0 ){
+            foreach( $relaciones as $relacion){
+                $idChar = $relacion['charID'];
+                $idVal = $relacion['valID'];
+                $valor = $this->valores->where('charID', $idChar)->where('valID', $idVal)->first();
+                array_push($valoresDeRecurso, $valor);
+            }
+        }
+
+
+        $data = ['recurso' => $recurso, 'valoresDeRecurso' => $valoresDeRecurso, 'todosLosValores' => $todosLosValores, 'caracteristicas' => $caracteristicas ];
+        $this->cargarVista("editarRecurso",$data);
+    }
+
+    public function mandarEdicion($id)
+    {
+        $title = $this->request->getPost('title');
+        $description = $this->request->getPost('description');
+        $font = $this->request->getPost('font');
+        $variety = $this->request->getPost('variety');
+
+        $mensaje = 'Resultado:<br>';
+        $data=(['','']);
+
+        if( session('role') > 1 ){
+            $this->recursos->update( $id, ['title' => $title,
+                                    'description' => $description,
+                                    'font' => $font,
+                                    'variety' => $variety]);
+        } else {
+            $this->recursos->update( $id, ['title' => $title,
+                                    'description' => $description,
+                                    'state' => 3,
+                                    'font' => $font,
+                                    'variety' => $variety]);
+        }
+
+        //hago este for para ver los checkbox que esta seleccionados de cada tipo
+        for ($i = 1; $i <= 3; $i++) {  
+            if($i == 1) $vector="pro";
+			if($i == 2) $vector="gra";
+			if($i == 3) $vector="vocFinal";                    
+        
+            //compruebo si hay algun checkbox seleccionado
+            if(!empty($_POST[$vector])) {
+
+                $relaciones = $this->compuestos->where('resID', $id)
+                                                ->where('charID', $i)
+                                                ->findAll(); 
+
+                // miro todas las relaciones que tiene el recurso y las comparo con las seleccionadas
+                foreach( $relaciones as $relacion ){
+                    $estaSeleccionado = false;
+                    foreach($_POST[$vector] as $value){
+                        //si la relacion sigue seleccionada se queda como esta
+                        if( $relacion['valID'] == $value ) $estaSeleccionado = true;
+                    }
+                    // si alguna de las relaciones no esta seleccionada se borra de la tabla
+                    if( $estaSeleccionado == false ){
+                        $this->compuestos->where('resID', $id)
+                                            ->where('charID', $i)
+                                            ->where('valID', $relacion['valID'])
+                                            ->delete();
+                    }
+                }
+
+                // miro todos los seleccionados y los busco en la tabla
+                foreach($_POST[$vector] as $value){
+                    $busco = $this->compuestos->where('resID', $id)
+                                                ->where("charID", $i)
+                                                ->where("valID", $value)
+                                                ->first(); 
+                    // si no estan en la tabla los añado
+                    if( $busco == NULL ){                         
+                        $this->compuestos->insert(['resID' => $id, 'charID' => $i, 'valID' => $value ]);
+                    } 
+                }
+            }
+        }                   
+
+        $mensaje = $mensaje . "-La edición del recurso ha sido mandada<br>";
+        
+        $session = session();
+        $session->setFlashdata('msg',$mensaje);
+        return redirect()->to(base_url('/recursos'));
+    }
+
+    public function nuevaPronunciacion()
+    {
+        $data=(['','']);
+        $this->cargarVista("nuevaPronunciacion",$data);
+    }
+
+    public function crearPronunciacion(){
+        $pro1 = $this->request->getPost('pro1');
+        $pro2 = $this->request->getPost('pro2');
+        $pro3 = $this->request->getPost('pro3');
+        $mensaje = 'Resultado:<br>';
+        $data=(['','']);
+
+        $pronunciacion = $this->valores->where('charID', 1)->findAll();
+        $cont = count($pronunciacion) + 1;
+    
+        $this->valores->insert(['charID' => 1,
+                                    'valID' => $cont,
+                                    'at1' => $pro1,
+                                    'at2' => $pro2,
+                                    'at3' => $pro3]);
+            
+        $mensaje = $mensaje . "-La nueva caracteristica de pronunciación ha sido creada<br>";
+
+        $session = session();
+        $session->setFlashdata('msg',$mensaje);
+        $this->cargarVista("nuevaPronunciacion",$data);
+    }
+
+    public function nuevaGramatica()
+    {
+        $data=(['','']);
+        $this->cargarVista("nuevaGramatica",$data);
+    }
+
+    public function crearGramatica(){
+        $gra1 = $this->request->getPost('gra1');
+        $gra2 = $this->request->getPost('gra2');
+        $gra3 = $this->request->getPost('gra3');
+        $mensaje = 'Resultado:<br>';
+        $data=(['','']);
+
+        $gramatica = $this->valores->where('charID', 2)->findAll();
+        $cont = count($gramatica) + 1;
+    
+        $this->valores->insert(['charID' => 2,
+                                    'valID' => $cont,
+                                    'at1' => $gra1,
+                                    'at2' => $gra2,
+                                    'at3' => $gra3]);
+            
+        $mensaje = $mensaje . "-La nueva caracteristica de gramática ha sido creada<br>";
+
+        $session = session();
+        $session->setFlashdata('msg',$mensaje);
+        $this->cargarVista("nuevaGramatica",$data);
     }
 
 

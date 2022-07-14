@@ -58,12 +58,12 @@
                 <?php if (session('role') >= 2) { ?>
                     <!-- Nav Item - Pages Collapse Menu -->
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="true" aria-controls="collapseTwo">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios"
+                            aria-expanded="true" aria-controls="collapseUsuarios">
                             <i class="fas fa-users"></i>
                             <span>Usuarios</span>
                         </a>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="collapse" id="collapseUsuarios" >
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <!--<h6 class="collapse-header">Ajustes de Usuarios:</h6>-->
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/usuarios/usuariosActivos">Usuarios Activos</a>
@@ -82,16 +82,36 @@
                 <?php if (session('role') >= 1) { ?>
                     <!-- Nav Item - Pages Collapse Menu -->
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="true" aria-controls="collapseTwo">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRecursos"
+                            aria-expanded="true" aria-controls="collapseRecursos">
                             <i class="fas fa-users"></i>
                             <span>Recursos</span>
                         </a>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="collapse" id="collapseRecursos" >
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <!--<h6 class="collapse-header">Ajustes de Usuarios:</h6>-->
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevoRecurso">Nuevo Recurso</a>    
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/aRevisar/<?php echo session('role'); ?>">Recursos que Revisar</a>    
+                            </div>
+                        </div>
+                    </li>
+                <?php } ?> 
+
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
+
+                <?php if (session('role') >= 2) { ?>
+                    <!-- Nav Item - Pages Collapse Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaracteristicas"
+                            aria-expanded="true" aria-controls="collapseCaracteristicas">
+                            <i class="fas fa-users"></i>
+                            <span>Caracteristicas</span>
+                        </a>
+                        <div class="collapse" id="collapseCaracteristicas" >
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaPronunciacion">Agregar Pronunciación</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaGramatica">Agregar Gramaticas</a>
                             </div>
                         </div>
                     </li>
