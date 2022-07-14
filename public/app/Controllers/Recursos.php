@@ -134,11 +134,13 @@ class Recursos extends BaseController
     // si lo crea un experto o un administrador se publica directamente
     public function crearRecurso()
     {
+        
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
         $font = $this->request->getPost('font');
         $variety = $this->request->getPost('variety');
 
+        
         $autor = session('nombre'). " " .session('apellidos');
         
         $mensaje = 'Resultado:<br>';
@@ -173,11 +175,31 @@ class Recursos extends BaseController
             
             $mensaje = $mensaje . "-El recurso se ha publicado<br>";
         }
-
+        
+        
         $recurso = $this->recursos->where('title', $title)
                                     ->where("description", $description)
                                     ->first(); 
         
+        $file = $this->request->getFile('file');        
+        
+        if( $file->isValid() && ! $file->hasMoved() ){
+
+            $mime = $file->getMimeType(); // video/mp4
+            $format = substr($mime, 0, strpos($mime, "/")); // video
+
+            if( $format == "image" ) $carpeta = "public/uploads/imagenes";
+            else if( $format == "video" ) $carpeta = "public/uploads/videos";
+            else if( $format == "application" ) $carpeta = "public/uploads/pdfs";
+
+            $format2 = $file->guessExtension(); // mp4
+            $nombreArchivo = $file->getRandomName();
+            $file->move(ROOTPATH.$carpeta, $nombreArchivo);
+            $this->recursos->update( $recurso['resourceID'], ['format' => $format,
+                                                                'format2' => $format2,
+                                                                'file' => $nombreArchivo]);  
+        }
+
         // echo("Pronunciación");
         if(!empty($_POST['pro'])) {
             foreach($_POST['pro'] as $value){
@@ -203,6 +225,7 @@ class Recursos extends BaseController
         $session = session();
         $session->setFlashdata('msg',$mensaje);
         return redirect()->to(base_url().'/recursos/nuevoRecurso');
+        
     }
     
     // -Funcion que carga la vista de los recursos a revisar

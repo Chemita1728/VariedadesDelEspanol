@@ -139,3 +139,8 @@
 [Mon Jul 04 13:40:09.970084 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 [Sat Jul 09 16:39:21.217735 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
 [Sat Jul 09 16:39:21.225849 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Jul 14 10:23:39.361519 2022] [php7:error] [pid 19] [client 172.24.0.1:57808] PHP Fatal error:  Cannot declare class Config\\Mimes, because the name is already in use in /var/www/html/app/Config/Mimes.php on line 19, referer: http://localhost/recursos/nuevoRecurso
+[Thu Jul 14 16:28:12.600975 2022] [php7:warn] [pid 19] [client 172.24.0.1:58838] PHP Warning:  Unterminated comment starting line 208 in /var/www/html/app/Controllers/Recursos.php on line 208, referer: http://localhost/recursos/recurso/53
+[Thu Jul 14 16:28:14.392987 2022] [php7:warn] [pid 17] [client 172.24.0.1:58836] PHP Warning:  Unterminated comment starting line 208 in /var/www/html/app/Controllers/Recursos.php on line 208, referer: http://localhost/recursos
+[Thu Jul 14 16:28:15.837478 2022] [php7:warn] [pid 24] [client 172.24.0.1:58840] PHP Warning:  Unterminated comment starting line 208 in /var/www/html/app/Controllers/Recursos.php on line 208, referer: http://localhost/recursos/nuevoRecurso
+[Thu Jul 14 16:28:22.895083 2022] [php7:warn] [pid 22] [client 172.24.0.1:58844] PHP Warning:  Unterminated comment starting line 208 in /var/www/html/app/Controllers/Recursos.php on line 208, referer: http://localhost/

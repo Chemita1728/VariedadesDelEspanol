@@ -10,7 +10,7 @@
 		<p><?php echo session('msg'); ?><p>
 	<?php endif; ?>
     
-	<form method="POST" action="<?php echo base_url(); ?>/recursos/crearRecurso" autocomplere="off">
+	<form method="POST" action="<?php echo base_url(); ?>/recursos/crearRecurso" autocomplere="off" enctype="multipart/form-data">
 	
 	<div class="contaired-fluid">
 		<div class="form-group">
@@ -22,7 +22,7 @@
                 <div class="col-12 col-sm-6"></div>
 				<div class="col-12 col-sm-8">
 					<label>Descripción</label>
-					<input class="form-control" id="description" name="description" type="text" autofocus require />
+					<textarea class="form-control" id="description" name="description" type="text" rows="5" autofocus require></textarea>
 				</div>
                 <div class="col-12 col-sm-6">
 					<label>Fuente</label>
@@ -53,7 +53,7 @@
 			<div class="row">	
 				<div class="col-12 col-sm-6">
 					<label>Fichero</label>
-					<input class="form-control" id="file" name="file" type="file" autofocus require />
+					<input class="form-control" id="file" name="file" type="file">
 				</div>
 				<div class="col-12 col-sm-6">
 					<label>Enlace Interesante</label>
@@ -117,7 +117,7 @@
 							</div> 
 						</div>
 						<div id="botonNuevoVocabulario" class="input-group col-lg-4" style="display: none">
-							<button type="button" onclick="desocultar()" class="btn btn-success">Añadir nuevo vocabulario</button>
+							<button type="button" onclick="ocultarDesocultarNuevoVocabulario()" class="btn btn-success">Añadir nuevo vocabulario</button>
 						</div>
 						<table class="table table-bordered" id="tablaVocabulario" width="100%" cellspacing="0">
 							<tbody></tbody>
@@ -190,7 +190,7 @@
 
 			}
 
-			function desocultar() {
+			function ocultarDesocultarNuevoVocabulario() {
 				var form = document.getElementById("nuevoVocabulario");
 				if ( form.style.display === "none" ) {
 					form.style.display = "block";
@@ -232,14 +232,10 @@
 						$('#'+index+'2').html(dato.at2);
 						$('#'+index+'3').html(dato.at3);
 					});
-					if( datos.length === 0){
-						var boton = document.getElementById("botonNuevoVocabulario");
-						if ( boton.style.display === "none" ) {
-							boton.style.display = "block";
-						} else {
-							boton.style.display = "none";
-						}
-					}
+					var boton = document.getElementById("botonNuevoVocabulario");
+					if( datos.length == 0 ){
+						boton.style.display = "block";
+					} else 	boton.style.display = "none";
 				})
 			}
 
@@ -252,7 +248,9 @@
 					method: "POST",
 					data: {lema: lema, forma: forma, sign: sign}
 				}).done(function(){
-					desocultar();
+					ocultarDesocultarNuevoVocabulario();
+					document.getElementById("buscarVoc").value = "";
+					buscarVocabulario();
 				})
 			}
 

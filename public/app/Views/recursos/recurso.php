@@ -26,7 +26,7 @@
     ?> 
 
     <input type="hidden" type="text" id="idRec"  name="idRec" value="<?php echo $recurso['resourceID']; ?>"/>
-                
+
     <div class="card shadow mb-4">  
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold"><?php echo $recurso['title'] ?></h6>
@@ -35,13 +35,34 @@
         </div>
         <div class="card-body">
             <p><?php echo $recurso['description'] ?></p>
-            <p>Fuente: <?php echo $recurso['font'] ?></p>
-            <p>Archivo:</p>
+            <p>Fuente: <?php echo $recurso['font'] ?></p>  
             <p>Link:</p>
             <p>Variedad: <?php echo cambioVariedad($recurso['variety']) ?></p>
             <p>Nivel de Español: <?php echo cambioNivelEsp($recurso['spanishlvl']) ?></p>
         </div>
     </div>
+
+    <?php if ( $recurso['file'] != NULL ) { ?>
+        <div id="botonArchivo" class="input-group col-lg-4 mb-4" style="display: block">
+            <button type="button" onclick="verArchivo()" class="btn btn-success">Ver archivo asociado al recurso</button>
+        </div>
+
+        <?php if ( $recurso['format'] == "image" ) { ?>
+            <div class="mb-4" id="archivo" style="display: none">
+                <img height="300" src="<?php echo base_url(); ?>/uploads/imagenes/<?php echo $recurso['file'] ?>" alt="Pues no esta">
+            </div>
+        <?php } ?> 
+        <?php if ( $recurso['format'] == "video" ) { ?>
+            <video class="mb-4" id="archivo" width="600" controls style="display: none">
+                <source src="<?php echo base_url(); ?>/uploads/videos/<?php echo $recurso['file'] ?>" type="video/mp4">
+            </video>
+        <?php } ?> 
+        <?php if ( $recurso['format'] == "application" ) { ?>
+            <div class="mb-4" id="archivo" style="display: none">
+                <p>Aqui va un pdf xd:</p>
+            </div>
+        <?php } ?> 
+    <?php } ?> 
 
     
     <select class="form-control bg-light mb-4" id="parametro" name="parametro" onchange="cargarCaracteristicas()">
@@ -99,6 +120,11 @@
                     $('#val'+index+'3').html(valor.at3);
                 });
             })
+        }
+
+        function verArchivo() {
+            document.getElementById("archivo").style.display = "block";
+            document.getElementById("botonArchivo").style.display = "none";
         }
 
     </script>
