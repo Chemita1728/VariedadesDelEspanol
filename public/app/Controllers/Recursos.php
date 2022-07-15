@@ -194,6 +194,8 @@ class Recursos extends BaseController
 
             $format2 = $file->guessExtension(); // mp4
             $nombreArchivo = $file->getRandomName();
+            // echo $format;
+            // echo $format2;
             $file->move(ROOTPATH.$carpeta, $nombreArchivo);
             $this->recursos->update( $recurso['resourceID'], ['format' => $format,
                                                                 'format2' => $format2,

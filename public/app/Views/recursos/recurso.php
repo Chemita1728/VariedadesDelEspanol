@@ -49,17 +49,17 @@
 
         <?php if ( $recurso['format'] == "image" ) { ?>
             <div class="mb-4" id="archivo" style="display: none">
-                <img height="300" src="<?php echo base_url(); ?>/uploads/imagenes/<?php echo $recurso['file'] ?>" alt="Pues no esta">
+                <img height="300" src="<?php echo base_url(); ?>/uploads/imagenes/<?php echo $recurso['file'] ?>" alt="Imagen del Recurso">
             </div>
         <?php } ?> 
         <?php if ( $recurso['format'] == "video" ) { ?>
-            <video class="mb-4" id="archivo" width="600" controls style="display: none">
-                <source src="<?php echo base_url(); ?>/uploads/videos/<?php echo $recurso['file'] ?>" type="video/mp4">
+            <video class="mb-4" id="archivo" controls style="display: none">
+                <source src="<?php echo base_url(); ?>/uploads/videos/<?php echo $recurso['file'] ?>" type="video/mp4" width="100%">
             </video>
         <?php } ?> 
         <?php if ( $recurso['format'] == "application" ) { ?>
             <div class="mb-4" id="archivo" style="display: none">
-                <p>Aqui va un pdf xd:</p>
+                <embed src="<?php echo base_url(); ?>/uploads/pdfs/<?php echo $recurso['file'] ?>" type="application/pdf" width="100%" height="600" />
             </div>
         <?php } ?> 
     <?php } ?> 
