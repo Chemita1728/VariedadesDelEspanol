@@ -433,15 +433,23 @@ class Recursos extends BaseController
 
     public function buscarVocabulario()
     {
+        // if( isset($_POST['palabra']) ) {
+        //     $palabra = $this->request->getPost('palabra');
+        //     $vocabulario = $this->valores->where('charID', 3)
+        //                                 ->like('at1', $palabra)
+        //                                 ->findAll();
+        // } else {
+        //     $vocabulario = $this->valores->where('charID', 3)
+        //                                 ->findAll();                         
+        // }
+
         if( isset($_POST['palabra']) ) {
-            $palabra = $this->request->getPost('palabra');
-            $vocabulario = $this->valores->where('charID', 3)
-                                        ->like('at1', $palabra)
-                                        ->findAll();
-        } else {
-            $vocabulario = $this->valores->where('charID', 3)
-                                        ->findAll();                         
-        }
+            $palabra = ['at1' => $this->request->getPost('palabra')];
+        } else $palabra = ['at1' => ''];
+
+        $vocabulario = $this->valores->where('charID', 3)
+                                        ->like($palabra)
+                                        ->findAll();                        
 
         echo json_encode($vocabulario);
     }
@@ -642,6 +650,41 @@ class Recursos extends BaseController
         $session->setFlashdata('msg',$mensaje);
         $this->cargarVista("nuevaGramatica",$data);
     }
+
+    public function buscarRecursos()
+    {
+        
+        if( $this->request->getPost('busqueda1') == 1 ) $parametro1 = "title";
+        else $parametro1 = "description";
+
+        if( isset($_POST['texto1']) ) {
+            $texto1 = [$parametro1 => $this->request->getPost('texto1')];
+        } else $texto1 = [$parametro1 => ''];
+        // if ( isset($_POST['formatoSeleccionado']) ){
+        //     $formato = ['format2' => $this->request->getPost('formatoSeleccionado')];;
+        // } else $formato = ['format2 !=' => ''];
+        // if ( isset($_POST['variedadSeleccionado']) ){
+        //     $variedad = ['variety'=> $this->request->getPost('variedadSeleccionado')];
+        // } else $variedad = ['variety !='=> ''];
+        // if ( isset($_POST['nivelSeleccionado']) ){
+        //     $nivel = ['spanishlvl' => $this->request->getPost('nivelSeleccionado')];;
+        // } else $nivel = ['spanishlvl !=' => ''];
+        if( isset($_POST['autor']) ) {
+            $autor = ['autor' => $this->request->getPost('autor')];
+        } else $autor = ['autor' => ''];
+        
+        $recursos = $this->recursos->where('state', 5)
+                                    ->like($texto1)
+                                    // ->where($formato)
+                                    // ->where($variedad)
+                                    // ->where($nivel)
+                                    ->like($autor)
+                                    ->orderBy("created_at", "asc")
+                                    ->findAll();  
+
+        echo json_encode($recursos);
+    }
+
 
 
 }
