@@ -653,32 +653,42 @@ class Recursos extends BaseController
 
     public function buscarRecursos()
     {
-        
+        //seleccionamos titulo o descripcion
         if( $this->request->getPost('busqueda1') == 1 ) $parametro1 = "title";
         else $parametro1 = "description";
-
+        //buscamos en titulo o descripcion
         if( isset($_POST['texto1']) ) {
             $texto1 = [$parametro1 => $this->request->getPost('texto1')];
         } else $texto1 = [$parametro1 => ''];
-        // if ( isset($_POST['formatoSeleccionado']) ){
-        //     $formato = ['format2' => $this->request->getPost('formatoSeleccionado')];;
-        // } else $formato = ['format2 !=' => ''];
-        // if ( isset($_POST['variedadSeleccionado']) ){
-        //     $variedad = ['variety'=> $this->request->getPost('variedadSeleccionado')];
-        // } else $variedad = ['variety !='=> ''];
-        // if ( isset($_POST['nivelSeleccionado']) ){
-        //     $nivel = ['spanishlvl' => $this->request->getPost('nivelSeleccionado')];;
-        // } else $nivel = ['spanishlvl !=' => ''];
+        //buscamos en autor
         if( isset($_POST['autor']) ) {
             $autor = ['autor' => $this->request->getPost('autor')];
         } else $autor = ['autor' => ''];
         
+        // buscamos en nivel de español
+        if( $this->request->getPost('nivel') != '' ){
+            $nivel = [ 'spanishlvl' => $this->request->getPost('nivel') ];
+        } else $nivel = ['spanishlvl !=' => null];
+        //buscamos en variedad del español
+        if ( $this->request->getPost('variedad') != '' ){
+            $variedad = [ 'variety'=> $this->request->getPost('variedad') ];
+        } else $variedad = ['variety !='=> null];
+        //buscamos en format1
+        if ( isset($_POST['formato']) ){
+            $formato = ['format' => $this->request->getPost('formato')];;
+        } else $formato = ['format !=' => null];
+        // //buscamos en format2
+        if ( isset($_POST['formatoSecundario']) ){
+            $formato2 = ['format2' => $this->request->getPost('formatoSecundario')];;
+        } else $formato2 = ['format2 !=' => null];
+        
         $recursos = $this->recursos->where('state', 5)
                                     ->like($texto1)
-                                    // ->where($formato)
-                                    // ->where($variedad)
-                                    // ->where($nivel)
                                     ->like($autor)
+                                    ->where($nivel)
+                                    ->where($variedad)
+                                    ->where($formato)
+                                    ->where($formato2)
                                     ->orderBy("created_at", "asc")
                                     ->findAll();  
 
