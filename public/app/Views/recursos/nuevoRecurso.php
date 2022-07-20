@@ -103,8 +103,8 @@
 					<!-- Card Header - Accordion -->
 					<a href="#vocabulario" class="d-block card-header py-3" data-toggle="collapse"
 					role="button" aria-expanded="true" aria-controls="vocabulario">
-					<h6 class="m-0 font-weight-bold">Vocabulario</h6>
-				</a>
+						<h6 class="m-0 font-weight-bold">Vocabulario</h6>
+					</a>
 				<!-- Card Content - Collapse -->
 				<div class="collapse" id="vocabulario">
 					<div class="card-body">

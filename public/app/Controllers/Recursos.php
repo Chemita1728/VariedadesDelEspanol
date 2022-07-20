@@ -82,6 +82,14 @@ class Recursos extends BaseController
     */
 
     // Función que carga la pagina para ver un recurso
+    public function recursos()
+    {
+        $valores = $this->valores->findAll();
+        $data = ['valores' => $valores];
+        $this->cargarVista("recursos",$data);
+    }
+
+    // Función que carga la pagina para ver un recurso
     public function recurso($id)
     {
         $recurso = $this->recursos->where('resourceID', $id)
@@ -653,6 +661,7 @@ class Recursos extends BaseController
 
     public function buscarRecursos()
     {
+
         //seleccionamos titulo o descripcion
         if( $this->request->getPost('busqueda1') == 1 ) $parametro1 = "title";
         else $parametro1 = "description";
@@ -681,7 +690,30 @@ class Recursos extends BaseController
         if ( isset($_POST['formatoSecundario']) ){
             $formato2 = ['format2' => $this->request->getPost('formatoSecundario')];;
         } else $formato2 = ['format2 !=' => null];
-        
+
+        // if(!empty($_POST['vocabulario'])) {
+        //     foreach($_POST['vocabulario'] as $value){
+        //         $numeros[] = $value;
+        //     }
+        // }
+
+        /*
+        $numerosPronunciacion = [2, 3, 5];
+        $pronunciacion = $this->compuestos->where('charID', 1)
+                                            ->whereIn('valID', $numerosPronunciacion)
+                                            ->findAll(); 
+
+        $numerosGramatica = [1];
+        $gramatica = $this->compuestos->where('charID', 2)
+                                            ->whereIn('valID', $numerosGramatica)
+                                            ->findAll(); 
+
+        $numerosVocabulario = [1, 2 ];
+        $vocabulario = $this->compuestos->where('charID', 3)
+                                            ->whereIn('valID', $numerosVocabulario)
+                                            ->findAll(); 
+        */
+
         $recursos = $this->recursos->where('state', 5)
                                     ->like($texto1)
                                     ->like($autor)
@@ -692,6 +724,36 @@ class Recursos extends BaseController
                                     ->orderBy("created_at", "asc")
                                     ->findAll();  
 
+        /*
+        $mios=([]);
+        foreach($recursos as $recurso){
+            $encontrado = false;
+            foreach($pronunciacion as $pro){
+                if( $recurso['resourceID'] == $pro['resID'] ){
+                    $mios[] = $recurso;
+                    $encontrado = true;
+                }
+            }
+            if( $encontrado == false ){
+                foreach($gramatica as $gra){
+                    if( $recurso['resourceID'] == $gra['resID'] ){
+                        $mios[] = $recurso;
+                        $encontrado = true;
+                    }
+                }
+            }
+            if( $encontrado == false ){
+                foreach($vocabulario as $voc){
+                    if( $recurso['resourceID'] == $voc['resID'] ){
+                        $mios[] = $recurso;
+                    }
+                }
+            }
+
+        }
+
+        echo json_encode($mios);
+        */
         echo json_encode($recursos);
     }
 

@@ -55,6 +55,16 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">
 
+                <!-- Nav Item - Dashboard -->
+                <li class="nav-item active">
+                    <a class="nav-link" href="<?php echo base_url(); ?>/recursos/recursos">
+                        <i class="fas fa-info"></i>
+                        <span>Ver Recursos</span></a>
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
+
                 <?php if (session('role') >= 2) { ?>
                     <!-- Nav Item - Pages Collapse Menu -->
                     <li class="nav-item">
