@@ -44,7 +44,7 @@
 
     <?php if ( $recurso['file'] != NULL ) { ?>
         <div id="botonArchivo" class="input-group col-lg-4 mb-4" style="display: block">
-            <button type="button" onclick="verArchivo()" class="btn btn-success">Ver archivo asociado al recurso</button>
+            <button type="button" onclick="verArchivo()" class="btn btn-primary">Ver archivo asociado al recurso</button>
         </div>
 
         <?php if ( $recurso['format'] == "image" ) { ?>

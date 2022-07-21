@@ -166,3 +166,6 @@
 [Mon Jul 18 17:30:15.344981 2022] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
 [Tue Jul 19 09:48:16.474588 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
 [Tue Jul 19 09:48:16.475988 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Jul 21 09:20:53.014802 2022] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu Jul 21 09:21:09.425495 2022] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.52 (Debian) PHP/7.4.28 configured -- resuming normal operations
+[Thu Jul 21 09:21:09.426807 2022] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'

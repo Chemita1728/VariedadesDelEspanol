@@ -30,7 +30,7 @@
 			</div>	
 		</div>
 
-		<button type="submit" class="btn btn-success">Crear Pronunciación</button>
+		<button type="submit" class="btn btn-primary">Crear Pronunciación</button>
 	</div>
 
 </div>

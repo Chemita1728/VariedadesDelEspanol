@@ -35,7 +35,7 @@
 
 		</div>	
 		<a href="<?php echo base_url(); ?>/usuarios/datosPersonales" class="btn btn-warning">Volver</a>
-		<button type="submit" class="btn btn-success">Guardar</button>
+		<button type="submit" class="btn btn-primary">Guardar</button>
 	</div>
 	</div>
 

@@ -111,13 +111,13 @@
 						<div class="input-group col-lg-4 mb-4">
 							<input type="text" name="buscarVoc" id="buscarVoc" class="form-control bg-light" placeholder="Buscar..."> 
 							<div class="input-group-append">
-								<button class="btn btn-secondary" disabled>
+								<button class="btn btn-primary" disabled>
 									<i class="fas fa-search fa-sm"></i>
 								</button>
 							</div> 
 						</div>
 						<div id="botonNuevoVocabulario" class="input-group col-lg-4" style="display: none">
-							<button type="button" onclick="ocultarDesocultarNuevoVocabulario()" class="btn btn-success">Añadir nuevo vocabulario</button>
+							<button type="button" onclick="ocultarDesocultarNuevoVocabulario()" class="btn btn-primary">Añadir nuevo vocabulario</button>
 						</div>
 						<table class="table table-bordered" id="tablaVocabulario" width="100%" cellspacing="0">
 							<tbody></tbody>
@@ -149,7 +149,7 @@
 							<input class="form-control" id="vocSignificado" name="vocSignificado" type="text" autofocus require />
 						</div>
 
-						<button type="button" onclick="introducirVocabulario()" class="btn btn-success">Añadir Vocabulario</button>
+						<button type="button" onclick="introducirVocabulario()" class="btn btn-primary">Añadir Vocabulario</button>
 						
 					</div>
                 </div>
@@ -257,10 +257,10 @@
 		</script>
 
         <?php if (session('role') == 1) { ?>
-            <button type="submit" class="btn btn-success">Mandar para Verificación</button>
+            <button type="submit" class="btn btn-primary">Mandar para Verificación</button>
         <?php } ?> 
         <?php if (session('role') > 1) { ?>
-            <button type="submit" class="btn btn-success">Crear Recurso</button>
+            <button type="submit" class="btn btn-primary">Crear Recurso</button>
         <?php } ?> 
         
 	</div>

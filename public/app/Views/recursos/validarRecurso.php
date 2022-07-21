@@ -93,7 +93,7 @@
 
         </div>
 
-        <button type="submit" class="btn btn-success">Mandar Comentario</button>
+        <button type="submit" class="btn btn-primary">Mandar Comentario</button>
     </div>
 
     <script>

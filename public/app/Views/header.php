@@ -18,7 +18,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="<?php echo base_url(); ?>/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>/css/sb-admin-2.css" rel="stylesheet">
 
     <script src="<?php echo base_url(); ?>/js/busquedas.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -36,10 +36,10 @@
 
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo base_url(); ?>/recursos">
-                    <div class="sidebar-brand-icon rotate-n-15">
-                        <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
+                    <div class="sidebar-brand-icon">
+                        <img class="sidebar-card-illustration mb-2" style="width: 3rem;" src="<?php echo base_url(); ?>/img/img-principal.png" alt="...">
                     </div>
-                    <div class="sidebar-brand-text mx-3">Variedades Del Espanol</sup></div>
+                    <div class="sidebar-brand-text mx-3">Variedades Del Español</sup></div>
                 </a>
 
                 <!-- Divider -->
@@ -61,11 +61,11 @@
                         <i class="fas fa-info"></i>
                         <span>Ver Recursos</span></a>
                 </li>
-
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
-
+                
                 <?php if (session('role') >= 2) { ?>
+                    
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
                     <!-- Nav Item - Pages Collapse Menu -->
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios"
@@ -86,10 +86,10 @@
                     </li>
                 <?php } ?> 
 
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
                 
                 <?php if (session('role') >= 1) { ?>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
                     <!-- Nav Item - Pages Collapse Menu -->
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRecursos"
@@ -107,10 +107,10 @@
                     </li>
                 <?php } ?> 
 
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
-
+                
                 <?php if (session('role') >= 2) { ?>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
                     <!-- Nav Item - Pages Collapse Menu -->
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaracteristicas"

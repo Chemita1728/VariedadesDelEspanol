@@ -134,7 +134,7 @@
                         <div class="input-group col-lg-4 mb-4">
                             <input type="text" name="buscarVoc" id="buscarVoc" class="form-control bg-light" placeholder="Buscar..."> 
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" disabled>
+                                <button class="btn btn-primary" disabled>
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div> 

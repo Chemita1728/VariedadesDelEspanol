@@ -42,7 +42,7 @@
 		</div>
 
 		<a href="<?php echo base_url(); ?>/usuarios" class="btn btn-warning">Volver</a>
-		<button type="submit" class="btn btn-success">Mandar correo para el Registro</button>
+		<button type="submit" class="btn btn-primary">Mandar correo para el Registro</button>
 	</div>
 
 </div>

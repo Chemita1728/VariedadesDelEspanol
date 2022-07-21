@@ -27,7 +27,7 @@
 			</div> 
 		</div>
         <a href="<?php echo base_url(); ?>/usuarios" class="btn btn-warning">Volver</a>
-		<button type="submit" class="btn btn-success">Registrar todos</button>
+		<button type="submit" class="btn btn-primary">Registrar todos</button>
 		
         </div>	
 	</div>

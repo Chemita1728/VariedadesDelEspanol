@@ -30,7 +30,7 @@
 			</div>	
 		</div>
 
-		<button type="submit" class="btn btn-success">Crear Gramática</button>
+		<button type="submit" class="btn btn-primary">Crear Gramática</button>
 	</div>
 
 </div>
