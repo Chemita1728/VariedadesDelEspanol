@@ -33,7 +33,6 @@
 						<option <?php if($selected == '4'){echo("selected");}?> value="4">B2</option>
 						<option <?php if($selected == '5'){echo("selected");}?> value="5">C1</option>
 						<option <?php if($selected == '6'){echo("selected");}?> value="6">C2</option>
-						<option <?php if($selected == '7'){echo("selected");}?> value="7">Nativo</option>
 					</select>
 				</div>
 				<div class="col-12 col-sm-6">

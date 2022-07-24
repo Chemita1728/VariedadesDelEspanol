@@ -40,7 +40,7 @@
                     <h6 class="m-0 font-weight-bold"><?php echo $recurso['title'] ?></h6>
                 </div>
                 <div class="card-body">
-                    <p>Fuente: <?php echo $recurso['font']; ?></p>
+                    <p>Fuente del material audiovisual: <?php echo $recurso['font']; ?></p>
                     <p>Descripción: <?php echo $recurso['description']; ?></p>
                     <p>Nivel de Español: <?php echo cambioNivelEsp($recurso['spanishlvl']); ?></p>
                     <p>Variedad del Español: <?php echo cambioVariedad($recurso['variety']); ?></p>

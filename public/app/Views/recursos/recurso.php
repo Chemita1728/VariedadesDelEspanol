@@ -35,8 +35,8 @@
         </div>
         <div class="card-body">
             <p><?php echo $recurso['description'] ?></p>
-            <p>Fuente: <?php echo $recurso['font'] ?></p>  
-            <p>Link:</p>
+            <p>Fuente del material audiovisual: <?php echo $recurso['font'] ?></p> 
+            <p>Link: <a target="_blank" href=<?php echo $recurso['link'] ?>><?php echo $recurso['link'] ?></a></p>
             <p>Variedad: <?php echo cambioVariedad($recurso['variety']) ?></p>
             <p>Nivel de Español: <?php echo cambioNivelEsp($recurso['spanishlvl']) ?></p>
         </div>

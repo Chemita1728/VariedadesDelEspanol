@@ -29,7 +29,6 @@
 						<option value="4">B2</option>
 						<option value="5">C1</option>
 						<option value="6">C2</option>
-						<option value="7">Nativo</option>
 					</select>
 				</div>
 				<div class="col-12 col-sm-6">

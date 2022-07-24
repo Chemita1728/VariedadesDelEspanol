@@ -145,22 +145,29 @@ class Recursos extends BaseController
         
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
-        $font = $this->request->getPost('font');
+        $nivel = $this->request->getPost('nivel');
         $variety = $this->request->getPost('variety');
+        $font = $this->request->getPost('font');
+        $link = $this->request->getPost('link');
 
-        
         $autor = session('nombre'). " " .session('apellidos');
         
         $mensaje = 'Resultado:<br>';
         $data=(['','']);
+
+        $format = "";
+        if( $font == "youtube" || $font == "Youtube" ) $format = "video";
+        else if ( $font == "kahoot" || $font == "Kahoot" ) $format = "application";
         
         if (session('role') == 1){
             $this->recursos->insert(['title' => $title,
             'description' => $description,
             'state' => 1,
-            'font' => $font,
+            'spanishlvl' => $nivel,
             'variety' => $variety,
-            'spanishlvl' => session('spanishlvl'),
+            'font' => $font,
+            'link' => $link,
+            'format' => $format,
             'autor' => $autor,
             'editor' => session('respMail'),
             'proposerMail' => session('email'),
@@ -172,9 +179,11 @@ class Recursos extends BaseController
             $this->recursos->insert(['title' => $title,
             'description' => $description,
             'state' => 5,
-            'font' => $font,
+            'spanishlvl' => $nivel,
             'variety' => $variety,
-            'spanishlvl' => session('spanishlvl'),
+            'font' => $font,
+            'link' => $link,
+            'format' => $format,
             'autor' => $autor,
             'editor' => session('email'),
             'proposerMail' => session('email'),
@@ -196,14 +205,13 @@ class Recursos extends BaseController
             $mime = $file->getMimeType(); // video/mp4
             $format = substr($mime, 0, strpos($mime, "/")); // video
 
-            if( $format == "image" ) $carpeta = "public/uploads/imagenes";
-            else if( $format == "video" ) $carpeta = "public/uploads/videos";
+            if( $format == "video" ) $carpeta = "public/uploads/videos";
             else if( $format == "application" ) $carpeta = "public/uploads/pdfs";
 
             $format2 = $file->guessExtension(); // mp4
             $nombreArchivo = $file->getRandomName();
-            // echo $format;
-            // echo $format2;
+            
+
             $file->move(ROOTPATH.$carpeta, $nombreArchivo);
             $this->recursos->update( $recurso['resourceID'], ['format' => $format,
                                                                 'format2' => $format2,
@@ -661,14 +669,14 @@ class Recursos extends BaseController
 
     public function buscarRecursos()
     {
-
-        //seleccionamos titulo o descripcion
-        if( $this->request->getPost('busqueda1') == 1 ) $parametro1 = "title";
-        else $parametro1 = "description";
         //buscamos en titulo o descripcion
         if( isset($_POST['texto1']) ) {
-            $texto1 = [$parametro1 => $this->request->getPost('texto1')];
-        } else $texto1 = [$parametro1 => ''];
+            $texto1 = ['title' => $this->request->getPost('texto1')];
+            $texto2 = ['description' => $this->request->getPost('texto1')];
+        } else {
+            $texto1 = ['title' => ''];
+            $texto2 = ['description' => ''];
+        }
         //buscamos en autor
         if( isset($_POST['autor']) ) {
             $autor = ['autor' => $this->request->getPost('autor')];
@@ -684,11 +692,20 @@ class Recursos extends BaseController
         } else $variedad = ['variety !='=> null];
         //buscamos en format1
         if ( isset($_POST['formato']) ){
-            $formato = ['format' => $this->request->getPost('formato')];;
+            $formato = ['format' => $this->request->getPost('formato')];
         } else $formato = ['format !=' => null];
-        // //buscamos en format2
+        //buscamos en format2
         if ( isset($_POST['formatoSecundario']) ){
-            $formato2 = ['format2' => $this->request->getPost('formatoSecundario')];;
+            $seleccionado = $this->request->getPost('formatoSecundario');
+            if( $seleccionado == "youtube" ){
+                $formato2 = ['font' => "youtube" ];
+            } else if ( $seleccionado == "noYoutube" ){
+                $formato2 = ['format2 !=' => "" ];
+            } else if ( $seleccionado == "kahoot" ){
+                $formato2 = ['font' => "kahoot" ];
+            } else {
+                $formato2 = ['format2' => $seleccionado ];
+            }
         } else $formato2 = ['format2 !=' => null];
 
         // if(!empty($_POST['vocabulario'])) {
@@ -716,6 +733,7 @@ class Recursos extends BaseController
 
         $recursos = $this->recursos->where('state', 5)
                                     ->like($texto1)
+                                    //->like($texto2)
                                     ->like($autor)
                                     ->where($nivel)
                                     ->where($variedad)
@@ -760,4 +778,3 @@ class Recursos extends BaseController
 
 
 }
-

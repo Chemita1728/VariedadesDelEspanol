@@ -51,7 +51,7 @@
 					<input class="form-control" id="description" name="description" type="text" value="<?php echo $recurso['description']; ?>"/>
 				</div>
                 <div class="col-12 col-sm-6">
-					<label>Fuente</label>
+					<label>Fuente del material audiovisual</label>
 					<input class="form-control" id="font" name="font" type="text" value="<?php echo $recurso['font']; ?>"/>
 				</div>
 				<div class="col-12 col-sm-6">

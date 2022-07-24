@@ -24,9 +24,16 @@
 					<label>Descripción</label>
 					<textarea class="form-control" id="description" name="description" type="text" rows="5" autofocus require></textarea>
 				</div>
-                <div class="col-12 col-sm-6">
-					<label>Fuente</label>
-					<input class="form-control" id="font" name="font" type="text" autofocus require />
+				<div class="col-12 col-sm-6">
+					<label>Nivel de Español de la gente a la que va dirigido el recurso</label>
+					<select class="form-control" id="nivel" name="nivel">
+						<option value="1">A1</option>
+						<option value="2">B2</option>
+						<option value="3">B1</option>
+						<option value="4">B2</option>
+						<option value="5">C1</option>
+						<option value="6">C2</option>
+					</select>
 				</div>
 				<div class="col-12 col-sm-6">
 					<label>Variedad</label>
@@ -42,6 +49,10 @@
 						<option value="9">Español de Guinea Ecuatorial</option>
 						<option value="10">Judeoespañol</option>
 					</select>
+				</div>
+				<div class="col-12 col-sm-6">
+					<label>Fuente del material audiovisual</label>
+					<input class="form-control" id="font" name="font" type="text" autofocus require />
 				</div>
 			</div>	
 		</div>	
