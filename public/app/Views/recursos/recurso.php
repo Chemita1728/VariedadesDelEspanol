@@ -4,8 +4,8 @@
 		<h1 class="h3 mb-0 text-gray-800">Recurso</h1>
 
 
-        <?php if ( session('role') > 1 || session('email') == $recurso['proposerMail'] ) { ?>
-            <a href="<?php echo base_url(); ?>/recursos/editarRecurso/<?php echo $recurso['resourceID']; ?>" class="btn btn-dark">
+        <?php if ( session('role') > 1 || session('email') == $resultado['proposerMail'] ) { ?>
+            <a href="<?php echo base_url(); ?>/recursos/editarRecurso/<?php echo $resultado['resourceID']; ?>" class="btn btn-dark">
                 <i class="fas fa-pencil-alt"></i>
             </a>     
         <?php } ?> 
@@ -14,7 +14,7 @@
 	<!-- Page Heading -->
 
     <?php
-        $selected = $recurso['variety'];
+        $selected = $resultado['variety'];
         function cambioNivelEsp($numero){
             $valor = array ( 'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo' );
             return $valor[$numero -1];
@@ -25,41 +25,40 @@
         }
     ?> 
 
-    <input type="hidden" type="text" id="idRec"  name="idRec" value="<?php echo $recurso['resourceID']; ?>"/>
+    <input type="hidden" type="text" id="idRec"  name="idRec" value="<?php echo $resultado['resourceID']; ?>"/>
 
     <div class="card shadow mb-4">  
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold"><?php echo $recurso['title'] ?></h6>
-            <p class="m-0">Autor: <?php echo $recurso['autor'] ?></p>
-            <p class="m-0">Supervisor: <?php echo $recurso['editor'] ?></p>
+            <h6 class="m-0 font-weight-bold"><?php echo $resultado['title'] ?></h6>
+            <p class="m-0">Autor: <?php echo $resultado['nombre']." ".$resultado['apellidos'] ?></p>
         </div>
         <div class="card-body">
-            <p><?php echo $recurso['description'] ?></p>
-            <p>Fuente del material audiovisual: <?php echo $recurso['font'] ?></p> 
-            <p>Link: <a target="_blank" href=<?php echo $recurso['link'] ?>><?php echo $recurso['link'] ?></a></p>
-            <p>Variedad: <?php echo cambioVariedad($recurso['variety']) ?></p>
-            <p>Nivel de Español: <?php echo cambioNivelEsp($recurso['spanishlvl']) ?></p>
+            <p><?php echo $resultado['description'] ?></p>
+            <p>Fuente del material audiovisual: <?php echo $resultado['source'] ?></p> 
+            <p>Link: <a target="_blank" href=<?php echo $resultado['link'] ?>><?php echo $resultado['link'] ?></a></p>
+            <p>Variedad: <?php echo cambioVariedad($resultado['variety']) ?></p>
+            <p>Nivel de Español: <?php echo cambioNivelEsp($resultado['spanishlvl']) ?></p>
         </div>
     </div>
 
-    <?php if ( $recurso['file'] != NULL ) { ?>
+    <?php if ( $resultado['file'] != NULL ) { ?>
         <div id="botonArchivo" class="input-group col-lg-4 mb-4" style="display: block">
-            <button type="button" onclick="verArchivo()" class="btn btn-primary">Ver archivo asociado al recurso</button>
+            <button type="button" onclick="verArchivo()" class="btn btn-primary">Ver archivo asociado al resultado</button>
         </div>
 
-        <?php if ( $recurso['format'] == "image" ) { ?>
+        <?php if ( $resultado['format'] == "image" ) { ?>
             <div class="mb-4" id="archivo" style="display: none">
-                <img height="300" src="<?php echo base_url(); ?>/uploads/imagenes/<?php echo $recurso['file'] ?>" alt="Imagen del Recurso">
+                <img height="300" src="<?php echo base_url(); ?>/uploads/imagenes/<?php echo $resultado['file'] ?>" alt="Imagen del Recurso">
             </div>
         <?php } ?> 
-        <?php if ( $recurso['format'] == "video" ) { ?>
+        <?php if ( $resultado['format'] == "video" ) { ?>
             <video class="mb-4" id="archivo" controls style="display: none">
-                <source src="<?php echo base_url(); ?>/uploads/videos/<?php echo $recurso['file'] ?>" type="video/mp4" width="100%">
+                <source src="<?php echo base_url(); ?>/uploads/videos/<?php echo $resultado['file'] ?>" type="video/mp4" width="100%">
             </video>
         <?php } ?> 
-        <?php if ( $recurso['format'] == "application" ) { ?>
+        <?php if ( $resultado['format'] == "application" ) { ?>
             <div class="mb-4" id="archivo" style="display: none">
-                <embed src="<?php echo base_url(); ?>/uploads/pdfs/<?php echo $recurso['file'] ?>" type="application/pdf" width="100%" height="600" />
+                <embed src="<?php echo base_url(); ?>/uploads/pdfs/<?php echo $resultado['file'] ?>" type="application/pdf" width="100%" height="600" />
             </div>
         <?php } ?> 
     <?php } ?> 

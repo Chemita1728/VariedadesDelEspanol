@@ -346,10 +346,10 @@
                                     id.textContent = dato.resourceID;
                                     dropDown.appendChild(id);
 
-                                    var autor = document.createElement("p");
-                                    autor.className = "m-0";
-                                    autor.textContent = dato.autor;
-                                    dropDown.appendChild(autor);
+                                    // var autor = document.createElement("p");
+                                    // autor.className = "m-0";
+                                    // autor.textContent = dato.autor;
+                                    // dropDown.appendChild(autor);
                             
                                 cardHeader.appendChild(dropDown);
                         

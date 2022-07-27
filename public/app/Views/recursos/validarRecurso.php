@@ -31,23 +31,23 @@
 		<p><?php echo session('msg'); ?><p>
 	<?php endif; ?>
 
-    <input type="hidden" type="text" id="idRec"  name="idRec" value="<?php echo $recurso['resourceID']; ?>"/>
+    <input type="hidden" type="text" id="idRec"  name="idRec" value="<?php echo $resultado['resourceID']; ?>"/>
 
 	<div class="contaired-fluid mb-4">
 		<div class="form-group">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold"><?php echo $recurso['title'] ?></h6>
+                    <h6 class="m-0 font-weight-bold"><?php echo $resultado['title'] ?></h6>
                 </div>
                 <div class="card-body">
-                    <p>Fuente del material audiovisual: <?php echo $recurso['font']; ?></p>
-                    <p>Descripción: <?php echo $recurso['description']; ?></p>
-                    <p>Nivel de Español: <?php echo cambioNivelEsp($recurso['spanishlvl']); ?></p>
-                    <p>Variedad del Español: <?php echo cambioVariedad($recurso['variety']); ?></p>
-                    <p>Fichero: <?php echo $recurso['file']; ?></p>
-                    <p>Link: <?php echo $recurso['link']; ?></p>
-                    <p>Autor: <?php echo $recurso['autor']; ?></p>
-                    <p>Editor: <?php echo $recurso['editor']; ?></p>
+                    <p>Fuente del material audiovisual: <?php echo $resultado['source']; ?></p>
+                    <p>Descripción: <?php echo $resultado['description']; ?></p>
+                    <p>Nivel de Español: <?php echo cambioNivelEsp($resultado['spanishlvl']); ?></p>
+                    <p>Variedad del Español: <?php echo cambioVariedad($resultado['variety']); ?></p>
+                    <p>Fichero: <?php echo $resultado['file']; ?></p>
+                    <p>Link: <?php echo $resultado['link']; ?></p>
+                    <p>Autor: <?php echo $resultado['nombre']." ".$resultado['apellidos']; ?></p>
+                    <p>Editor: <?php echo $resultado['respMail']; ?></p>
                 </div>
 			</div>
 		</div>
@@ -72,15 +72,15 @@
         </div>
 
         <button onclick="desocultar()" class="btn btn-warning"> Hacer Comentario </button>
-        <a href="<?php echo base_url(); ?>/recursos/publicar/<?php echo $recurso['resourceID']; ?>" class="btn btn-warning">Validar/Publicar Recurso</a>
+        <a href="<?php echo base_url(); ?>/recursos/publicar/<?php echo $resultado['resourceID']; ?>" class="btn btn-warning">Validar/Publicar Recurso</a>
 	
 	</div>
     
     <div class="contaired-fluid mb-4 col-sm-8" style="display: none" id="mensaje">
         <div class="form-group">
 
-            <form method="POST" action="<?php echo base_url(); ?>/recursos/enviarComentario/<?php echo $recurso['resourceID']; ?>" autocomplere="off">
-            <div class="row"> <input type="hidden" id="state"  name="state" value="<?php echo $recurso['state']; ?>"/></div>
+            <form method="POST" action="<?php echo base_url(); ?>/recursos/enviarComentario/<?php echo $resultado['resourceID']; ?>" autocomplere="off">
+            <div class="row"> <input type="hidden" id="state"  name="state" value="<?php echo $resultado['state']; ?>"/></div>
 
             <div class="card shadow">
                 <div class="card-header">

@@ -52,7 +52,7 @@
 				</div>
 				<div class="col-12 col-sm-6">
 					<label>Fuente del material audiovisual</label>
-					<input class="form-control" id="font" name="font" type="text" autofocus require />
+					<input class="form-control" id="source" name="source" type="text" autofocus require />
 				</div>
 			</div>	
 		</div>	

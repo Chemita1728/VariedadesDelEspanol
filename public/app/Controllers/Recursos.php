@@ -14,6 +14,7 @@ class Recursos extends BaseController
 
     public function __construct()
     {
+        $this->db = \Config\Database::connect();
         $this->recursos = new RecursosModel();
         $this->valores = new ValoresModel();
         $this->compuestos = new CompuestoModel();
@@ -92,10 +93,15 @@ class Recursos extends BaseController
     // Función que carga la pagina para ver un recurso
     public function recurso($id)
     {
-        $recurso = $this->recursos->where('resourceID', $id)
-                                    ->first(); 
+        $resultado = $this->db->table('resource')
+                                    ->where('resourceID', $id)
+                                    ->join('users', 'users.email = resource.proposerMail')
+                                    ->get()
+                                    ->getRowArray();
+        // $recurso = $this->recursos->where('resourceID', $id)
+        //                             ->first(); 
 
-        $data = ['recurso' => $recurso];
+        $data = ['resultado' => $resultado];
         $this->cargarVista("Recurso",$data);
     }
 
@@ -147,17 +153,15 @@ class Recursos extends BaseController
         $description = $this->request->getPost('description');
         $nivel = $this->request->getPost('nivel');
         $variety = $this->request->getPost('variety');
-        $font = $this->request->getPost('font');
+        $source = $this->request->getPost('source');
         $link = $this->request->getPost('link');
-
-        $autor = session('nombre'). " " .session('apellidos');
         
         $mensaje = 'Resultado:<br>';
         $data=(['','']);
 
         $format = "";
-        if( $font == "youtube" || $font == "Youtube" ) $format = "video";
-        else if ( $font == "kahoot" || $font == "Kahoot" ) $format = "application";
+        if( $source == "youtube" || $source == "Youtube" ) $format = "video";
+        else if ( $source == "kahoot" || $source == "Kahoot" ) $format = "application";
         
         if (session('role') == 1){
             $this->recursos->insert(['title' => $title,
@@ -165,11 +169,9 @@ class Recursos extends BaseController
             'state' => 1,
             'spanishlvl' => $nivel,
             'variety' => $variety,
-            'font' => $font,
+            'source' => $source,
             'link' => $link,
             'format' => $format,
-            'autor' => $autor,
-            'editor' => session('respMail'),
             'proposerMail' => session('email'),
             'publisherMail' => session('respMail')]);
             
@@ -181,11 +183,9 @@ class Recursos extends BaseController
             'state' => 5,
             'spanishlvl' => $nivel,
             'variety' => $variety,
-            'font' => $font,
+            'source' => $source,
             'link' => $link,
             'format' => $format,
-            'autor' => $autor,
-            'editor' => session('email'),
             'proposerMail' => session('email'),
             'publisherMail' => session('email'),
             'publishDate' => date('Y-m-d')]);
@@ -255,52 +255,66 @@ class Recursos extends BaseController
     // -En este caso salen primero los recursos de los supervisados de la persona registrada
     // y debajo todos los demas pendientes.
     public function aRevisar($rol)
-    {
-
+    {        
         $email = session('email');
-
         if( $rol == 1 ){
             $where = "state=2 OR state=4";
-            $recursos = $this->recursos->where("proposerMail", session('email'))
+            $resultados = $this->db->table('resource')
+                                    ->where("proposerMail", session('email'))
                                     ->where($where)
-                                    ->orderBy("created_at", "desc")
-                                    ->findAll();   
-
-            $data = ['titulo' => 'Recursos a Revisar', 'recursos' => $recursos, 'tipo' => 1];
+                                    ->join('users', 'users.email = resource.proposerMail')
+                                    ->orderby("resource.created_at", "desc")
+                                    ->get()
+                                    ->getResultArray();
+            // $recursos = $this->recursos->where("proposerMail", session('email'))
+            //                         ->where($where)
+            //                         ->orderBy("created_at", "desc")
+            //                         ->findAll();   
+            $data = ['titulo' => 'Recursos a Revisar', 'resultados' => $resultados, 'tipo' => 1];
             $this->cargarVista("aRevisar",$data);
         }
         else if( $rol > 1 ){
             $where = "state=1 OR state=3";
-            $recursos = $this->recursos->where($where)
-                                        ->orderBy('state', 'desc', 'created_at', 'asc')
-                                        ->findAll();   
-            
+            $resultados = $this->db->table('resource')
+                                    ->where($where)
+                                    ->join('users', 'users.email = resource.proposerMail')
+                                    ->orderby('state', 'desc', 'resource.created_at', 'asc')
+                                    ->get()
+                                    ->getResultArray();
+            // $recursos = $this->recursos->where($where)
+            //                             ->orderBy('state', 'desc', 'created_at', 'asc')
+            //                             ->findAll();   
             $mios=([]);
             $otros=([]);
     
-            foreach($recursos as $recurso){
-                if( $recurso['editor'] == $email ){
-                    $mios[] = $recurso;
+            foreach($resultados as $resultado){
+                if( $resultado['respMail'] == $email ){
+                    $mios[] = $resultado;
                 } else {
-                    $otros[] = $recurso;
+                    $otros[] = $resultado;
                 }
             }
             foreach( $otros as $otro ){
                 $mios[] = $otro;
             }
             
-    
-            $data = ['titulo' => 'Recursos a Revisar', 'recursos' => $mios, 'tipo' => 2];
-            $this->cargarVista("aRevisar",$data);
+        $data = ['titulo' => 'Recursos a Revisar', 'resultados' => $mios, 'tipo' => 2];
+        $this->cargarVista("aRevisar",$data);
+
         }
     }
 
     // -Función que carga la vista de un recurso a revisar por un experto o administrador
     public function validarRecurso($id)
     {
-        $recurso = $this->recursos->where('resourceID', $id)
-                                    ->first(); 
-        $data = ['recurso' => $recurso];
+        $resultado = $this->db->table('resource')
+                                ->where("resourceID", $id)
+                                ->join('users', 'users.email = resource.proposerMail')
+                                ->get()
+                                ->getRowArray();
+        // $recurso = $this->recursos->where('resourceID', $id)
+        //                             ->first(); 
+        $data = ['resultado' => $resultado];
         $this->cargarVista("validarRecurso",$data);
     }
 
@@ -383,7 +397,7 @@ class Recursos extends BaseController
     {
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
-        $font = $this->request->getPost('font');
+        $source = $this->request->getPost('source');
         $variety = $this->request->getPost('variety');
 
         $mensaje = 'Resultado:<br>';
@@ -393,7 +407,7 @@ class Recursos extends BaseController
                                 'description' => $description,
                                 'state' => 3,
                                 //'state' => 2,
-                                'font' => $font,
+                                'source' => $source,
                                 'variety' => $variety]);
 
         //hago este for para ver los checkbox que esta seleccionados de cada tipo
@@ -540,7 +554,7 @@ class Recursos extends BaseController
     {
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
-        $font = $this->request->getPost('font');
+        $source = $this->request->getPost('source');
         $variety = $this->request->getPost('variety');
 
         $mensaje = 'Resultado:<br>';
@@ -549,13 +563,13 @@ class Recursos extends BaseController
         if( session('role') > 1 ){
             $this->recursos->update( $id, ['title' => $title,
                                     'description' => $description,
-                                    'font' => $font,
+                                    'source' => $source,
                                     'variety' => $variety]);
         } else {
             $this->recursos->update( $id, ['title' => $title,
                                     'description' => $description,
                                     'state' => 3,
-                                    'font' => $font,
+                                    'source' => $source,
                                     'variety' => $variety]);
         }
 
@@ -669,6 +683,7 @@ class Recursos extends BaseController
 
     public function buscarRecursos()
     {
+
         //buscamos en titulo o descripcion
         if( isset($_POST['texto1']) ) {
             $texto1 = ['title' => $this->request->getPost('texto1')];
@@ -677,10 +692,6 @@ class Recursos extends BaseController
             $texto1 = ['title' => ''];
             $texto2 = ['description' => ''];
         }
-        //buscamos en autor
-        if( isset($_POST['autor']) ) {
-            $autor = ['autor' => $this->request->getPost('autor')];
-        } else $autor = ['autor' => ''];
         
         // buscamos en nivel de español
         if( $this->request->getPost('nivel') != '' ){
@@ -698,11 +709,11 @@ class Recursos extends BaseController
         if ( isset($_POST['formatoSecundario']) ){
             $seleccionado = $this->request->getPost('formatoSecundario');
             if( $seleccionado == "youtube" ){
-                $formato2 = ['font' => "youtube" ];
+                $formato2 = ['source' => "youtube" ];
             } else if ( $seleccionado == "noYoutube" ){
                 $formato2 = ['format2 !=' => "" ];
             } else if ( $seleccionado == "kahoot" ){
-                $formato2 = ['font' => "kahoot" ];
+                $formato2 = ['source' => "kahoot" ];
             } else {
                 $formato2 = ['format2' => $seleccionado ];
             }
@@ -733,8 +744,6 @@ class Recursos extends BaseController
 
         $recursos = $this->recursos->where('state', 5)
                                     ->like($texto1)
-                                    //->like($texto2)
-                                    ->like($autor)
                                     ->where($nivel)
                                     ->where($variedad)
                                     ->where($formato)

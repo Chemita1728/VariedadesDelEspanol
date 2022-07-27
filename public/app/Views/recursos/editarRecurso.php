@@ -36,7 +36,7 @@
 				</div>
                 <div class="col-12 col-sm-6">
 					<label>Fuente del material audiovisual</label>
-					<input class="form-control" id="font" name="font" type="text" value="<?php echo $recurso['font']; ?>"/>
+					<input class="form-control" id="source" name="source" type="text" value="<?php echo $recurso['source']; ?>"/>
 				</div>
 				<div class="col-12 col-sm-6">
 					<label>Variedad</label>
