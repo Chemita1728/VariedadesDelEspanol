@@ -64,8 +64,7 @@
                             <div class="col-lg-6 mb-4" id="divArchivo" style="display: none"> 
                                 <p>Elige el tipo de archivo</p>
                                 <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="pdf" /> PDF</label> <br />
-                                <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="doc" /> DOC</label> <br />
-                                <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="word" /> WORD</label> <br />
+                                <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="docx" /> DOCX</label> <br />
                                 <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="kahoot" /> Enlace a Kahoot</label> <br />
                             </div>
                         </form>

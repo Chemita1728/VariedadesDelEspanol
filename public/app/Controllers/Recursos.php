@@ -148,7 +148,6 @@ class Recursos extends BaseController
     // si lo crea un experto o un administrador se publica directamente
     public function crearRecurso()
     {
-        
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
         $nivel = $this->request->getPost('nivel');
@@ -197,9 +196,10 @@ class Recursos extends BaseController
         $recurso = $this->recursos->where('title', $title)
                                     ->where("description", $description)
                                     ->first(); 
-        
+
         $file = $this->request->getFile('file');        
         
+
         if( $file->isValid() && ! $file->hasMoved() ){
 
             $mime = $file->getMimeType(); // video/mp4
@@ -209,13 +209,16 @@ class Recursos extends BaseController
             else if( $format == "application" ) $carpeta = "public/uploads/pdfs";
 
             $format2 = $file->guessExtension(); // mp4
+            if( $format2 == "" ) $format2 = "docx";
             $nombreArchivo = $file->getRandomName();
-            
+            // echo($mime);
+            // echo($format);
+            // echo($format2);
 
             $file->move(ROOTPATH.$carpeta, $nombreArchivo);
             $this->recursos->update( $recurso['resourceID'], ['format' => $format,
                                                                 'format2' => $format2,
-                                                                'file' => $nombreArchivo]);  
+                                                                'file' => $nombreArchivo]);
         }
 
         // echo("Pronunciación");
@@ -243,7 +246,7 @@ class Recursos extends BaseController
         $session = session();
         $session->setFlashdata('msg',$mensaje);
         return redirect()->to(base_url().'/recursos/nuevoRecurso');
-        
+
     }
     
     // -Funcion que carga la vista de los recursos a revisar
@@ -479,6 +482,7 @@ class Recursos extends BaseController
 
         $vocabulario = $this->valores->where('charID', 3)
                                         ->like($palabra)
+                                        ->orderBy("at1", "asc")
                                         ->findAll();                        
 
         echo json_encode($vocabulario);

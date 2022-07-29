@@ -57,9 +57,18 @@
             </video>
         <?php } ?> 
         <?php if ( $resultado['format'] == "application" ) { ?>
-            <div class="mb-4" id="archivo" style="display: none">
-                <embed src="<?php echo base_url(); ?>/uploads/pdfs/<?php echo $resultado['file'] ?>" type="application/pdf" width="100%" height="600" />
-            </div>
+            <?php if ( $resultado['format2'] == "pdf" ) { ?>
+                <div class="mb-4" id="archivo" style="display: none">
+                    <embed src="<?php echo base_url(); ?>/uploads/pdfs/<?php echo $resultado['file'] ?>" type="application/pdf" width="100%" height="600" />
+                </div>
+            <?php } ?> 
+            <?php if ( $resultado['format2'] == "docx" ) { ?>
+                <div class="mb-4" id="archivo" style="display: none">
+                    <h4>El archivo que esta relacionado con este recurso es un .docx</h4>
+                    <h5>No es posible verlo dentro de esta web y tendra que descargarlo si quiere hacerlo.</h5>
+                    
+                </div>
+            <?php } ?> 
         <?php } ?> 
     <?php } ?> 
 

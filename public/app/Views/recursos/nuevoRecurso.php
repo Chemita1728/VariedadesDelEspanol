@@ -226,6 +226,7 @@
 					data: {palabra: palabra}
 				}).done(function(res){
 					var datos = JSON.parse(res);
+					
 					$("#tablaVocabulario tr").remove(); 
 					datos.forEach(function(dato, index) {
 						var num = index+1;
