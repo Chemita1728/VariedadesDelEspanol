@@ -88,6 +88,9 @@ class Usuarios extends BaseController
             }
         }
 
+        $mios=([]);
+        $otros=([]);
+
         foreach($usuarios as $usuario){
             if( $usuario['respMail'] ==  $mailRegistrado ){
                 $mios[] = $usuario;
@@ -433,7 +436,7 @@ class Usuarios extends BaseController
         //////////CAMBIAR
         $usuario = $this->usuarios->where('email',$email)->first();
 
-        if(password_verify($password, $usuario['password'])){
+        if(password_verify($password, $usuario['password']) && $usuario['activo'] == 1 ){
         
             $data = [ "id" => $usuario['id'],
                         "email" => $usuario['email'],

@@ -4,7 +4,7 @@
 		<h1 class="h3 mb-0 text-gray-800">Recurso</h1>
 
 
-        <?php if ( session('role') > 1 || session('email') == $resultado['proposerMail'] ) { ?>
+        <?php if ( session('role') > 1 || session('email') == $resultado['author'] ) { ?>
             <a href="<?php echo base_url(); ?>/recursos/editarRecurso/<?php echo $resultado['resourceID']; ?>" class="btn btn-dark">
                 <i class="fas fa-pencil-alt"></i>
             </a>     
@@ -30,14 +30,14 @@
     <div class="card shadow mb-4">  
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold"><?php echo $resultado['title'] ?></h6>
-            <p class="m-0">Autor: <?php echo $resultado['nombre']." ".$resultado['apellidos'] ?></p>
+            <p class="m-0">author: <?php echo $resultado['nombre']." ".$resultado['apellidos'] ?></p>
         </div>
         <div class="card-body">
             <p><?php echo $resultado['description'] ?></p>
             <p>Fuente del material audiovisual: <?php echo $resultado['source'] ?></p> 
             <p>Link: <a target="_blank" href=<?php echo $resultado['link'] ?>><?php echo $resultado['link'] ?></a></p>
             <p>Variedad: <?php echo cambioVariedad($resultado['variety']) ?></p>
-            <p>Nivel de Español: <?php echo cambioNivelEsp($resultado['spanishlvl']) ?></p>
+            <p>Nivel de Español: <?php echo cambioNivelEsp($resultado['spanishlvlRes']) ?></p>
         </div>
     </div>
 

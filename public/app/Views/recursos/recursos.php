@@ -363,9 +363,9 @@
                             descripcion.textContent = dato.description;
                             body.appendChild(descripcion);
 
-                            var level = document.createElement("p");
-                            level.textContent = 'Nivel de Español: '+cambiarNivelEsp(dato.spanishlvl);
-                            body.appendChild(level);
+                            // var level = document.createElement("p");
+                            // level.textContent = 'Nivel de Español: '+cambiarNivelEsp(dato.spanishlvlRes);
+                            // body.appendChild(level);
 
                             var variety = document.createElement("p");
                             variety.textContent = 'Variedad del Español: '+cambiarVariedad(dato.variety);

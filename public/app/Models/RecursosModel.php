@@ -11,7 +11,7 @@ class RecursosModel extends Model{
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['title', 'description', 'state', 'source', 'format', 'format2', 'variety', 'spanishlvl', 'autor', 'editor', 'file', 'link', 'expComment', 'proposerMail', 'publisherMail', 'publishDate'];
+    protected $allowedFields = ['title', 'description', 'state', 'source', 'format', 'format2', 'variety', 'spanishlvlRes', 'author', 'editor', 'file', 'link', 'expComment', 'author', 'publisher', 'publishDate'];
 
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';

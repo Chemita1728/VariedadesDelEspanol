@@ -95,14 +95,14 @@ class Recursos extends BaseController
     {
         $resultado = $this->db->table('resource')
                                     ->where('resourceID', $id)
-                                    ->join('users', 'users.email = resource.proposerMail')
+                                    ->join('users', 'users.email = resource.author')
                                     ->get()
                                     ->getRowArray();
         // $recurso = $this->recursos->where('resourceID', $id)
         //                             ->first(); 
 
         $data = ['resultado' => $resultado];
-        $this->cargarVista("Recurso",$data);
+        $this->cargarVista("recurso",$data);
     }
 
     //Funcion para cargar los nombres de cada caracteristica
@@ -166,13 +166,13 @@ class Recursos extends BaseController
             $this->recursos->insert(['title' => $title,
             'description' => $description,
             'state' => 1,
-            'spanishlvl' => $nivel,
+            'spanishlvlRes' => $nivel,
             'variety' => $variety,
             'source' => $source,
             'link' => $link,
             'format' => $format,
-            'proposerMail' => session('email'),
-            'publisherMail' => session('respMail')]);
+            'author' => session('email'),
+            'publisher' => session('respMail')]);
             
             $mensaje = $mensaje . "-El recurso ha sido mandado para supervisión<br>";
         }
@@ -180,13 +180,13 @@ class Recursos extends BaseController
             $this->recursos->insert(['title' => $title,
             'description' => $description,
             'state' => 5,
-            'spanishlvl' => $nivel,
+            'spanishlvlRes' => $nivel,
             'variety' => $variety,
             'source' => $source,
             'link' => $link,
             'format' => $format,
-            'proposerMail' => session('email'),
-            'publisherMail' => session('email'),
+            'author' => session('email'),
+            'publisher' => session('email'),
             'publishDate' => date('Y-m-d')]);
             
             $mensaje = $mensaje . "-El recurso se ha publicado<br>";
@@ -263,13 +263,13 @@ class Recursos extends BaseController
         if( $rol == 1 ){
             $where = "state=2 OR state=4";
             $resultados = $this->db->table('resource')
-                                    ->where("proposerMail", session('email'))
+                                    ->where("author", session('email'))
                                     ->where($where)
-                                    ->join('users', 'users.email = resource.proposerMail')
+                                    ->join('users', 'users.email = resource.author')
                                     ->orderby("resource.created_at", "desc")
                                     ->get()
                                     ->getResultArray();
-            // $recursos = $this->recursos->where("proposerMail", session('email'))
+            // $recursos = $this->recursos->where("author", session('email'))
             //                         ->where($where)
             //                         ->orderBy("created_at", "desc")
             //                         ->findAll();   
@@ -280,7 +280,7 @@ class Recursos extends BaseController
             $where = "state=1 OR state=3";
             $resultados = $this->db->table('resource')
                                     ->where($where)
-                                    ->join('users', 'users.email = resource.proposerMail')
+                                    ->join('users', 'users.email = resource.author')
                                     ->orderby('state', 'desc', 'resource.created_at', 'asc')
                                     ->get()
                                     ->getResultArray();
@@ -301,7 +301,7 @@ class Recursos extends BaseController
                 $mios[] = $otro;
             }
             
-        $data = ['titulo' => 'Recursos a Revisar', 'resultados' => $mios, 'tipo' => 2];
+        $data = ['titulo' => 'Recursos a Validar', 'resultados' => $mios, 'tipo' => 2];
         $this->cargarVista("aRevisar",$data);
 
         }
@@ -312,7 +312,7 @@ class Recursos extends BaseController
     {
         $resultado = $this->db->table('resource')
                                 ->where("resourceID", $id)
-                                ->join('users', 'users.email = resource.proposerMail')
+                                ->join('users', 'users.email = resource.author')
                                 ->get()
                                 ->getRowArray();
         // $recurso = $this->recursos->where('resourceID', $id)
@@ -335,7 +335,7 @@ class Recursos extends BaseController
         if( $estado == 3 ) $nuevoEstado = 4;
 
         $this->recursos->update( $id, ['state' => $nuevoEstado,
-                                    'publisherMail' => session('email'),
+                                    'publisher' => session('email'),
                                     'expComment' => $comentario]);    
 
         $mensaje = $mensaje . "-El recurso ha sido mandado al colaborador para la revision<br>";
@@ -355,7 +355,7 @@ class Recursos extends BaseController
 
         $this->recursos->update( $id, ['state' => 5,
                                     'expComment' => NULL,
-                                    'publisherMail' => session('email'),
+                                    'publisher' => session('email'),
                                     'publishDate' => date('Y-m-d')]);    
 
         $mensaje = $mensaje . "-El recurso se ha publicado<br>";
@@ -699,8 +699,8 @@ class Recursos extends BaseController
         
         // buscamos en nivel de español
         if( $this->request->getPost('nivel') != '' ){
-            $nivel = [ 'spanishlvl' => $this->request->getPost('nivel') ];
-        } else $nivel = ['spanishlvl !=' => null];
+            $nivel = [ 'spanishlvlRes' => $this->request->getPost('nivel') ];
+        } else $nivel = ['spanishlvlRes !=' => null];
         //buscamos en variedad del español
         if ( $this->request->getPost('variedad') != '' ){
             $variedad = [ 'variety'=> $this->request->getPost('variedad') ];
@@ -723,6 +723,14 @@ class Recursos extends BaseController
             }
         } else $formato2 = ['format2 !=' => null];
 
+        $recursos = $this->recursos->where('state', 5)
+                                    ->like($texto1)
+                                    ->where($nivel)
+                                    ->where($variedad)
+                                    ->where($formato)
+                                    ->where($formato2)
+                                    ->orderBy("created_at", "asc")
+                                    ->findAll();  
         // if(!empty($_POST['vocabulario'])) {
         //     foreach($_POST['vocabulario'] as $value){
         //         $numeros[] = $value;
@@ -746,14 +754,6 @@ class Recursos extends BaseController
                                             ->findAll(); 
         */
 
-        $recursos = $this->recursos->where('state', 5)
-                                    ->like($texto1)
-                                    ->where($nivel)
-                                    ->where($variedad)
-                                    ->where($formato)
-                                    ->where($formato2)
-                                    ->orderBy("created_at", "asc")
-                                    ->findAll();  
 
         /*
         $mios=([]);

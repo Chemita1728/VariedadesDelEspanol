@@ -42,7 +42,7 @@
                 <div class="card-body">
                     <p>Fuente del material audiovisual: <?php echo $resultado['source']; ?></p>
                     <p>Descripción: <?php echo $resultado['description']; ?></p>
-                    <p>Nivel de Español: <?php echo cambioNivelEsp($resultado['spanishlvl']); ?></p>
+                    <p>Nivel de Español: <?php echo cambioNivelEsp($resultado['spanishlvlRes']); ?></p>
                     <p>Variedad del Español: <?php echo cambioVariedad($resultado['variety']); ?></p>
                     <p>Fichero: <?php echo $resultado['file']; ?></p>
                     <p>Link: <?php echo $resultado['link']; ?></p>
