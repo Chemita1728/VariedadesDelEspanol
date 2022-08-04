@@ -120,8 +120,8 @@
                         </a>
                         <div class="collapse" id="collapseCaracteristicas" >
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaPronunciacion">Agregar Pronunciación</a>
-                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaGramatica">Agregar Gramaticas</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaProGra/1">Agregar Pronunciación</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaProGra/2">Agregar Gramaticas</a>
                             </div>
                         </div>
                     </li>

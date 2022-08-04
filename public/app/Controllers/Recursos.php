@@ -627,62 +627,41 @@ class Recursos extends BaseController
         return redirect()->to(base_url('/recursos'));
     }
 
-    public function nuevaPronunciacion()
+    public function nuevaProGra($tipo)
     {
-        $data=(['','']);
-        $this->cargarVista("nuevaPronunciacion",$data);
+        $proGra = $this->caracteristicas
+                                ->where('charID', $tipo)
+                                ->first();
+        $data = ['proGra' => $proGra, 'tipo' => $tipo];
+        $this->cargarVista("nuevaProGra",$data);
     }
 
-    public function crearPronunciacion(){
-        $pro1 = $this->request->getPost('pro1');
-        $pro2 = $this->request->getPost('pro2');
-        $pro3 = $this->request->getPost('pro3');
+    public function crearProGra($tipo){
+        $proGra1 = $this->request->getPost('proGra1');
+        $proGra2 = $this->request->getPost('proGra2');
+        $proGra3 = $this->request->getPost('proGra3');
         $mensaje = 'Resultado:<br>';
         $data=(['','']);
 
-        $pronunciacion = $this->valores->where('charID', 1)->findAll();
-        $cont = count($pronunciacion) + 1;
+        $proGra = $this->valores->where('charID', $tipo)->findAll();
+        $cont = count($proGra) + 1;
     
-        $this->valores->insert(['charID' => 1,
+        $this->valores->insert(['charID' => $tipo,
                                     'valID' => $cont,
-                                    'at1' => $pro1,
-                                    'at2' => $pro2,
-                                    'at3' => $pro3]);
+                                    'at1' => $proGra1,
+                                    'at2' => $proGra2,
+                                    'at3' => $proGra3]);
             
         $mensaje = $mensaje . "-La nueva caracteristica de pronunciación ha sido creada<br>";
 
         $session = session();
         $session->setFlashdata('msg',$mensaje);
-        $this->cargarVista("nuevaPronunciacion",$data);
-    }
 
-    public function nuevaGramatica()
-    {
-        $data=(['','']);
-        $this->cargarVista("nuevaGramatica",$data);
-    }
-
-    public function crearGramatica(){
-        $gra1 = $this->request->getPost('gra1');
-        $gra2 = $this->request->getPost('gra2');
-        $gra3 = $this->request->getPost('gra3');
-        $mensaje = 'Resultado:<br>';
-        $data=(['','']);
-
-        $gramatica = $this->valores->where('charID', 2)->findAll();
-        $cont = count($gramatica) + 1;
-    
-        $this->valores->insert(['charID' => 2,
-                                    'valID' => $cont,
-                                    'at1' => $gra1,
-                                    'at2' => $gra2,
-                                    'at3' => $gra3]);
-            
-        $mensaje = $mensaje . "-La nueva caracteristica de gramática ha sido creada<br>";
-
-        $session = session();
-        $session->setFlashdata('msg',$mensaje);
-        $this->cargarVista("nuevaGramatica",$data);
+        $proGra = $this->caracteristicas
+                                ->where('charID', $tipo)
+                                ->first();
+        $data = ['proGra' => $proGra, 'tipo' => $tipo];
+        $this->cargarVista("nuevaProGra",$data);
     }
 
     public function buscarRecursos()
