@@ -430,7 +430,7 @@ class Usuarios extends BaseController
 
     public function login()
     {
-        $email = $this->request->getPost('email');
+        $email = trim($this->request->getPost('email'));
         $password = $this->request->getPost('password');
     
         //////////CAMBIAR

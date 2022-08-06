@@ -34,6 +34,13 @@ class Recursos extends BaseController
         echo view('footer');
     }
 
+    public function sobreNosotros()
+    {
+        
+        echo view('header');
+        echo view('sobreNosotros');
+        echo view('footer');
+    }
     public function cargarVista($nombre,$data)
     {
         $vista = 'recursos/'.$nombre;

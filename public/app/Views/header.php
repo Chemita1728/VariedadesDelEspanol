@@ -132,7 +132,7 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">
+                    <a class="nav-link" href="<?php echo base_url(); ?>/recursos/sobreNosotros">
                         <i class="fas fa-info"></i>
                         <span>Sobre Nosotros</span></a>
                 </li>
@@ -175,12 +175,19 @@
                             </li> 
                         <?php } ?>   
 
+                        <?php
+                            function cambioRol($numero){
+                                $valor = array ( 'Colaborador', 'Experto', 'Administrador');
+                                return $valor[$numero - 1];
+                            }
+                        ?>
+
                         <?php if (session('role') != 0) { ?>
                             <!-- Nav Item - Usuario Registrado -->
                             <li class="navbar-nav ml-auto dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 medium"><?php echo session('nombre'); ?></span>
+                                    <span class="mr-2 medium"><?php echo session('nombre')." ".session('apellidos'); ?> | <?php echo cambioRol(session('role')); ?></span>
                                     
                                 </a>
                                 <!-- Dropdown - Usuario Registrado -->
