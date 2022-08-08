@@ -236,7 +236,7 @@ class Usuarios extends BaseController
                                         'activo' => '0',
                                         'respMail' => $respMail,
                                         'tempId' => $num]);
-            
+
             $data = (['email' => $email,
                         'nombre' => $nombre,
                         'apellidos' => $apellidos,
@@ -244,7 +244,7 @@ class Usuarios extends BaseController
                         'respNombre' => $respNombre,
                         'respApellidos' => $respApellidos,
                         'tempId' => $num]);
-    
+
             $controller = \Config\Services::email();
             // $controller->setFrom('variedadesesp@gmail.com', $respNombre. $respApellidos );
             $controller->setFrom('variedadesesp@gmail.com', "Variedades Del Español" );
@@ -254,12 +254,16 @@ class Usuarios extends BaseController
             $vista = view('emails/mensaje', $data);
             $controller->setMessage($vista);
             if($controller->send()){
+                // echo ( "MANDAO" );
                 $mensaje = $mensaje . "-El usuario ha sido avisado correctamente<br>";
             }
+            
         }
+
         $session = session();
         $session->setFlashdata('msg',$mensaje);
         $this->cargarVista("nuevoUsuario",$data);
+        
     }
 
     public function registroParaUsuario()
@@ -273,15 +277,32 @@ class Usuarios extends BaseController
 
     public function insertar()
     {
-        $password = password_hash( $this->request->getPost('password'), PASSWORD_DEFAULT );
-        $this->usuarios->update( $this->request->getPost('id'),
+        $pass1 = $this->request->getPost('password');
+        $pass2 = $this->request->getPost('password2');
+        $id = $this->request->getPost('id');
+        $mensaje = 'Resultado:<br>';
+
+        if( $pass1 == $pass2 ){
+            $password = password_hash( $pass1, PASSWORD_DEFAULT );
+            $this->usuarios->update( $id,
                                     ['spanishlvl' => $this->request->getPost('spanishlvl'),
                                     'university' => $this->request->getPost('university'),
                                     'birthPlace' => $this->request->getPost('birthPlace'),
                                     'password' => $password,
                                     'activo' => 1,
-                                    'tempId' => 0 ]);        
-        return redirect()->to(base_url());
+                                    'tempId' => 0 ]); 
+
+            return redirect()->to(base_url());
+        } else {
+            $usuario = $this->usuarios->where('id', $id)->first();
+
+            $mensaje = $mensaje . "-Las contraseñas que has introducido no coinciden<br>";
+            $session = session();
+            $session->setFlashdata('msg',$mensaje);
+
+            $data = ['titulo' => 'Registro para el usuario', 'datos' => $usuario];
+            $this->cargarVista("registroParaUsuario",$data);
+        }  
     }
 
     /////////////////////////////////////////////
@@ -432,8 +453,8 @@ class Usuarios extends BaseController
     {
         $email = trim($this->request->getPost('email'));
         $password = $this->request->getPost('password');
+        $mensaje = 'Resultado:<br>';
     
-        //////////CAMBIAR
         $usuario = $this->usuarios->where('email',$email)->first();
 
         if(password_verify($password, $usuario['password']) && $usuario['activo'] == 1 ){
@@ -454,7 +475,14 @@ class Usuarios extends BaseController
             return redirect()->to(base_url('/recursos'));
         
         } else {
-            return redirect()->to(base_url('/recursos'));
+
+            $mensaje = $mensaje . "-La contraseña o el usuario no son correctos<br>";
+            $session = session();
+            $session->setFlashdata('msg',$mensaje);
+
+            $data = ['titulo' => 'Inicio de Sesión'];
+            $this->cargarVista("inicioSesion",$data);
+            
         }
     }
 
