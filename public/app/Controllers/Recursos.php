@@ -717,41 +717,38 @@ class Recursos extends BaseController
                                     ->where($formato2)
                                     ->orderBy("created_at", "asc")
                                     ->findAll();  
-        // if(!empty($_POST['vocabulario'])) {
-        //     foreach($_POST['vocabulario'] as $value){
-        //         $numeros[] = $value;
-        //     }
-        // }
-
-        /*
-        $numerosPronunciacion = [2, 3, 5];
-        $pronunciacion = $this->compuestos->where('charID', 1)
-                                            ->whereIn('valID', $numerosPronunciacion)
-                                            ->findAll(); 
-
-        $numerosGramatica = [1];
-        $gramatica = $this->compuestos->where('charID', 2)
-                                            ->whereIn('valID', $numerosGramatica)
-                                            ->findAll(); 
-
-        $numerosVocabulario = [1, 2 ];
-        $vocabulario = $this->compuestos->where('charID', 3)
-                                            ->whereIn('valID', $numerosVocabulario)
-                                            ->findAll(); 
-        */
-
-
-        /*
+       
+        $numerosPronunciacion = $this->request->getPost('proFinal');
+        $numerosGramatica = $this->request->getPost('graFinal');
+        $numerosVocabulario = $this->request->getPost('vocFinal');
         $mios=([]);
-        foreach($recursos as $recurso){
-            $encontrado = false;
-            foreach($pronunciacion as $pro){
-                if( $recurso['resourceID'] == $pro['resID'] ){
-                    $mios[] = $recurso;
-                    $encontrado = true;
+
+        if( $numerosPronunciacion != null ) {
+
+            $pronunciacion = $this->compuestos->where('charID', 1)
+                                                ->whereIn('valID', $numerosPronunciacion)
+                                                ->findAll(); 
+    
+            foreach($recursos as $recurso){
+                $encontrado = false;
+                foreach($pronunciacion as $pro){
+                    if( $recurso['resourceID'] == $pro['resID'] ){
+                        $mios[] = $recurso;
+                        $encontrado = true;
+                    }
                 }
             }
-            if( $encontrado == false ){
+            $mios = array_unique($mios);
+            echo json_encode($mios);
+
+        } else if( $numerosGramatica != null ) {
+
+            $gramatica = $this->compuestos->where('charID', 2)
+                                                ->whereIn('valID', $numerosGramatica)
+                                                ->findAll(); 
+    
+            foreach($recursos as $recurso){
+                $encontrado = false;
                 foreach($gramatica as $gra){
                     if( $recurso['resourceID'] == $gra['resID'] ){
                         $mios[] = $recurso;
@@ -759,19 +756,31 @@ class Recursos extends BaseController
                     }
                 }
             }
-            if( $encontrado == false ){
+            $mios = array_unique($mios);
+            echo json_encode($mios);
+
+        } else if( $numerosVocabulario != null ) {
+
+            $vocabulario = $this->compuestos->where('charID', 3)
+                                                ->whereIn('valID', $numerosVocabulario)
+                                                ->findAll(); 
+    
+            foreach($recursos as $recurso){
+                $encontrado = false;
                 foreach($vocabulario as $voc){
                     if( $recurso['resourceID'] == $voc['resID'] ){
                         $mios[] = $recurso;
+                        $encontrado = true;
                     }
                 }
             }
+            $mios = array_unique($mios);
+            echo json_encode($mios);
 
+        } else {
+            echo json_encode($recursos);
         }
 
-        echo json_encode($mios);
-        */
-        echo json_encode($recursos);
     }
 
 

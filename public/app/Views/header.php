@@ -176,7 +176,7 @@
                         <?php } ?>   
 
                         <?php
-                            function cambioRol($numero){
+                            function cambioRolHeader($numero){
                                 $valor = array ( 'Colaborador', 'Experto', 'Administrador');
                                 return $valor[$numero - 1];
                             }
@@ -187,7 +187,7 @@
                             <li class="navbar-nav ml-auto dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 medium"><?php echo session('nombre')." ".session('apellidos'); ?> | <?php echo cambioRol(session('role')); ?></span>
+                                    <span class="mr-2 medium"><?php echo session('nombre')." ".session('apellidos'); ?> | <?php echo cambioRolHeader(session('role')); ?></span>
                                     
                                 </a>
                                 <!-- Dropdown - Usuario Registrado -->

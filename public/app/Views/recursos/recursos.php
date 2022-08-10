@@ -97,7 +97,7 @@
                                             <tr>
                                                 <?php if($valor['charID'] == $i) { ?>
                                                     <td><?php echo $valor['at1'] ?></td>
-                                                    <td><input type="checkbox" id="caca" name="<?php echo $vector ?>" value="<?php echo $valor['valID'] ?>"/></td>
+                                                    <td><input type="checkbox" name="<?php echo $vector ?>" value="<?php echo $valor['valID'] ?>"/></td>
                                                 <?php }?>
                                             </tr>
                                         <?php } ?>
@@ -108,6 +108,13 @@
                 </div>
             </div>
         <?php } ?>
+
+        <table class="table table-bordered" id="pronunciacionFinal" width="100%" cellspacing="0" style="display: none">
+			<tbody></tbody>
+		</table>
+        <table class="table table-bordered" id="gramaticaFinal" width="100%" cellspacing="0" style="display: none">
+			<tbody></tbody>
+		</table>
 
         <div class="col-lg-12">
             <div class="card shadow mb-4">
@@ -284,7 +291,6 @@
         // funcion que carga los recursos con todos los campos de busqueda
         function buscarRecursos(){
 
-            var busqueda1 = document.getElementById("busqueda1").value;
             var texto1 = document.getElementById("texto1").value;
 
             var nivel = document.getElementById("nivel").value;
@@ -293,18 +299,36 @@
             var formato = $("input[name='archivo']:checked").val();
             var formatoSecundario = $("input[name='archivoSecundario']:checked").val();
 
-            //var vocabulario = document.getElementsByName("vocFinal[]");
+            // console.log("Vuelta a buscar");
+            var pronunciacion = Array.from( document.getElementsByName("pro[]") );
+            var proFinal = [];
+            for (const pro of pronunciacion) {
+                if( pro.checked == true ) proFinal.push(pro.defaultValue);
+            }
+
+            var gramatica = Array.from( document.getElementsByName("gra[]") );
+            var graFinal = [];
+            for (const gra of gramatica) {
+                if( gra.checked == true ) graFinal.push(gra.defaultValue);
+            }
+
+            var vocabulario = Array.from( document.getElementsByName("vocFinal[]") );
+            var vocFinal = [];
+            for (const voc of vocabulario) {
+                if( voc.checked == true ) vocFinal.push(voc.defaultValue);
+            }
 
             $.ajax({
                 url: "<?php echo base_url(); ?>/recursos/buscarRecursos",
                 method: "POST",
-                data: {busqueda1: busqueda1, 
-                        texto1: texto1, 
+                data: {texto1: texto1, 
                         nivel: nivel,
                         variedad: variedad,
                         formato: formato,
-                        formatoSecundario: formatoSecundario 
-                        //vocabulario: JSON.stringify(vocabulario)
+                        formatoSecundario: formatoSecundario,
+                        proFinal: proFinal,
+                        graFinal: graFinal,
+                        vocFinal: vocFinal
                         }
             }).done(function(res){
                 var datos = JSON.parse(res);
