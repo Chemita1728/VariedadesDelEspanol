@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">Revisar Recurso</h1>
+		<h1 class="h3 mb-0 text-gray-800">Validar Recurso</h1>
     </div>
 	<!-- Page Heading -->
 
@@ -71,8 +71,8 @@
             </table>
         </div>
 
-        <button onclick="desocultar()" class="btn btn-warning"> Hacer Comentario </button>
-        <a href="<?php echo base_url(); ?>/recursos/publicar/<?php echo $resultado['resourceID']; ?>" class="btn btn-warning">Validar/Publicar Recurso</a>
+        <button onclick="desocultar()" class="btn btn-secondary"> Hacer Comentario </button>
+        <a href="<?php echo base_url(); ?>/recursos/publicar/<?php echo $resultado['resourceID']; ?>" class="btn btn-secondary">Validar/Publicar Recurso</a>
 	
 	</div>
     

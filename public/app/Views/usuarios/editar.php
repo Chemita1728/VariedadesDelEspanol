@@ -64,10 +64,8 @@
 		</div>
 
 		</div>	
-		<a href="<?php echo base_url(); ?>/usuarios" class="btn btn-warning">Volver</a>
+		<a href="<?php echo base_url(); ?>/usuarios" class="btn btn-secondary">Volver</a>
 		<button type="submit" class="btn btn-primary">Guardar</button>
-	</div>
-	</div>
 
 </div>
 

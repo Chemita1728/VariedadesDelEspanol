@@ -101,7 +101,9 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <!--<h6 class="collapse-header">Ajustes de Usuarios:</h6>-->
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevoRecurso">Nuevo Recurso</a>    
-                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/aRevisar/<?php echo session('role'); ?>">Recursos que Revisar</a>    
+                                <?php if (session('role') == 1) { $nombre = "Revisar"; } ?>
+                                <?php if (session('role') >= 2) { $nombre = "Validar"; } ?> 
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/aRevisar/<?php echo session('role'); ?>">Recursos a <?php echo $nombre; ?></a>    
                             </div>
                         </div>
                     </li>

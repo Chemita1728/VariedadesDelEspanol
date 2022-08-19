@@ -77,15 +77,15 @@
 
 			<?php for ($i = 1; $i <= 2; $i++) { ?>
 				<?php 
-					if($i == 1) { $vector="pro[]"; $nombre = "Pronunciacion"; }
-					if($i == 2) { $vector="gra[]"; $nombre = "Gramatica"; }
+					if($i == 1) { $vector="pro[]"; $nombre = "Pronunciacion"; $titulo = "Pronunciación"; }
+					if($i == 2) { $vector="gra[]"; $nombre = "Gramatica"; $titulo = "Gramática"; }
 				?>
 				<div class="col-lg-6">
 					<div class="card shadow mb-4">
 						<!-- Card Header - Accordion -->
 						<a href="#<?php echo $nombre ?>" class="d-block card-header py-3" data-toggle="collapse"
 						role="button" aria-expanded="true" aria-controls="<?php echo $nombre ?>">
-						<h6 class="m-0 font-weight-bold"><?php echo $nombre ?></h6>
+						<h6 class="m-0 font-weight-bold"><?php echo $titulo ?></h6>
 						</a>
 						<!-- Card Content - Collapse -->
 						<div class="collapse" id="<?php echo $nombre ?>">

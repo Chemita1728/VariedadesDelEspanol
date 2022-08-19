@@ -78,8 +78,8 @@
     <div class="row">
         <?php for ($i = 1; $i <= 2; $i++) { ?>
             <?php 
-                if($i == 1) { $vector="pro[]"; $nombre = "Pronunciacion"; }
-                if($i == 2) { $vector="gra[]"; $nombre = "Gramatica"; }
+                if($i == 1) { $vector="pro[]"; $nombre = "Pronunciación"; }
+                if($i == 2) { $vector="gra[]"; $nombre = "Gramática"; }
             ?>
             <div class="col-lg-6">
                 <div class="card shadow mb-4">
@@ -151,10 +151,15 @@
     <div id="mensaje" style="display: none">
         <h2>No hay resultados para la busqueda</h2>
     </div>
-    <div id="grid" class="row">
+    <div id="grid" class="row"> </div>
+
+    <div class="text-center">
+        <div id="selector" class="row" style="display=text-align: center"></div>
     </div>
 
     <script>
+
+        var paginaSeleccionada = 1;
 
         //Cargamos el vocabulario
         buscarVocabulario();
@@ -289,7 +294,7 @@
         }
 
         // funcion que carga los recursos con todos los campos de busqueda
-        function buscarRecursos(){
+        function buscarRecursos( pag = 1 ){
 
             var texto1 = document.getElementById("texto1").value;
 
@@ -319,7 +324,7 @@
             }
 
             $.ajax({
-                url: "<?php echo base_url(); ?>/recursos/buscarRecursos",
+                url: "<?php echo base_url(); ?>/recursos/buscarRecursos/"+pag,
                 method: "POST",
                 data: {texto1: texto1, 
                         nivel: nivel,
@@ -402,8 +407,33 @@
                     grid.appendChild(contenedor);
 
                 });
+                cargarSelector( datos.length );
+
 
             })
+        }
+
+        function cargarSelector( num ){
+            // <a>\</a>
+            // <a class="col-lg-1" onclick="buscarRecursos(1)">1</a>
+            // <a class="col-lg-1" onclick="buscarRecursos(2)">2</a>
+            // <a class="col-lg-1" onclick="buscarRecursos(3)">3</a>
+            // <a>/</a>
+            var selector = document.getElementById("selector");
+
+            var left = document.createElement("a");
+            left.textContent = "\\";
+            selector.appendChild(left);
+            for( var i = 1; i <= Math.ceil(num/9); i++ ){
+                var cositas = document.createElement("a");
+                cositas.className = "col-lg-1";
+                cositas.textContent = i;
+                selector.appendChild(cositas);
+            }
+            var right = document.createElement("a");
+            right.textContent = "/";
+            selector.appendChild(right);
+                            
         }
 
 		</script>

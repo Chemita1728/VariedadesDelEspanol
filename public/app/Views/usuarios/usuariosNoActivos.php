@@ -29,7 +29,7 @@
 
 	<div>
 		<p>
-			<a href="<?php echo base_url(); ?>/usuarios/nuevoUsuario" class="btn btn-info">Nuevo Usuario</a>
+			<a href="<?php echo base_url(); ?>/usuarios/nuevoUsuario" class="btn btn-primary">Nuevo Usuario</a>
 		</p>
 	</div>
     <!-- Content Row -->

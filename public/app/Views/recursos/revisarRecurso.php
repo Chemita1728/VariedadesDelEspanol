@@ -17,7 +17,7 @@
 			</div>
 		</div>
 
-        <button onclick="desocultarForm()" class="btn btn-warning"> Editar Recurso </button>
+        <button onclick="desocultarForm()" class="btn btn-secondary"> Editar Recurso </button>
 	
 	</div>
 

@@ -8,10 +8,12 @@ use App\Models\ValoresModel;
 use App\Models\CompuestoModel;
 use App\Models\CaracteristicasModel;
 
+use App\Libraries\ZipFile;
+
 class Recursos extends BaseController
 {
     protected $recursos;
-
+    
     public function __construct()
     {
         $this->db = \Config\Database::connect();
@@ -48,46 +50,6 @@ class Recursos extends BaseController
         echo view($vista, $data);
         echo view('footer');
     }
-
-    /*
-    public function sacarCaracteristicas(){
-        $caracteristicas = $this->caracteristicas->findAll();
-        return $caracteristicas;
-    }
-
-    public function sacarValoresRecurso($id){
-
-        $relaciones = $this->compuestos->where('resID', $id)
-                                        ->findAll();
-        $valores = [];
-
-        if( count($relaciones) != 0 ){
-            foreach( $relaciones as $relacion){
-                // echo ($relacion['charID']);
-                // echo ($relacion['valID']);
-                $idChar = $relacion['charID'];
-                $idVal = $relacion['valID'];
-                $valor = $this->valores->where('charID', $idChar)->where('valID', $idVal)->first();
-                array_push($valores, $valor);
-            }
-        }
-        return $valores;
-
-    }
-    // Función que carga la pagina para ver un recurso
-    public function recurso($id)
-    {
-        $recurso = $this->recursos->where('resourceID', $id)
-                                    ->first(); 
-
-        $idRec = $recurso['resourceID'];
-        $caracteristicas = sacarCaracteristicas();
-        $valores = sacarValoresRecurso($idRec);
-
-        $data = ['recurso' => $recurso, 'valores' => $valores, 'caracteristicas' => $caracteristicas ];
-        $this->cargarVista("Recurso",$data);
-    }
-    */
 
     // Función que carga la pagina para ver un recurso
     public function recursos()
@@ -671,8 +633,10 @@ class Recursos extends BaseController
         $this->cargarVista("nuevaProGra",$data);
     }
 
-    public function buscarRecursos()
+    public function buscarRecursos( $pag )
     {
+
+        $first = ($pag - 1)  * 9 ;
 
         //buscamos en titulo o descripcion
         if( isset($_POST['texto1']) ) {
@@ -715,9 +679,9 @@ class Recursos extends BaseController
                                     ->where($variedad)
                                     ->where($formato)
                                     ->where($formato2)
-                                    ->orderBy("created_at", "asc")
+                                    ->orderBy("publishDate", "asc")
                                     ->findAll();  
-       
+
         $numerosPronunciacion = $this->request->getPost('proFinal');
         $numerosGramatica = $this->request->getPost('graFinal');
         $numerosVocabulario = $this->request->getPost('vocFinal');
@@ -728,7 +692,7 @@ class Recursos extends BaseController
             $pronunciacion = $this->compuestos->where('charID', 1)
                                                 ->whereIn('valID', $numerosPronunciacion)
                                                 ->findAll(); 
-    
+
             foreach($recursos as $recurso){
                 $encontrado = false;
                 foreach($pronunciacion as $pro){
@@ -746,7 +710,7 @@ class Recursos extends BaseController
             $gramatica = $this->compuestos->where('charID', 2)
                                                 ->whereIn('valID', $numerosGramatica)
                                                 ->findAll(); 
-    
+
             foreach($recursos as $recurso){
                 $encontrado = false;
                 foreach($gramatica as $gra){
@@ -764,7 +728,7 @@ class Recursos extends BaseController
             $vocabulario = $this->compuestos->where('charID', 3)
                                                 ->whereIn('valID', $numerosVocabulario)
                                                 ->findAll(); 
-    
+
             foreach($recursos as $recurso){
                 $encontrado = false;
                 foreach($vocabulario as $voc){
@@ -778,11 +742,90 @@ class Recursos extends BaseController
             echo json_encode($mios);
 
         } else {
+            // echo json_encode(array_slice($recursos, $first, 9));
             echo json_encode($recursos);
         }
 
     }
 
+    public function crearCSV( $id ){
 
+        $url = "../public/tempFiles/rec".$id.".csv";
+        //FORMA 1
+        $headersEsp = array("idRecurso", "Autor", "Editor", "Titulo", "Descripción", "Estado", "Fuente", "Formato1", "Formato2", "VariedadEspañol", "NivelEspañol", "Link", "FechaPublicación");
+        $dataName = array("resourceID", "author", "publisher", "title", "description", "state", "source", "format", "format2", "variety", "spanishlvlRes", "link", "publishDate");
+        $file = fopen($url, "w");
+        $recurso = $this->recursos->where('resourceID', $id)->get()->getRowArray();
+
+        $variedad = ['Castellano', 'Andaluz', 'Canario', 'Caribeño', 'Mexicano-Centroamericano', 'Andino', 'Austral', 'Chileno', 'Español de Guinea Ecuatorial', 'Judeoespañol'];
+        $nivel = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+        fputcsv($file, $headersEsp);
+        $linea = array();
+        for( $i = 0; $i < count($dataName)-1; $i++ ){
+            if( $i == 9 ) $linea[] = $variedad[$recurso[$dataName[$i]]];
+            else if( $i == 10 ) $linea[] = $nivel[$recurso[$dataName[$i]]];
+            else $linea[] = $recurso[$dataName[$i]];
+        }
+        fputcsv($file, $linea);
+
+        //FORMA 2
+        // $headersEsp = array("idRecurso", "Autor", "Editor", "Titulo", "Descripción", "Estado", "Fuente", "Formato1", "Formato2", "VariedadEspañol", "NivelEspañol", "Link", "FechaPublicación");
+        // $dataName = array("resourceID", "author", "publisher", "title", "description", "state", "source", "format", "format2", "variety", "spanishlvlRes", "link", "publishDate");
+        // $file = fopen("../public/tempFiles/rec".$id.".csv", "w");
+        // $recurso = $this->recursos->where('resourceID', $id)->first();
+
+        // for( $i = 0; $i < count($dataName); $i++ ){
+        //     $linea = array($headersEsp[$i], $recurso[$dataName[$i]]);
+        //     fputcsv($file, $linea);
+        // }
+
+        fclose($file);
+
+        // if (file_exists($url)) {
+        //     header('Content-Description: File Transfer');
+        //     header('Content-Type: text/csv');
+        //     header('Content-Disposition: attachment; filename='.basename($url));
+        //     header('Content-Transfer-Encoding: binary');
+        //     header('Expires: 0');
+        //     header('Cache-Control: must-revalidate');
+        //     header('Pragma: public');
+        //     //header('Content-Length: ' . filesize($file_example));
+        //     ob_clean();
+        //     flush();
+        //     readfile($url);
+        //     // readfile($file_example);
+        //     exit;
+        // }
+        // else {
+        //     echo 'Archivo no disponible.';
+        // }
+
+        // Creamos un instancia de la clase ZipArchive
+        // $zip = new \ZipArchive();
+        // // Creamos y abrimos un archivo zip temporal
+        // $zip->open("recurso".$id.".zip",ZipArchive::CREATE);
+        // // Añadimos un directorio
+        // $dir = 'Recurso'.$id;
+        // $zip->addEmptyDir($dir);
+        // //Añadimos un archivo dentro del directorio que hemos creado
+        // $zip->addFile($url, $dir."/recurso".$id.".csv");
+        // // Una vez añadido los archivos deseados cerramos el zip.
+        // $zip->close();
+        // // Creamos las cabezeras que forzaran la descarga del archivo como archivo zip.
+        // header("Content-type: application/octet-stream");
+        // header("Content-disposition: attachment; filename=recurso".$id.".zip");
+        // // leemos el archivo creado
+        // readfile('recurso'.$id.'.zip');
+        // // Por último eliminamos el archivo temporal creado
+        // unlink('recurso'.$id.'.zip');//Destruye el archivo temporal
+
+        //$this->zip->read_file($url);
+
+        // Download the file to your desktop. Name it "my_backup.zip"
+        //$this->zip->download('recursos.zip');
+        //$zipFile = new \PhpZip\ZipFile();
+
+    }
 
 }

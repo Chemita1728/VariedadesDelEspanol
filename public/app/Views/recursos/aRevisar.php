@@ -3,7 +3,12 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
 		
-		<h1 class="h3 mb-0 text-gray-800">Recursos a Revisar</h1>
+		<?php if ( $tipo == 1) { ?>
+			<h1 class="h3 mb-0 text-gray-800">Recursos a Revisar</h1>
+		<?php } ?> 
+		<?php if ( $tipo == 2) { ?>
+			<h1 class="h3 mb-0 text-gray-800">Recursos a Validar</h1>
+		<?php } ?> 
 
 		<form method="POST" action="<?php echo base_url(); ?>/usuarios/buscarColaboradores" class="mr-4 navbar-search">
 			<div class="input-group">

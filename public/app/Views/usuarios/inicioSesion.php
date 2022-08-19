@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</div>		
-		<a href="<?php echo base_url(); ?>/" class="btn btn-warning">Registrarse</a>
+		<a href="<?php echo base_url(); ?>/" class="btn btn-secondary">Registrarse</a>
 		<button type="submit" class="btn btn-primary">Iniciar Sesión</button>
 	</div>
 

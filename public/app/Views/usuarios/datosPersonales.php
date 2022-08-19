@@ -21,7 +21,7 @@
 	<div class="contaired-fluid">
 		<div class="form-group">
 			<div class="d-sm-flex align-items-center justify-content-between mb-4">
-				<h1 class="h5 mb-0 text-gray-800 col-12">Informacón Personal </h1>
+				<h1 class="h5 mb-0 text-gray-800 col-12">Información Personal </h1>
 			</div>
 			<div class="row"> <input type="hidden" id="id"  name="id" value="<?php echo $datos['id']; ?>"/>
 				<div class="col-12 ">
@@ -42,8 +42,8 @@
 			</div>
             
 		</div>
-        <a href="<?php echo base_url(); ?>/usuarios/cambioDatosPersonales" class="btn btn-warning">Cambiar Datos</a>
-        <a href="<?php echo base_url(); ?>/usuarios/cambioPassPersonal" class="btn btn-warning">Cambiar Contraseña</a>
+        <a href="<?php echo base_url(); ?>/usuarios/cambioDatosPersonales" class="btn btn-secondary">Cambiar Datos</a>
+        <a href="<?php echo base_url(); ?>/usuarios/cambioPassPersonal" class="btn btn-secondary">Cambiar Contraseña</a>
 
 		</div>	
 	</div>
