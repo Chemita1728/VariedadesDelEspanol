@@ -151,10 +151,11 @@
     <div id="mensaje" style="display: none">
         <h2>No hay resultados para la busqueda</h2>
     </div>
+
     <div id="grid" class="row"> </div>
 
-    <div class="text-center">
-        <div id="selector" class="row" style="display=text-align: center"></div>
+    <div class="row  mb-4" style="text-align: center">
+        <div id="selector" class="col-lg-12"></div>
     </div>
 
     <script>
@@ -345,7 +346,7 @@
                     $("#selector").empty();
                 } else {
                     document.getElementById("mensaje").style.display = "none";
-                    cargarSelector( datos.length );
+                    cargarSelector( datos.length, pag );
                 } 
 
                 var first = 0 + ( 9 * ( pag-1 ) );
@@ -423,31 +424,18 @@
             })
         }
 
-        function cargarSelector( num ){
-            // <a>\</a>
-            // <a class="col-lg-1" onclick="buscarRecursos(1)">1</a>
-            // <a class="col-lg-1" onclick="buscarRecursos(2)">2</a>
-            // <a class="col-lg-1" onclick="buscarRecursos(3)">3</a>
-            // <a>/</a>
+        function cargarSelector( num, selected ){
+            
             $("#selector").empty(); 
-
             var selector = document.getElementById("selector");
-
-            var left = document.createElement("a");
-            left.textContent = "\\";
-            selector.appendChild(left);
             for( var i = 1; i <= Math.ceil(num/9); i++ ){
-                var cositas = document.createElement("a");
-                cositas.className = "col-lg-1";
-                // cositas.onclick = function() { buscarRecursos(i); };
-                // cositas.onclick = "buscarRecursos("+i+")";
-                cositas.setAttribute("onclick","buscarRecursos("+i+")");
-                cositas.textContent = i;
-                selector.appendChild(cositas);
+                var page = document.createElement("a");
+                if( i == selected ) page.className = "px-4 bg-gradient-primary text-white";
+                else page.className = "px-4 bg-gradient-secondary text-white";
+                page.setAttribute("onclick","buscarRecursos("+i+")");
+                page.textContent = i;
+                selector.appendChild(page);
             }
-            var right = document.createElement("a");
-            right.textContent = "/";
-            selector.appendChild(right);
                             
         }
 

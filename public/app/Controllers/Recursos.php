@@ -672,6 +672,8 @@ class Recursos extends BaseController
 
         $recursos = $this->recursos->where('state', 5)
                                     ->like($texto1)
+                                    ->orlike($texto2)
+                                    //falta poner que busque descripcion
                                     ->where($nivel)
                                     ->where($variedad)
                                     ->where($formato)
@@ -699,7 +701,7 @@ class Recursos extends BaseController
                     }
                 }
             }
-            $mios = array_unique($mios);
+            $mios = array_unique($mios, SORT_REGULAR);
             echo json_encode($mios);
 
         } else if( $numerosGramatica != null ) {
@@ -717,7 +719,7 @@ class Recursos extends BaseController
                     }
                 }
             }
-            $mios = array_unique($mios);
+            $mios = array_unique($mios, SORT_REGULAR);
             echo json_encode($mios);
 
         } else if( $numerosVocabulario != null ) {
@@ -735,7 +737,7 @@ class Recursos extends BaseController
                     }
                 }
             }
-            $mios = array_unique($mios);
+            $mios = array_unique($mios, SORT_REGULAR);
             echo json_encode($mios);
 
         } else {
