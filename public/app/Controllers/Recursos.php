@@ -633,11 +633,8 @@ class Recursos extends BaseController
         $this->cargarVista("nuevaProGra",$data);
     }
 
-    public function buscarRecursos( $pag )
+    public function buscarRecursos( )
     {
-
-        $first = ($pag - 1)  * 9 ;
-
         //buscamos en titulo o descripcion
         if( isset($_POST['texto1']) ) {
             $texto1 = ['title' => $this->request->getPost('texto1')];
@@ -782,24 +779,24 @@ class Recursos extends BaseController
 
         fclose($file);
 
-        // if (file_exists($url)) {
-        //     header('Content-Description: File Transfer');
-        //     header('Content-Type: text/csv');
-        //     header('Content-Disposition: attachment; filename='.basename($url));
-        //     header('Content-Transfer-Encoding: binary');
-        //     header('Expires: 0');
-        //     header('Cache-Control: must-revalidate');
-        //     header('Pragma: public');
-        //     //header('Content-Length: ' . filesize($file_example));
-        //     ob_clean();
-        //     flush();
-        //     readfile($url);
-        //     // readfile($file_example);
-        //     exit;
-        // }
-        // else {
-        //     echo 'Archivo no disponible.';
-        // }
+        if (file_exists($url)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: text/csv');
+            header('Content-Disposition: attachment; filename='.basename($url));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            //header('Content-Length: ' . filesize($file_example));
+            ob_clean();
+            flush();
+            readfile($url);
+            // readfile($file_example);
+            exit;
+        }
+        else {
+            echo 'Archivo no disponible.';
+        }
 
         // Creamos un instancia de la clase ZipArchive
         // $zip = new \ZipArchive();

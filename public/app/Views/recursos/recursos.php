@@ -324,7 +324,7 @@
             }
 
             $.ajax({
-                url: "<?php echo base_url(); ?>/recursos/buscarRecursos/"+pag,
+                url: "<?php echo base_url(); ?>/recursos/buscarRecursos",
                 method: "POST",
                 data: {texto1: texto1, 
                         nivel: nivel,
@@ -340,75 +340,85 @@
                 
                 $("#grid").empty(); 
 
-                if(datos.length == 0 ) document.getElementById("mensaje").style.display = "block";
-                else document.getElementById("mensaje").style.display = "none";
+                if(datos.length == 0 ) { 
+                    document.getElementById("mensaje").style.display = "block";
+                    $("#selector").empty();
+                } else {
+                    document.getElementById("mensaje").style.display = "none";
+                    cargarSelector( datos.length );
+                } 
+
+                var first = 0 + ( 9 * ( pag-1 ) );
+                var last = first + 8;
+                var contador = 0;
 
                 datos.forEach(function(dato, index) {
 
-                    // se crea todo el recurso visualmente
-                    var grid = document.getElementById("grid");
-
-                    var contenedor = document.createElement("div");
-                    contenedor.className = "col-xl-4 mb-4";
-
-                    var card = document.createElement("div");
-                    card.className = "card shadow mb-4";
-
-                        var a = document.createElement("a");
-                        a.href = "<?php echo base_url(); ?>/recursos/recurso/"+dato.resourceID+"";
-                        a.style.cssText = "color:grey; text-decoration:none;";
-
-                            var cardHeader = document.createElement("div");
-                            cardHeader.className = "card-header py-3";
-
-                                var dropDown = document.createElement("div");
-                                dropDown.className = "dropdown no-arrow";
-
-                                    var titulo = document.createElement("h6");
-                                    titulo.className = "m-0 font-weight-bold";
-                                    titulo.textContent = dato.title;
-                                    dropDown.appendChild(titulo);
-
-                                    var id = document.createElement("p");
-                                    id.className = "m-0";
-                                    id.textContent = dato.resourceID;
-                                    dropDown.appendChild(id);
-
-                                    // var autor = document.createElement("p");
-                                    // autor.className = "m-0";
-                                    // autor.textContent = dato.autor;
-                                    // dropDown.appendChild(autor);
+                    if( contador >= first && contador <= last ){
+                        // se crea todo el recurso visualmente
+                        var grid = document.getElementById("grid");
+    
+                        var contenedor = document.createElement("div");
+                        contenedor.className = "col-xl-4 mb-4";
+    
+                        var card = document.createElement("div");
+                        card.className = "card shadow mb-4";
+    
+                            var a = document.createElement("a");
+                            a.href = "<?php echo base_url(); ?>/recursos/recurso/"+dato.resourceID+"";
+                            a.style.cssText = "color:grey; text-decoration:none;";
+    
+                                var cardHeader = document.createElement("div");
+                                cardHeader.className = "card-header py-3";
+    
+                                    var dropDown = document.createElement("div");
+                                    dropDown.className = "dropdown no-arrow";
+    
+                                        var titulo = document.createElement("h6");
+                                        titulo.className = "m-0 font-weight-bold";
+                                        titulo.textContent = dato.title;
+                                        dropDown.appendChild(titulo);
+    
+                                        var id = document.createElement("p");
+                                        id.className = "m-0";
+                                        // id.textContent = dato.resourceID;
+                                        id.textContent = dato.resourceID;
+                                        dropDown.appendChild(id);
+    
+                                        // var autor = document.createElement("p");
+                                        // autor.className = "m-0";
+                                        // autor.textContent = dato.autor;
+                                        // dropDown.appendChild(autor);
+                                
+                                    cardHeader.appendChild(dropDown);
                             
-                                cardHeader.appendChild(dropDown);
-                        
-                            a.appendChild(cardHeader);
-
-                        card.appendChild(a);
-
-                        var body = document.createElement("div");
-                        body.className = "card-body";
-
-                            var descripcion = document.createElement("p");
-                            descripcion.textContent = dato.description;
-                            body.appendChild(descripcion);
-
-                            // var level = document.createElement("p");
-                            // level.textContent = 'Nivel de Español: '+cambiarNivelEsp(dato.spanishlvlRes);
-                            // body.appendChild(level);
-
-                            var variety = document.createElement("p");
-                            variety.textContent = 'Variedad del Español: '+cambiarVariedad(dato.variety);
-                            body.appendChild(variety);
-
-                        card.appendChild(body);
-
-                        contenedor.appendChild(card);
-
-                    grid.appendChild(contenedor);
-
+                                a.appendChild(cardHeader);
+    
+                            card.appendChild(a);
+    
+                            var body = document.createElement("div");
+                            body.className = "card-body";
+    
+                                var descripcion = document.createElement("p");
+                                descripcion.textContent = dato.description;
+                                body.appendChild(descripcion);
+    
+                                // var level = document.createElement("p");
+                                // level.textContent = 'Nivel de Español: '+cambiarNivelEsp(dato.spanishlvlRes);
+                                // body.appendChild(level);
+    
+                                var variety = document.createElement("p");
+                                variety.textContent = 'Variedad del Español: '+cambiarVariedad(dato.variety);
+                                body.appendChild(variety);
+    
+                            card.appendChild(body);
+    
+                            contenedor.appendChild(card);
+    
+                        grid.appendChild(contenedor);
+                    }
+                    contador++;
                 });
-                cargarSelector( datos.length );
-
 
             })
         }
@@ -419,6 +429,8 @@
             // <a class="col-lg-1" onclick="buscarRecursos(2)">2</a>
             // <a class="col-lg-1" onclick="buscarRecursos(3)">3</a>
             // <a>/</a>
+            $("#selector").empty(); 
+
             var selector = document.getElementById("selector");
 
             var left = document.createElement("a");
@@ -427,6 +439,9 @@
             for( var i = 1; i <= Math.ceil(num/9); i++ ){
                 var cositas = document.createElement("a");
                 cositas.className = "col-lg-1";
+                // cositas.onclick = function() { buscarRecursos(i); };
+                // cositas.onclick = "buscarRecursos("+i+")";
+                cositas.setAttribute("onclick","buscarRecursos("+i+")");
                 cositas.textContent = i;
                 selector.appendChild(cositas);
             }
