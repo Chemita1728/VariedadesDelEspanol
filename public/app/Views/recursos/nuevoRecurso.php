@@ -28,7 +28,7 @@
 					<label>Nivel de Español de la gente a la que va dirigido el recurso</label>
 					<select class="form-control" id="nivel" name="nivel">
 						<option value="1">A1</option>
-						<option value="2">B2</option>
+						<option value="2">A2</option>
 						<option value="3">B1</option>
 						<option value="4">B2</option>
 						<option value="5">C1</option>

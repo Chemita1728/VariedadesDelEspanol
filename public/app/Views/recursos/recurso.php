@@ -32,7 +32,7 @@
     <div class="card shadow mb-4">  
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold"><?php echo $resultado['title'] ?></h6>
-            <p class="m-0">author: <?php echo $resultado['nombre']." ".$resultado['apellidos'] ?></p>
+            <p class="m-0">Autor: <?php echo $resultado['nombre']." ".$resultado['apellidos'] ?></p>
         </div>
         <div class="card-body">
             <p><?php echo $resultado['description'] ?></p>

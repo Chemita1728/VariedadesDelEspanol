@@ -11,7 +11,8 @@
 		<div class="form-group">
 
 			<?php
-				$selected = $recurso['variety'];
+				$selectedVariety = $recurso['variety'];
+				$selectedSpLevel = $recurso['spanishlvlRes'];
 				function cambioNivelEsp($numero){
 					$valor = array ( 'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo' );
 					return $valor[$numero -1];
@@ -32,27 +33,37 @@
                 <div class="col-12 col-sm-6"></div>
 				<div class="col-12 col-sm-8">
 					<label>Descripción</label>
-					<input class="form-control" id="description" name="description" type="text" value="<?php echo $recurso['description']; ?>"/>
-				</div>
-                <div class="col-12 col-sm-6">
-					<label>Fuente del material audiovisual</label>
-					<input class="form-control" id="source" name="source" type="text" value="<?php echo $recurso['source']; ?>"/>
+					<textarea class="form-control" id="description" name="description" type="text" rows="5"><?php echo $recurso['description']; ?></textarea>
 				</div>
 				<div class="col-12 col-sm-6">
-					<label>Variedad</label>
-                    
-					<select class="form-control" id="variety" name="variety">
-						<option <?php if($selected == '1'){echo("selected");}?> value="1">Castellano</option>
-						<option <?php if($selected == '2'){echo("selected");}?> value="2">Andaluz</option>
-						<option <?php if($selected == '3'){echo("selected");}?> value="3">Canario</option>
-						<option <?php if($selected == '4'){echo("selected");}?> value="4">Caribeño</option>
-						<option <?php if($selected == '5'){echo("selected");}?> value="5">Mexicano-Centroamericano</option>
-						<option <?php if($selected == '6'){echo("selected");}?> value="6">Andino</option>
-						<option <?php if($selected == '7'){echo("selected");}?> value="7">Austral</option>
-						<option <?php if($selected == '8'){echo("selected");}?> value="8">Chileno</option>
-						<option <?php if($selected == '9'){echo("selected");}?> value="9">Español de Guinea Ecuatorial</option>
-						<option <?php if($selected == '10'){echo("selected");}?> value="10">Judeoespañol</option>
+					<label>Nivel de Español de la gente a la que va dirigido el recurso</label>
+					<select class="form-control" id="nivel" name="nivel">
+						<option <?php if($selectedSpLevel == '1'){echo("selected");}?> value="1">A1</option>
+						<option <?php if($selectedSpLevel == '2'){echo("selected");}?> value="2">A2</option>
+						<option <?php if($selectedSpLevel == '3'){echo("selected");}?> value="3">B1</option>
+						<option <?php if($selectedSpLevel == '4'){echo("selected");}?> value="4">B2</option>
+						<option <?php if($selectedSpLevel == '5'){echo("selected");}?> value="5">C1</option>
+						<option <?php if($selectedSpLevel == '6'){echo("selected");}?> value="6">C2</option>
 					</select>
+				</div>                
+				<div class="col-12 col-sm-6">
+					<label>Variedad</label>
+					<select class="form-control" id="variety" name="variety">
+						<option <?php if($selectedVariety == '1'){echo("selected");}?> value="1">Castellano</option>
+						<option <?php if($selectedVariety == '2'){echo("selected");}?> value="2">Andaluz</option>
+						<option <?php if($selectedVariety == '3'){echo("selected");}?> value="3">Canario</option>
+						<option <?php if($selectedVariety == '4'){echo("selected");}?> value="4">Caribeño</option>
+						<option <?php if($selectedVariety == '5'){echo("selected");}?> value="5">Mexicano-Centroamericano</option>
+						<option <?php if($selectedVariety == '6'){echo("selected");}?> value="6">Andino</option>
+						<option <?php if($selectedVariety == '7'){echo("selected");}?> value="7">Austral</option>
+						<option <?php if($selectedVariety == '8'){echo("selected");}?> value="8">Chileno</option>
+						<option <?php if($selectedVariety == '9'){echo("selected");}?> value="9">Español de Guinea Ecuatorial</option>
+						<option <?php if($selectedVariety == '10'){echo("selected");}?> value="10">Judeoespañol</option>
+					</select>
+				</div>
+				<div class="col-12 col-sm-6">
+					<label>Fuente del material audiovisual</label>
+					<input class="form-control" id="source" name="source" type="text" value="<?php echo $recurso['source']; ?>"/>
 				</div>
 			</div>	
 		</div>	

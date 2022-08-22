@@ -527,22 +527,38 @@ class Recursos extends BaseController
     {
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
-        $source = $this->request->getPost('source');
+        $nivel = $this->request->getPost('nivel');
         $variety = $this->request->getPost('variety');
+        $source = $this->request->getPost('source');
+        $link = $this->request->getPost('link');
+
 
         $mensaje = 'Resultado:<br>';
         $data=(['','']);
+        
+        $format = "";
+        if( $source == "youtube" || $source == "Youtube" ) $format = "video";
+        else if ( $source == "kahoot" || $source == "Kahoot" ) $format = "application";
+        
 
         if( session('role') > 1 ){
             $this->recursos->update( $id, ['title' => $title,
                                     'description' => $description,
+                                    'spanishlvlRes' => $nivel,
+                                    'variety' => $variety,
                                     'source' => $source,
+                                    'link' => $link,
+                                    'format' => $format,
                                     'variety' => $variety]);
         } else {
             $this->recursos->update( $id, ['title' => $title,
-                                    'description' => $description,
                                     'state' => 3,
+                                    'description' => $description,
+                                    'spanishlvlRes' => $nivel,
+                                    'variety' => $variety,
                                     'source' => $source,
+                                    'link' => $link,
+                                    'format' => $format,
                                     'variety' => $variety]);
         }
 
@@ -672,7 +688,7 @@ class Recursos extends BaseController
 
         $recursos = $this->recursos->where('state', 5)
                                     ->like($texto1)
-                                    ->orlike($texto2)
+                                    // ->orlike($texto2)
                                     //falta poner que busque descripcion
                                     ->where($nivel)
                                     ->where($variedad)
