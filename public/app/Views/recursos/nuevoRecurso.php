@@ -50,122 +50,138 @@
 						<option value="10">Judeoespañol</option>
 					</select>
 				</div>
-				<div class="col-12 col-sm-6">
-					<label>Fuente del material audiovisual</label>
-					<input class="form-control" id="source" name="source" type="text" autofocus require />
-				</div>
 			</div>	
 		</div>	
 
 		<div class="form-group">
 			<div class="d-sm-flex align-items-center justify-content-between mb-4">
-				<h1 class="h5 mb-0 text-gray-800">Información Extra </h1>
+				<h1 class="h5 mb-0 text-gray-800">Material audiovisual </h1>
 			</div>
 			<div class="row">	
 				<div class="col-12 col-sm-6">
-					<label>Fichero</label>
-					<input class="form-control" id="file" name="file" type="file">
+					<label>Fuente del Material Audiovisual</label>
+					<select class="form-control" id="source" name="source">
+						<option value="" selected="selected">Seleccione una fuente</option>
+						<option value="Youtube">Youtube</option>
+						<option value="Kahoot">Kahoot</option>
+					</select>
 				</div>
 				<div class="col-12 col-sm-6">
-					<label>Enlace Interesante</label>
+					<label>Enlace del Material</label>
 					<input class="form-control" id="link" name="link" type="text" autofocus require />
 				</div>
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="form-group">
+			<div class="d-sm-flex align-items-center justify-content-between mb-4">
+				<h1 class="h5 mb-0 text-gray-800">Archivo relacionado con el recurso </h1>
+			</div>
+			<div class="row">	
+				<div class="col-12 col-sm-6">
+					<input class="form-control" id="file" name="file" type="file">
+				</div>
+			</div>
+		</div>
 
-			<?php for ($i = 1; $i <= 2; $i++) { ?>
-				<?php 
-					if($i == 1) { $vector="pro[]"; $nombre = "Pronunciacion"; $titulo = "Pronunciación"; }
-					if($i == 2) { $vector="gra[]"; $nombre = "Gramatica"; $titulo = "Gramática"; }
-				?>
-				<div class="col-lg-6">
+		<div class="form-group">
+			<div class="d-sm-flex align-items-center justify-content-between mb-4">
+				<h1 class="h5 mb-0 text-gray-800">Rasgos </h1>
+			</div>
+			<div class="row">
+
+				<?php for ($i = 1; $i <= 2; $i++) { ?>
+					<?php 
+						if($i == 1) { $vector="pro[]"; $nombre = "Pronunciacion"; $titulo = "Pronunciación"; }
+						if($i == 2) { $vector="gra[]"; $nombre = "Gramatica"; $titulo = "Gramática"; }
+					?>
+					<div class="col-lg-6">
+						<div class="card shadow mb-4">
+							<!-- Card Header - Accordion -->
+							<a href="#<?php echo $nombre ?>" class="d-block card-header py-3" data-toggle="collapse"
+							role="button" aria-expanded="true" aria-controls="<?php echo $nombre ?>">
+							<h6 class="m-0 font-weight-bold"><?php echo $titulo ?></h6>
+							</a>
+							<!-- Card Content - Collapse -->
+							<div class="collapse" id="<?php echo $nombre ?>">
+								<div class="card-body">
+									<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+										<tbody>
+												<?php foreach($valores as $valor) { ?>
+													<tr>
+														<?php if($valor['charID'] == $i) { ?>
+															<td><?php echo $valor['at1'] ?></td>
+															<td><input type="checkbox" name="<?php echo $vector ?>" value="<?php echo $valor['valID'] ?>"/></td>
+														<?php }?>
+													</tr>
+												<?php } ?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				<?php } ?>
+
+				
+				<div class="col-lg-12">
 					<div class="card shadow mb-4">
 						<!-- Card Header - Accordion -->
-						<a href="#<?php echo $nombre ?>" class="d-block card-header py-3" data-toggle="collapse"
-						role="button" aria-expanded="true" aria-controls="<?php echo $nombre ?>">
-						<h6 class="m-0 font-weight-bold"><?php echo $titulo ?></h6>
+						<a href="#vocabulario" class="d-block card-header py-3" data-toggle="collapse"
+						role="button" aria-expanded="true" aria-controls="vocabulario">
+							<h6 class="m-0 font-weight-bold">Vocabulario</h6>
 						</a>
-						<!-- Card Content - Collapse -->
-						<div class="collapse" id="<?php echo $nombre ?>">
-							<div class="card-body">
-								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-									<tbody>
-											<?php foreach($valores as $valor) { ?>
-												<tr>
-													<?php if($valor['charID'] == $i) { ?>
-														<td><?php echo $valor['at1'] ?></td>
-														<td><input type="checkbox" name="<?php echo $vector ?>" value="<?php echo $valor['valID'] ?>"/></td>
-													<?php }?>
-												</tr>
-											<?php } ?>
-									</tbody>
-								</table>
+					<!-- Card Content - Collapse -->
+					<div class="collapse" id="vocabulario">
+						<div class="card-body">
+							<div class="input-group col-lg-4 mb-4">
+								<input type="text" name="buscarVoc" id="buscarVoc" class="form-control bg-light" placeholder="Buscar..."> 
+								<div class="input-group-append">
+									<button class="btn btn-primary" disabled>
+										<i class="fas fa-search fa-sm"></i>
+									</button>
+								</div> 
+							</div>
+							<div id="botonNuevoVocabulario" class="input-group col-lg-4" style="display: none">
+								<button type="button" onclick="ocultarDesocultarNuevoVocabulario()" class="btn btn-primary">Añadir nuevo vocabulario</button>
+							</div>
+							<table class="table table-bordered" id="tablaVocabulario" width="100%" cellspacing="0">
+								<tbody></tbody>
+							</table>
 							</div>
 						</div>
 					</div>
 				</div>
-			<?php } ?>
 
-			
-			<div class="col-lg-12">
-				<div class="card shadow mb-4">
-					<!-- Card Header - Accordion -->
-					<a href="#vocabulario" class="d-block card-header py-3" data-toggle="collapse"
-					role="button" aria-expanded="true" aria-controls="vocabulario">
-						<h6 class="m-0 font-weight-bold">Vocabulario</h6>
-					</a>
-				<!-- Card Content - Collapse -->
-				<div class="collapse" id="vocabulario">
-					<div class="card-body">
-						<div class="input-group col-lg-4 mb-4">
-							<input type="text" name="buscarVoc" id="buscarVoc" class="form-control bg-light" placeholder="Buscar..."> 
-							<div class="input-group-append">
-								<button class="btn btn-primary" disabled>
-									<i class="fas fa-search fa-sm"></i>
-								</button>
-							</div> 
-						</div>
-						<div id="botonNuevoVocabulario" class="input-group col-lg-4" style="display: none">
-							<button type="button" onclick="ocultarDesocultarNuevoVocabulario()" class="btn btn-primary">Añadir nuevo vocabulario</button>
-						</div>
-						<table class="table table-bordered" id="tablaVocabulario" width="100%" cellspacing="0">
-							<tbody></tbody>
-						</table>
+				<table class="table table-bordered" id="vocabularioFinal" width="100%" cellspacing="0" style="display: none">
+					<tbody></tbody>
+				</table>
+
+				<div id="nuevoVocabulario" class="col-lg-12" style="display: none">
+					<!-- Approach -->
+					<div class="card shadow mb-4">
+						<div class="card-body">
+
+							<label>Lema</label>
+							<div class="input-group col-lg-6 mb-4">
+								<input class="form-control" id="vocLema" name="vocLema" type="text" autofocus require />
+							</div>
+							<label>Forma</label>
+							<div class="input-group col-lg-6 mb-4">
+								<input class="form-control" id="vocForma" name="vocForma" type="text" autofocus require />
+							</div>
+							<label>Significado</label>
+							<div class="input-group col-lg-12 mb-4">
+								<input class="form-control" id="vocSignificado" name="vocSignificado" type="text" autofocus require />
+							</div>
+
+							<button type="button" onclick="introducirVocabulario()" class="btn btn-primary">Añadir Vocabulario</button>
+							
 						</div>
 					</div>
 				</div>
+				
 			</div>
-
-			<table class="table table-bordered" id="vocabularioFinal" width="100%" cellspacing="0" style="display: none">
-				<tbody></tbody>
-			</table>
-
-			<div id="nuevoVocabulario" class="col-lg-12" style="display: none">
-                <!-- Approach -->
-                <div class="card shadow mb-4">
-					<div class="card-body">
-
-						<label>Lema</label>
-						<div class="input-group col-lg-6 mb-4">
-							<input class="form-control" id="vocLema" name="vocLema" type="text" autofocus require />
-						</div>
-						<label>Forma</label>
-						<div class="input-group col-lg-6 mb-4">
-							<input class="form-control" id="vocForma" name="vocForma" type="text" autofocus require />
-						</div>
-						<label>Significado</label>
-						<div class="input-group col-lg-12 mb-4">
-							<input class="form-control" id="vocSignificado" name="vocSignificado" type="text" autofocus require />
-						</div>
-
-						<button type="button" onclick="introducirVocabulario()" class="btn btn-primary">Añadir Vocabulario</button>
-						
-					</div>
-                </div>
-            </div>
-			
 		</div>
 
 		<script>

@@ -126,37 +126,31 @@ class Recursos extends BaseController
         
         $mensaje = 'Resultado:<br>';
         $data=(['','']);
-
-        $format = "";
-        if( $source == "youtube" || $source == "Youtube" ) $format = "video";
-        else if ( $source == "kahoot" || $source == "Kahoot" ) $format = "application";
         
         if (session('role') == 1){
             $this->recursos->insert(['title' => $title,
-            'description' => $description,
-            'state' => 1,
-            'spanishlvlRes' => $nivel,
-            'variety' => $variety,
-            'source' => $source,
-            'link' => $link,
-            'format' => $format,
-            'author' => session('email'),
-            'publisher' => session('respMail')]);
+                                        'description' => $description,
+                                        'state' => 1,
+                                        'spanishlvlRes' => $nivel,
+                                        'variety' => $variety,
+                                        'source' => $source,
+                                        'link' => $link,
+                                        'author' => session('email'),
+                                        'publisher' => session('respMail')]);
             
             $mensaje = $mensaje . "-El recurso ha sido mandado para supervisión<br>";
         }
         if (session('role') > 1){
             $this->recursos->insert(['title' => $title,
-            'description' => $description,
-            'state' => 5,
-            'spanishlvlRes' => $nivel,
-            'variety' => $variety,
-            'source' => $source,
-            'link' => $link,
-            'format' => $format,
-            'author' => session('email'),
-            'publisher' => session('email'),
-            'publishDate' => date('Y-m-d')]);
+                                        'description' => $description,
+                                        'state' => 5,
+                                        'spanishlvlRes' => $nivel,
+                                        'variety' => $variety,
+                                        'source' => $source,
+                                        'link' => $link,
+                                        'author' => session('email'),
+                                        'publisher' => session('email'),
+                                        'publishDate' => date('Y-m-d')]);
             
             $mensaje = $mensaje . "-El recurso se ha publicado<br>";
         }
@@ -171,22 +165,15 @@ class Recursos extends BaseController
 
         if( $file->isValid() && ! $file->hasMoved() ){
 
-            $mime = $file->getMimeType(); // video/mp4
-            $format = substr($mime, 0, strpos($mime, "/")); // video
-
-            if( $format == "video" ) $carpeta = "public/uploads/videos";
-            else if( $format == "application" ) $carpeta = "public/uploads/pdfs";
-
-            $format2 = $file->guessExtension(); // mp4
-            if( $format2 == "" ) $format2 = "docx";
+            $fileFormat = $file->guessExtension(); // pdf o vacio
+            if( $fileFormat == "" ) $fileFormat = "docx"; //si es vacio es docx
             $nombreArchivo = $file->getRandomName();
             // echo($mime);
             // echo($format);
             // echo($format2);
 
-            $file->move(ROOTPATH.$carpeta, $nombreArchivo);
-            $this->recursos->update( $recurso['resourceID'], ['format' => $format,
-                                                                'format2' => $format2,
+            $file->move(ROOTPATH."public/uploads/files", $nombreArchivo);
+            $this->recursos->update( $recurso['resourceID'], ['fileFormat' => $fileFormat,
                                                                 'file' => $nombreArchivo]);
         }
 
@@ -369,8 +356,10 @@ class Recursos extends BaseController
     {
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
-        $source = $this->request->getPost('source');
+        $nivel = $this->request->getPost('nivel');
         $variety = $this->request->getPost('variety');
+        $source = $this->request->getPost('source');
+        $link = $this->request->getPost('link');
 
         $mensaje = 'Resultado:<br>';
         $data=(['','']);
@@ -378,9 +367,23 @@ class Recursos extends BaseController
         $this->recursos->update( $id, ['title' => $title,
                                 'description' => $description,
                                 'state' => 3,
-                                //'state' => 2,
+                                'spanishlvlRes' => $nivel,
+                                'variety' => $variety,
                                 'source' => $source,
+                                'link' => $link,
                                 'variety' => $variety]);
+
+        $file = $this->request->getFile('file');    
+        
+        if( $file->isValid() && ! $file->hasMoved() ){
+            $fileFormat = $file->guessExtension(); // pdf o vacio
+            if( $fileFormat == "" ) $fileFormat = "docx"; //si es vacio es docx
+            $nombreArchivo = $file->getRandomName();
+
+            $file->move(ROOTPATH."public/uploads/files", $nombreArchivo);
+            $this->recursos->update( $id, ['fileFormat' => $fileFormat,
+                                            'file' => $nombreArchivo]);
+        }
 
         //hago este for para ver los checkbox que esta seleccionados de cada tipo
         for ($i = 1; $i <= 3; $i++) {  
@@ -518,7 +521,6 @@ class Recursos extends BaseController
             }
         }
 
-
         $data = ['recurso' => $recurso, 'valoresDeRecurso' => $valoresDeRecurso, 'todosLosValores' => $todosLosValores, 'caracteristicas' => $caracteristicas ];
         $this->cargarVista("editarRecurso",$data);
     }
@@ -532,14 +534,8 @@ class Recursos extends BaseController
         $source = $this->request->getPost('source');
         $link = $this->request->getPost('link');
 
-
         $mensaje = 'Resultado:<br>';
-        $data=(['','']);
-        
-        $format = "";
-        if( $source == "youtube" || $source == "Youtube" ) $format = "video";
-        else if ( $source == "kahoot" || $source == "Kahoot" ) $format = "application";
-        
+        $data=(['','']);        
 
         if( session('role') > 1 ){
             $this->recursos->update( $id, ['title' => $title,
@@ -548,7 +544,6 @@ class Recursos extends BaseController
                                     'variety' => $variety,
                                     'source' => $source,
                                     'link' => $link,
-                                    'format' => $format,
                                     'variety' => $variety]);
         } else {
             $this->recursos->update( $id, ['title' => $title,
@@ -558,10 +553,30 @@ class Recursos extends BaseController
                                     'variety' => $variety,
                                     'source' => $source,
                                     'link' => $link,
-                                    'format' => $format,
                                     'variety' => $variety]);
         }
 
+        $recurso = $this->recursos->where('title', $title)
+                                    ->where("description", $description)
+                                    ->first(); 
+
+        $file = $this->request->getFile('file');    
+        
+        if( $file->isValid() && ! $file->hasMoved() ){
+
+            $fileFormat = $file->guessExtension(); // pdf o vacio
+            if( $fileFormat == "" ) $fileFormat = "docx"; //si es vacio es docx
+            $nombreArchivo = $file->getRandomName();
+            // echo($mime);
+            // echo($format);
+            // echo($format2);
+
+            $file->move(ROOTPATH."public/uploads/files", $nombreArchivo);
+            $this->recursos->update( $recurso['resourceID'], ['fileFormat' => $fileFormat,
+                                                                'file' => $nombreArchivo]);
+        }
+
+        
         //hago este for para ver los checkbox que esta seleccionados de cada tipo
         for ($i = 1; $i <= 3; $i++) {  
             if($i == 1) $vector="pro";
@@ -668,23 +683,20 @@ class Recursos extends BaseController
         if ( $this->request->getPost('variedad') != '' ){
             $variedad = [ 'variety'=> $this->request->getPost('variedad') ];
         } else $variedad = ['variety !='=> null];
-        //buscamos en format1
-        if ( isset($_POST['formato']) ){
-            $formato = ['format' => $this->request->getPost('formato')];
-        } else $formato = ['format !=' => null];
-        //buscamos en format2
-        if ( isset($_POST['formatoSecundario']) ){
-            $seleccionado = $this->request->getPost('formatoSecundario');
-            if( $seleccionado == "youtube" ){
-                $formato2 = ['source' => "youtube" ];
-            } else if ( $seleccionado == "noYoutube" ){
-                $formato2 = ['format2 !=' => "" ];
-            } else if ( $seleccionado == "kahoot" ){
-                $formato2 = ['source' => "kahoot" ];
-            } else {
-                $formato2 = ['format2' => $seleccionado ];
-            }
-        } else $formato2 = ['format2 !=' => null];
+
+        //buscamos en source
+        if( isset($_POST['source']) ) {
+            $source = ['source' => $this->request->getPost('source')];
+        } else {
+            $source = ['source !=' => null];
+        }
+
+        //buscamos en fileFormat
+        if( isset($_POST['fileFormat']) ) {
+            $fileFormat = ['fileFormat' => $this->request->getPost('fileFormat')];
+        } else {
+            $fileFormat = ['fileFormat !=' => null];
+        }
 
         $recursos = $this->recursos->where('state', 5)
                                     ->like($texto1)
@@ -692,8 +704,8 @@ class Recursos extends BaseController
                                     //falta poner que busque descripcion
                                     ->where($nivel)
                                     ->where($variedad)
-                                    ->where($formato)
-                                    ->where($formato2)
+                                    ->where($source)
+                                    ->where($fileFormat)
                                     ->orderBy("publishDate", "asc")
                                     ->findAll();  
 
@@ -767,8 +779,8 @@ class Recursos extends BaseController
 
         $url = "../public/tempFiles/rec".$id.".csv";
         //FORMA 1
-        $headersEsp = array("idRecurso", "Autor", "Editor", "Titulo", "Descripción", "Estado", "Fuente", "Formato1", "Formato2", "VariedadEspañol", "NivelEspañol", "Link", "FechaPublicación");
-        $dataName = array("resourceID", "author", "publisher", "title", "description", "state", "source", "format", "format2", "variety", "spanishlvlRes", "link", "publishDate");
+        $headersEsp = array("idRecurso", "Autor", "Editor", "Titulo", "Descripción", "Estado", "Fuente", "VariedadEspañol", "NivelEspañol", "Link", "FechaPublicación");
+        $dataName = array("resourceID", "author", "publisher", "title", "description", "state", "source", "variety", "spanishlvlRes", "link", "publishDate");
         $file = fopen($url, "w");
         $recurso = $this->recursos->where('resourceID', $id)->get()->getRowArray();
 
@@ -778,15 +790,15 @@ class Recursos extends BaseController
         fputcsv($file, $headersEsp);
         $linea = array();
         for( $i = 0; $i < count($dataName)-1; $i++ ){
-            if( $i == 9 ) $linea[] = $variedad[$recurso[$dataName[$i]]];
-            else if( $i == 10 ) $linea[] = $nivel[$recurso[$dataName[$i]]];
+            if( $i == 7 ) $linea[] = $variedad[$recurso[$dataName[$i]]];
+            else if( $i == 8 ) $linea[] = $nivel[$recurso[$dataName[$i]]];
             else $linea[] = $recurso[$dataName[$i]];
         }
         fputcsv($file, $linea);
 
         //FORMA 2
-        // $headersEsp = array("idRecurso", "Autor", "Editor", "Titulo", "Descripción", "Estado", "Fuente", "Formato1", "Formato2", "VariedadEspañol", "NivelEspañol", "Link", "FechaPublicación");
-        // $dataName = array("resourceID", "author", "publisher", "title", "description", "state", "source", "format", "format2", "variety", "spanishlvlRes", "link", "publishDate");
+        // $headersEsp = array("idRecurso", "Autor", "Editor", "Titulo", "Descripción", "Estado", "Fuente", "VariedadEspañol", "NivelEspañol", "Link", "FechaPublicación");
+        // $dataName = array("resourceID", "author", "publisher", "title", "description", "state", "source", "variety", "spanishlvlRes", "link", "publishDate");
         // $file = fopen("../public/tempFiles/rec".$id.".csv", "w");
         // $recurso = $this->recursos->where('resourceID', $id)->first();
 

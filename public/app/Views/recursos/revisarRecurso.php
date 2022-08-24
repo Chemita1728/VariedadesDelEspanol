@@ -21,15 +21,17 @@
 	
 	</div>
 
-    <form method="POST" action="<?php echo base_url(); ?>/recursos/mandarRevision/<?php echo $recurso['resourceID']; ?>" autocomplere="off">
+    <form method="POST" action="<?php echo base_url(); ?>/recursos/mandarRevision/<?php echo $recurso['resourceID']; ?>" autocomplere="off" enctype="multipart/form-data">
 	
 	<div class="contaired-fluid" style="display: none" id="formEntero">
 		<div class="form-group">
 
 			<?php
-				$selected = $recurso['variety'];
+				$selectedFornat = $recurso['source'];
+				$selectedVariety = $recurso['variety'];
+				$selectedSpLevel = $recurso['spanishlvlRes'];
 				function cambioNivelEsp($numero){
-					$valor = array ( 'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo' );
+					$valor = array ( 'A1', 'A2', 'B1', 'B2', 'C1', 'C2' );
 					return $valor[$numero -1];
 				}
 				function cambioVariedad($numero){
@@ -50,24 +52,30 @@
 					<label>Descripción</label>
 					<input class="form-control" id="description" name="description" type="text" value="<?php echo $recurso['description']; ?>"/>
 				</div>
-                <div class="col-12 col-sm-6">
-					<label>Fuente del material audiovisual</label>
-					<input class="form-control" id="source" name="source" type="text" value="<?php echo $recurso['source']; ?>"/>
+				<div class="col-12 col-sm-6">
+					<label>Nivel de Español de la gente a la que va dirigido el recurso</label>
+					<select class="form-control" id="nivel" name="nivel">
+						<option <?php if($selectedSpLevel == '1'){echo("selected");}?> value="1">A1</option>
+						<option <?php if($selectedSpLevel == '2'){echo("selected");}?> value="2">A2</option>
+						<option <?php if($selectedSpLevel == '3'){echo("selected");}?> value="3">B1</option>
+						<option <?php if($selectedSpLevel == '4'){echo("selected");}?> value="4">B2</option>
+						<option <?php if($selectedSpLevel == '5'){echo("selected");}?> value="5">C1</option>
+						<option <?php if($selectedSpLevel == '6'){echo("selected");}?> value="6">C2</option>
+					</select>
 				</div>
 				<div class="col-12 col-sm-6">
 					<label>Variedad</label>
-                    
 					<select class="form-control" id="variety" name="variety">
-						<option <?php if($selected == '1'){echo("selected");}?> value="1">Castellano</option>
-						<option <?php if($selected == '2'){echo("selected");}?> value="2">Andaluz</option>
-						<option <?php if($selected == '3'){echo("selected");}?> value="3">Canario</option>
-						<option <?php if($selected == '4'){echo("selected");}?> value="4">Caribeño</option>
-						<option <?php if($selected == '5'){echo("selected");}?> value="5">Mexicano-Centroamericano</option>
-						<option <?php if($selected == '6'){echo("selected");}?> value="6">Andino</option>
-						<option <?php if($selected == '7'){echo("selected");}?> value="7">Austral</option>
-						<option <?php if($selected == '8'){echo("selected");}?> value="8">Chileno</option>
-						<option <?php if($selected == '9'){echo("selected");}?> value="9">Español de Guinea Ecuatorial</option>
-						<option <?php if($selected == '10'){echo("selected");}?> value="10">Judeoespañol</option>
+						<option <?php if($selectedVariety == '1'){echo("selected");}?> value="1">Castellano</option>
+						<option <?php if($selectedVariety == '2'){echo("selected");}?> value="2">Andaluz</option>
+						<option <?php if($selectedVariety == '3'){echo("selected");}?> value="3">Canario</option>
+						<option <?php if($selectedVariety == '4'){echo("selected");}?> value="4">Caribeño</option>
+						<option <?php if($selectedVariety == '5'){echo("selected");}?> value="5">Mexicano-Centroamericano</option>
+						<option <?php if($selectedVariety == '6'){echo("selected");}?> value="6">Andino</option>
+						<option <?php if($selectedVariety == '7'){echo("selected");}?> value="7">Austral</option>
+						<option <?php if($selectedVariety == '8'){echo("selected");}?> value="8">Chileno</option>
+						<option <?php if($selectedVariety == '9'){echo("selected");}?> value="9">Español de Guinea Ecuatorial</option>
+						<option <?php if($selectedVariety == '10'){echo("selected");}?> value="10">Judeoespañol</option>
 					</select>
 				</div>
 			</div>	
@@ -75,16 +83,31 @@
 
 		<div class="form-group">
 			<div class="d-sm-flex align-items-center justify-content-between mb-4">
-				<h1 class="h5 mb-0 text-gray-800">Información Extra </h1>
+				<h1 class="h5 mb-0 text-gray-800">Material audiovisual </h1>
 			</div>
 			<div class="row">	
 				<div class="col-12 col-sm-6">
-					<label>Fichero</label>
-					<input class="form-control" id="file" name="file" type="file" value="<?php echo $recurso['file']; ?>"/>
+					<label>Fuente del Material Audiovisual</label>
+					<select class="form-control" id="source" name="source">
+						<option <?php if($selectedFornat == ''){echo("selected");}?> value="" selected="selected">Seleccione una fuente</option>
+						<option <?php if($selectedFornat == 'Youtube'){echo("selected");}?> value="Youtube">Youtube</option>
+						<option <?php if($selectedFornat == 'Kahoot'){echo("selected");}?> value="Kahoot">Kahoot</option>
+					</select>
 				</div>
 				<div class="col-12 col-sm-6">
-					<label>Enlace Interesante</label>
-					<input class="form-control" id="link" name="link" type="text" value="<?php echo $recurso['link']; ?>"/>
+					<label>Enlace del Material</label>
+					<input class="form-control" id="link" name="link" type="text" value="<?php echo $recurso['link']; ?>" />
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="d-sm-flex align-items-center justify-content-between mb-4">
+				<h1 class="h5 mb-0 text-gray-800">Archivo relacionado con el recurso </h1>
+			</div>
+			<div class="row">	
+				<div class="col-12 col-sm-6">
+					<input class="form-control" id="file" name="file" type="file">
 				</div>
 			</div>
 		</div>
@@ -93,8 +116,8 @@
 
 			<?php for ($i = 1; $i <= 2; $i++) { ?>
 				<?php 
-					if($i == 1) { $vector="pro[]"; $nombre = "Pronunciacion"; }
-					if($i == 2) { $vector="gra[]"; $nombre = "Gramatica"; }
+					if($i == 1) { $vector="pro[]"; $nombre = "Pronunciación"; }
+					if($i == 2) { $vector="gra[]"; $nombre = "Gramática"; }
 					//if($i == 3) { $vector="voc[]"; $nombre = "Vocabulario"; }
 				?>
 				<div class="col-lg-6">
@@ -328,8 +351,6 @@
 		</script>
     
 	</div>
-    </div>
-    </div>
 
 </div>
 

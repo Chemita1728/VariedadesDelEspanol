@@ -52,20 +52,14 @@
                     <div  class="col-lg-6 mb-4">
                         <form id="radios" class="row">
                             <div class="col-lg-6 mb-4"> 
-                                <p>Elige el tipo de recurso</p>
-                                <label><input type="radio" id="archivo" name="archivo" value="video" /> Video</label> <br />
-                                <label><input type="radio" id="archivo" name="archivo" value="application" /> Archivo</label> <br />
+                                <p>Elige la fuente del material audiovisual </p>
+                                <label><input type="radio" id="source" name="source" value="Youtube" /> Youtube</label> <br />
+                                <label><input type="radio" id="source" name="source" value="Kahoot" /> Kahoot</label> <br />
                             </div>
-                            <div class="col-lg-6 mb-4" id="divVideo" style="display: none"> 
-                                <p>Elige el tipo de video</p>
-                                <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="youtube" /> Youtube</label> <br />
-                                <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="noYoutube" /> Video Propio</label> <br />
-                            </div>
-                            <div class="col-lg-6 mb-4" id="divArchivo" style="display: none"> 
+                            <div class="col-lg-6 mb-4">
                                 <p>Elige el tipo de archivo</p>
-                                <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="pdf" /> PDF</label> <br />
-                                <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="docx" /> DOCX</label> <br />
-                                <label><input type="radio" id="archivoSecundario" name="archivoSecundario" value="kahoot" /> Enlace a Kahoot</label> <br />
+                                <label><input type="radio" id="fileFormat" name="fileFormat" value="pdf" /> PDF</label> <br />
+                                <label><input type="radio" id="fileFormat" name="fileFormat" value="docx" /> WORD</label> <br />
                             </div>
                         </form>
                         <button type="button" onclick="resetearForms()" class="btn btn-primary">Resetear Busqueda</button>
@@ -252,36 +246,24 @@
             return a - b;
         }
 
-        // se ejecuta al ecribir en texto1
-        $(document).on('keyup', '#texto1', function(){
+        // se ejecuta al cambiar el select de variedad
+        $(document).on('change', '#variedad', function(){
             buscarRecursos();
         });
-        // se ejecuta al cambiar radio de archivo
-        $(document).on('change', '#archivo', function(){
-            var formatoSeleccionado = $("input[name='archivo']:checked").val();
-            var divVideo = document.getElementById("divVideo");
-            var divArchivo = document.getElementById("divArchivo");
-            if ( formatoSeleccionado == "video" ){
-                divVideo.style.display = "block";
-                divArchivo.style.display = "none";
-            } else if ( formatoSeleccionado == "application" ) {
-                divVideo.style.display = "none";
-                divArchivo.style.display = "block";
-            }
-            buscarRecursos();
-        });
-
-        // se ejecuta al cambiar radio de archivo secundario
-        $(document).on('change', '#archivoSecundario', function(){
-            buscarRecursos();
-        });
-
         // se ejecuta al cambiar el select de nivel
         $(document).on('change', '#nivel', function(){
             buscarRecursos();
         });
-        // se ejecuta al cambiar el select de variedad
-        $(document).on('change', '#variedad', function(){
+        // se ejecuta al ecribir en texto1
+        $(document).on('keyup', '#texto1', function(){
+            buscarRecursos();
+        });
+        // se ejecuta al cambiar radio de fuente
+        $(document).on('change', '#source', function(){
+            buscarRecursos();
+        });
+        // se ejecuta al cambiar radio de tipo
+        $(document).on('change', '#fileFormat', function(){
             buscarRecursos();
         });
         
@@ -289,8 +271,6 @@
         function resetearForms(){
             document.getElementById('seleccionables').reset();
             document.getElementById('radios').reset();
-            divVideo.style.display = "none";
-            divArchivo.style.display = "none";
             buscarRecursos();
         }
 
@@ -302,8 +282,8 @@
             var nivel = document.getElementById("nivel").value;
             var variedad = document.getElementById("variedad").value;
 
-            var formato = $("input[name='archivo']:checked").val();
-            var formatoSecundario = $("input[name='archivoSecundario']:checked").val();
+            var source = $("input[name='source']:checked").val();
+            var fileFormat = $("input[name='fileFormat']:checked").val();
 
             // console.log("Vuelta a buscar");
             var pronunciacion = Array.from( document.getElementsByName("pro[]") );
@@ -330,8 +310,8 @@
                 data: {texto1: texto1, 
                         nivel: nivel,
                         variedad: variedad,
-                        formato: formato,
-                        formatoSecundario: formatoSecundario,
+                        source: source,
+                        fileFormat: fileFormat,
                         proFinal: proFinal,
                         graFinal: graFinal,
                         vocFinal: vocFinal
