@@ -4,142 +4,147 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Recursos Publicados</h1>
+
+        <div class="mr-4"> 
+            <button id="botonBuscador" onclick="sacarFormulario()" class="btn btn-primary">Abrir Buscador</button>
+		</div>
     </div>
 
-    <div class="col-lg-12">
-        <div class="card shadow mb-4">
-            <div class="card-body">
-                <div class="row">
-                    <div class="navbar-search col-lg-6 mb-4"> 
+    <div id="buscador" style="display: none">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="navbar-search col-lg-6 mb-4"> 
 
-                        <form id="seleccionables">
+                            <form id="seleccionables">
 
-                            <select class="form-control mb-4" id="variedad" name="variedad">
-                                <option value="" disabled selected>Elige Variedad de Español</option>
-                                <option value="1">Castellano</option>
-                                <option value="2">Andaluz</option>
-                                <option value="3">Canario</option>
-                                <option value="4">Caribeño</option>
-                                <option value="5">Mexicano-Centroamericano</option>
-                                <option value="6">Andino</option>
-                                <option value="7">Austral</option>
-                                <option value="8">Chileno</option>
-                                <option value="9">Español de Guinea Ecuatorial</option>
-                                <option value="10">Judeoespañol</option>
-                            </select>
+                                <select class="form-control mb-4" id="variedad" name="variedad">
+                                    <option value="" disabled selected>Elige Variedad de Español</option>
+                                    <option value="1">Castellano</option>
+                                    <option value="2">Andaluz</option>
+                                    <option value="3">Canario</option>
+                                    <option value="4">Caribeño</option>
+                                    <option value="5">Mexicano-Centroamericano</option>
+                                    <option value="6">Andino</option>
+                                    <option value="7">Austral</option>
+                                    <option value="8">Chileno</option>
+                                    <option value="9">Español de Guinea Ecuatorial</option>
+                                    <option value="10">Judeoespañol</option>
+                                </select>
 
-                            <select class="form-control mb-4" id="nivel" name="nivel">
-                                <option value="" disabled selected>Elige Nivel de Español</option>
-                                <option value="1">A1</option>
-                                <option value="2">A2</option>
-                                <option value="3">B1</option>
-                                <option value="4">B2</option>
-                                <option value="5">C1</option>
-                                <option value="6">C2</option>
-                            </select>
+                                <select class="form-control mb-4" id="nivel" name="nivel">
+                                    <option value="" disabled selected>Elige Nivel de Español</option>
+                                    <option value="1">A1</option>
+                                    <option value="2">A2</option>
+                                    <option value="3">B1</option>
+                                    <option value="4">B2</option>
+                                    <option value="5">C1</option>
+                                    <option value="6">C2</option>
+                                </select>
 
-                            
-                        </form>
+                                
+                            </form>
 
-                        <div class="input-group navbar-search mr-4 mb-4">
-                            <select class="form-control bg-light col-lg-3" style="appearance:none" id="busqueda1" name="busqueda1">
-                                <option value="1">Palabras Clave</option>
-                            </select>
-                            <input class="form-control" id="texto1" name="texto1" type="text" autofocus require />
+                            <div class="input-group navbar-search mr-4 mb-4">
+                                <select class="form-control bg-light col-lg-3" style="appearance:none" id="busqueda1" name="busqueda1">
+                                    <option value="1">Palabras Clave</option>
+                                </select>
+                                <input class="form-control" id="texto1" name="texto1" type="text" autofocus require />
+                            </div>
+
                         </div>
-
-                    </div>
-                    <div  class="col-lg-6 mb-4">
-                        <form id="radios" class="row">
-                            <div class="col-lg-6 mb-4"> 
-                                <p>Elige la fuente del material audiovisual </p>
-                                <label><input type="radio" id="source" name="source" value="Youtube" /> Youtube</label> <br />
-                                <label><input type="radio" id="source" name="source" value="Kahoot" /> Kahoot</label> <br />
-                            </div>
-                            <div class="col-lg-6 mb-4">
-                                <p>Elige el tipo de archivo</p>
-                                <label><input type="radio" id="fileFormat" name="fileFormat" value="pdf" /> PDF</label> <br />
-                                <label><input type="radio" id="fileFormat" name="fileFormat" value="docx" /> WORD</label> <br />
-                            </div>
-                        </form>
-                        <button type="button" onclick="resetearForms()" class="btn btn-primary">Resetear Busqueda</button>
+                        <div  class="col-lg-6 mb-4">
+                            <form id="radios" class="row">
+                                <div class="col-lg-6 mb-4"> 
+                                    <p>Elige la fuente del material audiovisual </p>
+                                    <label><input type="radio" id="source" name="source" value="Youtube" /> Youtube</label> <br />
+                                    <label><input type="radio" id="source" name="source" value="Kahoot" /> Kahoot</label> <br />
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <p>Elige el tipo de archivo</p>
+                                    <label><input type="radio" id="fileFormat" name="fileFormat" value="pdf" /> PDF</label> <br />
+                                    <label><input type="radio" id="fileFormat" name="fileFormat" value="docx" /> WORD</label> <br />
+                                </div>
+                            </form>
+                            <button type="button" onclick="resetearForms()" class="btn btn-primary">Resetear Busqueda</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <?php for ($i = 1; $i <= 2; $i++) { ?>
-            <?php 
-                if($i == 1) { $vector="pro[]"; $nombre = "Pronunciación"; }
-                if($i == 2) { $vector="gra[]"; $nombre = "Gramática"; }
-            ?>
-            <div class="col-lg-6">
+        <div class="row">
+            <?php for ($i = 1; $i <= 2; $i++) { ?>
+                <?php 
+                    if($i == 1) { $vector="pro[]"; $nombre = "Pronunciación"; }
+                    if($i == 2) { $vector="gra[]"; $nombre = "Gramática"; }
+                ?>
+                <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Accordion -->
+                        <a href="#<?php echo $nombre ?>" class="d-block card-header py-3" data-toggle="collapse"
+                        role="button" aria-expanded="true" aria-controls="<?php echo $nombre ?>">
+                        <h6 class="m-0 font-weight-bold"><?php echo $nombre ?></h6>
+                        </a>
+                        <!-- Card Content - Collapse -->
+                        <div class="collapse" id="<?php echo $nombre ?>">
+                            <div class="card-body">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <tbody>
+                                            <?php foreach($valores as $valor) { ?>
+                                                <tr>
+                                                    <?php if($valor['charID'] == $i) { ?>
+                                                        <td><?php echo $valor['at1'] ?></td>
+                                                        <td><input type="checkbox" name="<?php echo $vector ?>" value="<?php echo $valor['valID'] ?>"/></td>
+                                                    <?php }?>
+                                                </tr>
+                                            <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <table class="table table-bordered" id="pronunciacionFinal" width="100%" cellspacing="0" style="display: none">
+                <tbody></tbody>
+            </table>
+            <table class="table table-bordered" id="gramaticaFinal" width="100%" cellspacing="0" style="display: none">
+                <tbody></tbody>
+            </table>
+
+            <div class="col-lg-12">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#<?php echo $nombre ?>" class="d-block card-header py-3" data-toggle="collapse"
-                    role="button" aria-expanded="true" aria-controls="<?php echo $nombre ?>">
-                    <h6 class="m-0 font-weight-bold"><?php echo $nombre ?></h6>
+                    <a href="#vocabulario" class="d-block card-header py-3" data-toggle="collapse"
+                    role="button" aria-expanded="true" aria-controls="vocabulario">
+                        <h6 class="m-0 font-weight-bold">Vocabulario</h6>
                     </a>
                     <!-- Card Content - Collapse -->
-                    <div class="collapse" id="<?php echo $nombre ?>">
+                    <div class="collapse" id="vocabulario">
                         <div class="card-body">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <tbody>
-                                        <?php foreach($valores as $valor) { ?>
-                                            <tr>
-                                                <?php if($valor['charID'] == $i) { ?>
-                                                    <td><?php echo $valor['at1'] ?></td>
-                                                    <td><input type="checkbox" name="<?php echo $vector ?>" value="<?php echo $valor['valID'] ?>"/></td>
-                                                <?php }?>
-                                            </tr>
-                                        <?php } ?>
-                                </tbody>
+                            <div class="input-group col-lg-4 mb-4">
+                                <input type="text" name="buscarVoc" id="buscarVoc" class="form-control bg-light" placeholder="Buscar..."> 
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" disabled>
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div> 
+                            </div>
+                            <table class="table table-bordered" id="tablaVocabulario" width="100%" cellspacing="0">
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
+                <table class="table table-bordered" id="vocabularioFinal" width="100%" cellspacing="0" style="display: none">
+                    <tbody></tbody>
+                </table>
             </div>
-        <?php } ?>
-
-        <table class="table table-bordered" id="pronunciacionFinal" width="100%" cellspacing="0" style="display: none">
-			<tbody></tbody>
-		</table>
-        <table class="table table-bordered" id="gramaticaFinal" width="100%" cellspacing="0" style="display: none">
-			<tbody></tbody>
-		</table>
-
-        <div class="col-lg-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Accordion -->
-                <a href="#vocabulario" class="d-block card-header py-3" data-toggle="collapse"
-                role="button" aria-expanded="true" aria-controls="vocabulario">
-                    <h6 class="m-0 font-weight-bold">Vocabulario</h6>
-                </a>
-                <!-- Card Content - Collapse -->
-                <div class="collapse" id="vocabulario">
-                    <div class="card-body">
-                        <div class="input-group col-lg-4 mb-4">
-                            <input type="text" name="buscarVoc" id="buscarVoc" class="form-control bg-light" placeholder="Buscar..."> 
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" disabled>
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div> 
-                        </div>
-                        <table class="table table-bordered" id="tablaVocabulario" width="100%" cellspacing="0">
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-			<table class="table table-bordered" id="vocabularioFinal" width="100%" cellspacing="0" style="display: none">
-				<tbody></tbody>
-			</table>
         </div>
-
     </div>
 
     <div id="mensaje" style="display: none">
@@ -360,11 +365,11 @@
                                         titulo.textContent = dato.title;
                                         dropDown.appendChild(titulo);
     
-                                        var id = document.createElement("p");
-                                        id.className = "m-0";
+                                        // var id = document.createElement("p");
+                                        // id.className = "m-0";
+                                        // // id.textContent = dato.resourceID;
                                         // id.textContent = dato.resourceID;
-                                        id.textContent = dato.resourceID;
-                                        dropDown.appendChild(id);
+                                        // dropDown.appendChild(id);
     
                                         // var autor = document.createElement("p");
                                         // autor.className = "m-0";
@@ -417,6 +422,11 @@
                 selector.appendChild(page);
             }
                             
+        }
+
+        function sacarFormulario() {
+            var boton = document.getElementById("botonBuscador").style.display = "none";
+            document.getElementById("buscador").style.display = "block";
         }
 
 		</script>

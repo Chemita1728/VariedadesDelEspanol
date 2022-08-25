@@ -9,6 +9,9 @@ class Correos extends BaseController
 
     public function __construct(){}
 
+    /**
+     * It sends an email to the user with the data that the user has entered.
+     */
     public function sendMail()
     {
         $nombre = $this->request->getPost('nombre');

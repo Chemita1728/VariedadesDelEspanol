@@ -4,12 +4,14 @@
 		<h1 class="h3 mb-0 text-gray-800">Recurso</h1>
 
         <?php if ( session('role') > 1 || session('email') == $resultado['author'] ) { ?>
-            <a href="<?php echo base_url(); ?>/recursos/crearCSV/<?php echo $resultado['resourceID']; ?>" class="btn btn-dark">
-                <i class="fas fa-arrow-down"></i>
-            </a> 
-            <a href="<?php echo base_url(); ?>/recursos/editarRecurso/<?php echo $resultado['resourceID']; ?>" class="btn btn-dark">
-                <i class="fas fa-pencil-alt"></i>
-            </a>     
+            <div class="mr-4"> 
+                <a href="<?php echo base_url(); ?>/recursos/crearCSV/<?php echo $resultado['resourceID']; ?>" class="btn btn-dark">
+                    <i class="fas fa-arrow-down"></i>
+                </a> 
+                <a href="<?php echo base_url(); ?>/recursos/editarRecurso/<?php echo $resultado['resourceID']; ?>" class="btn btn-dark">
+                    <i class="fas fa-pencil-alt"></i>
+                </a> 
+            </div>    
         <?php } ?> 
 
     </div>
@@ -55,11 +57,13 @@
         <?php } ?> 
         <?php if ( $resultado['fileFormat'] == "docx" ) { ?>
             <div class="mb-4" id="archivo" style="display: none">
-                <iframe src="<?php echo base_url(); ?>/uploads/files/<?php echo $resultado['file'] ?>"></iframe>
                 <h4>El archivo que esta relacionado con este recurso es un .docx</h4>
                 <h5>No es posible verlo dentro de esta web y tendra que descargarlo si quiere hacerlo.</h5>
             </div>
         <?php } ?> 
+        <div class="mb-4" id="botonDescarga" style="display: none">    
+            <a href="<?php echo base_url(); ?>/recursos/descargarArchivo/<?php echo $resultado['resourceID']; ?>" class="btn btn-primary"> Descargar Archivo Asociado</a> 
+        </div>
     <?php } ?> 
 
     
@@ -122,6 +126,7 @@
 
         function verArchivo() {
             document.getElementById("archivo").style.display = "block";
+            document.getElementById("botonDescarga").style.display = "block";
             document.getElementById("botonArchivo").style.display = "none";
         }
 

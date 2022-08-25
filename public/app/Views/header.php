@@ -46,19 +46,19 @@
                 <hr class="sidebar-divider my-0">
 
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url(); ?>/recursos">
                         <i class="fas fa-home"></i>
-                        <span>Pagina Principal</span></a>
+                        <span>Página Principal</span></a>
                 </li>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">
 
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url(); ?>/recursos/recursos">
-                        <i class="fas fa-info"></i>
+                        <i class="fas fa-list"></i>
                         <span>Ver Recursos</span></a>
                 </li>
                 
@@ -94,7 +94,7 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRecursos"
                             aria-expanded="true" aria-controls="collapseRecursos">
-                            <i class="fas fa-users"></i>
+                            <i class="fas fa-pen-nib"></i>
                             <span>Recursos</span>
                         </a>
                         <div class="collapse" id="collapseRecursos" >
@@ -117,13 +117,14 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaracteristicas"
                             aria-expanded="true" aria-controls="collapseCaracteristicas">
-                            <i class="fas fa-users"></i>
-                            <span>Caracteristicas</span>
+                            <i class="fas fa-plus"></i>
+                            <!-- <i class="fas fa-dragon"></i> -->
+                            <span>Características</span>
                         </a>
                         <div class="collapse" id="collapseCaracteristicas" >
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaProGra/1">Agregar Pronunciación</a>
-                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaProGra/2">Agregar Gramaticas</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaProGra/2">Agregar Gramática</a>
                             </div>
                         </div>
                     </li>
@@ -166,7 +167,7 @@
                             <li class="navbar-nav ml-auto dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 medium">Usuario Anonimo</span>
+                                    <span class="mr-2 medium">Usuario Anónimo</span>
                                     
                                 </a>
                                 <!-- Dropdown - Usuario Anonimo -->

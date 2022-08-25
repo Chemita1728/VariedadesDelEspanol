@@ -14,8 +14,10 @@ class Recursos extends BaseController
 {
     protected $recursos;
     
-    public function __construct()
-    {
+    /**
+     * It connects to the database, and then creates a new instance of each of the models
+     */
+    public function __construct(){
         $this->db = \Config\Database::connect();
         $this->recursos = new RecursosModel();
         $this->valores = new ValoresModel();
@@ -23,8 +25,10 @@ class Recursos extends BaseController
         $this->caracteristicas = new CaracteristicasModel();
     }
 
-    public function index()
-    {
+    /**
+     * It gets all the resources from the database and displays them in the home page
+     */
+    public function index(){
         $recursos = $this->recursos->where('state', 5)
                                     ->orderBy("created_at", "asc")
                                     ->findAll();     
@@ -36,32 +40,45 @@ class Recursos extends BaseController
         echo view('footer');
     }
 
-    public function sobreNosotros()
-    {
+    /**
+     * It loads the header, footer and the sobreNosotros view.
+     */
+    public function sobreNosotros(){
         
         echo view('header');
         echo view('sobreNosotros');
         echo view('footer');
     }
-    public function cargarVista($nombre,$data)
-    {
+
+    /**
+     * It loads a view, and passes it some data
+     * 
+     * @param nombre The name of the view file.
+     * @param data An array of data that will be passed to the view.
+     */
+    public function cargarVista($nombre,$data){
         $vista = 'recursos/'.$nombre;
         echo view('header');
         echo view($vista, $data);
         echo view('footer');
     }
 
-    // Función que carga la pagina para ver un recurso
-    public function recursos()
-    {
+    /**
+     * It loads the view "recursos" and passes the data array to it.
+     */
+    public function recursos(){
         $valores = $this->valores->findAll();
         $data = ['valores' => $valores];
         $this->cargarVista("recursos",$data);
     }
 
-    // Función que carga la pagina para ver un recurso
-    public function recurso($id)
-    {
+    /**
+     * It gets the resource with the id passed as a parameter, and then it gets the author of that
+     * resource
+     * 
+     * @param id The id of the resource you want to retrieve.
+     */
+    public function recurso($id){
         $resultado = $this->db->table('resource')
                                     ->where('resourceID', $id)
                                     ->join('users', 'users.email = resource.author')
@@ -74,7 +91,9 @@ class Recursos extends BaseController
         $this->cargarVista("recurso",$data);
     }
 
-    //Funcion para cargar los nombres de cada caracteristica
+    /**
+     * It takes a parameter from a form, and then returns a JSON object with the data from the database
+     */
     public function cargarCaracteristicas(){
         $parametro = $this->request->getPost('parametro');
         $caracteristica = $this->caracteristicas->where('charID', $parametro)
@@ -82,7 +101,10 @@ class Recursos extends BaseController
         echo json_encode($caracteristica);                                            
     }
 
-    //Funcion para cargar los valores pertenecientes a un recurso dependiendo de la caracteristica elegida
+    /**
+     * It takes the id of a resource and the id of a parameter, and returns the values of that
+     * parameter that are associated with that resource
+     */
     public function cargarValores(){
         $id = $this->request->getPost('id');
         $parametro = $this->request->getPost('parametro');
@@ -103,20 +125,23 @@ class Recursos extends BaseController
         echo json_encode($valores);  
     }
 
-    // Función que carga la pagina para crear un nuevo recurso
-    public function nuevoRecurso()
-    {
+    /**
+     * It loads the view nuevoRecurso.php
+     */
+    public function nuevoRecurso(){
         $valores = $this->valores->findAll();
         $data = ['titulo' => 'Nuevo Recurso', 'valores' => $valores];
 
         $this->cargarVista("nuevoRecurso",$data);
     }
 
-    // funcion que crea el nuevo recurso
-    // si lo crea un colaborador se manda para la revision de un expreto
-    // si lo crea un experto o un administrador se publica directamente
-    public function crearRecurso()
-    {
+    /**
+     * It takes the data from a form, inserts it into a database, and then redirects the user to a
+     * different page
+     * 
+     * @return the view of the form to create a new resource.
+     */
+    public function crearRecurso(){
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
         $nivel = $this->request->getPost('nivel');
@@ -127,6 +152,7 @@ class Recursos extends BaseController
         $mensaje = 'Resultado:<br>';
         $data=(['','']);
         
+        // If you are a collaborator
         if (session('role') == 1){
             $this->recursos->insert(['title' => $title,
                                         'description' => $description,
@@ -140,6 +166,7 @@ class Recursos extends BaseController
             
             $mensaje = $mensaje . "-El recurso ha sido mandado para supervisión<br>";
         }
+        // If you are an expert or admin
         if (session('role') > 1){
             $this->recursos->insert(['title' => $title,
                                         'description' => $description,
@@ -155,7 +182,7 @@ class Recursos extends BaseController
             $mensaje = $mensaje . "-El recurso se ha publicado<br>";
         }
         
-        
+        /* Updating the fileFormat and file columns in the database. */
         $recurso = $this->recursos->where('title', $title)
                                     ->where("description", $description)
                                     ->first(); 
@@ -165,18 +192,19 @@ class Recursos extends BaseController
 
         if( $file->isValid() && ! $file->hasMoved() ){
 
-            $fileFormat = $file->guessExtension(); // pdf o vacio
-            if( $fileFormat == "" ) $fileFormat = "docx"; //si es vacio es docx
+            $fileFormat = $file->guessExtension();
+            if( $fileFormat == "" ) $fileFormat = "docx"; 
             $nombreArchivo = $file->getRandomName();
-            // echo($mime);
-            // echo($format);
-            // echo($format2);
 
+            /* Moving the file to the folder "uploads/files" and updating the database with the new
+            file name. */
             $file->move(ROOTPATH."public/uploads/files", $nombreArchivo);
             $this->recursos->update( $recurso['resourceID'], ['fileFormat' => $fileFormat,
                                                                 'file' => $nombreArchivo]);
         }
 
+       
+        /* Inserting the values of the checkboxes into the database. */
         // echo("Pronunciación");
         if(!empty($_POST['pro'])) {
             foreach($_POST['pro'] as $value){
@@ -205,16 +233,13 @@ class Recursos extends BaseController
 
     }
     
-    // -Funcion que carga la vista de los recursos a revisar
-    // -Si la persona registrada es un colaborador se cargan los recursos que le ha
-    // devuelto editor para volver a revisar con su comentario respectivamente
-    // -En este caso solo salen los recirsos del colaborador pendientes de revisión
-    // -Si la persona registrada es un experto o un administrador, se cargan los 
-    // recursos que sus supervisados han creado para la supervision
-    // -En este caso salen primero los recursos de los supervisados de la persona registrada
-    // y debajo todos los demas pendientes.
-    public function aRevisar($rol)
-    {        
+    /**
+     * It's a function that gets all the resources that are in a state of 2 or 4 (for the author) or 1
+     * or 3 (for the reviewer) and displays them in a table
+     * 
+     * @param rol 1 = collaborator, 2 = expert, 3 = admin
+     */
+    public function aRevisar($rol){        
         $email = session('email');
         if( $rol == 1 ){
             $where = "state=2 OR state=4";
@@ -225,10 +250,6 @@ class Recursos extends BaseController
                                     ->orderby("resource.created_at", "desc")
                                     ->get()
                                     ->getResultArray();
-            // $recursos = $this->recursos->where("author", session('email'))
-            //                         ->where($where)
-            //                         ->orderBy("created_at", "desc")
-            //                         ->findAll();   
             $data = ['titulo' => 'Recursos a Revisar', 'resultados' => $resultados, 'tipo' => 1];
             $this->cargarVista("aRevisar",$data);
         }
@@ -239,10 +260,7 @@ class Recursos extends BaseController
                                     ->join('users', 'users.email = resource.author')
                                     ->orderby('state', 'desc', 'resource.created_at', 'asc')
                                     ->get()
-                                    ->getResultArray();
-            // $recursos = $this->recursos->where($where)
-            //                             ->orderBy('state', 'desc', 'created_at', 'asc')
-            //                             ->findAll();   
+                                    ->getResultArray(); 
             $mios=([]);
             $otros=([]);
     
@@ -257,15 +275,19 @@ class Recursos extends BaseController
                 $mios[] = $otro;
             }
             
-        $data = ['titulo' => 'Recursos a Validar', 'resultados' => $mios, 'tipo' => 2];
-        $this->cargarVista("aRevisar",$data);
+            $data = ['titulo' => 'Recursos a Validar', 'resultados' => $mios, 'tipo' => 2];
+            $this->cargarVista("aRevisar",$data);
 
         }
     }
 
-    // -Función que carga la vista de un recurso a revisar por un experto o administrador
-    public function validarRecurso($id)
-    {
+    /**
+     * It gets the resource with the given id, joins the users table to get the author's name, and then
+     * loads the view with the result
+     * 
+     * @param id The id of the resource to be validated
+     */
+    public function validarRecurso($id){
         $resultado = $this->db->table('resource')
                                 ->where("resourceID", $id)
                                 ->join('users', 'users.email = resource.author')
@@ -277,9 +299,13 @@ class Recursos extends BaseController
         $this->cargarVista("validarRecurso",$data);
     }
 
-    // -Función para que un recurso no se publique y el colaborador lo tenga que revisar
-    public function enviarComentario($id)
-    {
+    /**
+     * It updates the resource's state to 2 or 4 depending on the state it was in before, and then
+     * redirects to the same page
+     * 
+     * @param id The id of the resource to be updated
+     */
+    public function enviarComentario($id){
 
         $comentario = $this->request->getPost('comentario');
         $estado = $this->request->getPost('state');
@@ -301,11 +327,13 @@ class Recursos extends BaseController
         return redirect()->to(base_url().'/recursos/aRevisar/2');
         
     }
-
-    // -Función para que un experto o administrador publiquen un recurso de un colaborador
-    public function publicar($id)
-    {
-
+ 
+    /**
+     * It updates the state of a resource to 5 (published) and sets the publisher and publish date
+     * 
+     * @param id The id of the resource to be published
+     */
+    public function publicar($id){
         $mensaje = 'Resultado:<br>';
         $data=(['','']); 
 
@@ -322,9 +350,13 @@ class Recursos extends BaseController
 
     }
 
-    //-Función que carga la vista de un recurso a revisar por un colaborador
-    public function revisarRecurso($id)
-    {
+    /**
+     * It takes the id of a resource, finds the resource, finds all the values of the resource, finds
+     * all the values of the characteristics, and then loads the view with all of that data
+     * 
+     * @param id the id of the resource to be reviewed
+     */
+    public function revisarRecurso($id){
         $recurso = $this->recursos->where('resourceID', $id)
                                     ->first();
 
@@ -350,10 +382,13 @@ class Recursos extends BaseController
         $this->cargarVista("revisarRecurso",$data);
     }
 
-    // Función que usa el colaborador cuando el experto dice que su recurso no es correcto
-    // para volver a mandarlo para que lo revisen
-    public function mandarRevision($id)
-    {
+    /**
+     * It updates a resource in the database, and if a file is not uploaded, it updates the file
+     * information in the database
+     * 
+     * @param id The id of the resource
+     */
+    public function mandarRevision($id){
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
         $nivel = $this->request->getPost('nivel');
@@ -385,20 +420,21 @@ class Recursos extends BaseController
                                             'file' => $nombreArchivo]);
         }
 
-        //hago este for para ver los checkbox que esta seleccionados de cada tipo
+        /* Checking if the checkboxes are checked and if they are, it is adding them to the database. */
         for ($i = 1; $i <= 3; $i++) {  
             if($i == 1) $vector="pro";
 			if($i == 2) $vector="gra";
 			if($i == 3) $vector="vocFinal";                    
         
-            //compruebo si hay algun checkbox seleccionado
+            /* Checking if the post is empty. */
             if(!empty($_POST[$vector])) {
 
                 $relaciones = $this->compuestos->where('resID', $id)
                                                 ->where('charID', $i)
                                                 ->findAll(); 
 
-                // miro todas las relaciones que tiene el recurso y las comparo con las seleccionadas
+                /* Checking if the values in the database are still selected. If they are not, it
+                deletes them. */
                 foreach( $relaciones as $relacion ){
                     $estaSeleccionado = false;
                     foreach($_POST[$vector] as $value){
@@ -414,13 +450,12 @@ class Recursos extends BaseController
                     }
                 }
 
-                // miro todos los seleccionados y los busco en la tabla
+                /* Inserting values into a table if not yet included. */
                 foreach($_POST[$vector] as $value){
                     $busco = $this->compuestos->where('resID', $id)
                                                 ->where("charID", $i)
                                                 ->where("valID", $value)
                                                 ->first(); 
-                    // si no estan en la tabla los añado
                     if( $busco == NULL ){                         
                         $this->compuestos->insert(['resID' => $id, 'charID' => $i, 'valID' => $value ]);
                     } 
@@ -436,18 +471,11 @@ class Recursos extends BaseController
 
     }
 
-    public function buscarVocabulario()
-    {
-        // if( isset($_POST['palabra']) ) {
-        //     $palabra = $this->request->getPost('palabra');
-        //     $vocabulario = $this->valores->where('charID', 3)
-        //                                 ->like('at1', $palabra)
-        //                                 ->findAll();
-        // } else {
-        //     $vocabulario = $this->valores->where('charID', 3)
-        //                                 ->findAll();                         
-        // }
-
+    /**
+     * It receives a POST request with a word, and returns a JSON with all the words that match the
+     * word in the database
+     */
+    public function buscarVocabulario(){
         if( isset($_POST['palabra']) ) {
             $palabra = ['at1' => $this->request->getPost('palabra')];
         } else $palabra = ['at1' => ''];
@@ -460,8 +488,10 @@ class Recursos extends BaseController
         echo json_encode($vocabulario);
     }
 
-    public function introducirVocabulario()
-    {
+    /**
+     * It takes the values from the form, and inserts them into the database
+     */
+    public function introducirVocabulario(){
         $lema = $this->request->getPost('lema');
         $forma = $this->request->getPost('forma');
         $significado = $this->request->getPost('sign');
@@ -476,8 +506,11 @@ class Recursos extends BaseController
                                 'at3' => $significado]);      
     }
 
-    public function cargarSeleccionados()
-    {
+    /**
+     * It takes the id of a resource, finds the resource, then finds all the values associated with
+     * that resource, and returns them as an array
+     */
+    public function cargarSeleccionados(){
         $vocabularioDeRecurso = [];
 
         $id = $this->request->getPost('id');
@@ -500,6 +533,12 @@ class Recursos extends BaseController
         echo json_encode($vocabularioDeRecurso);
     }
 
+    /**
+     * It gets a resource from the database, gets all the values of that resource, gets all the values
+     * from the database, and gets all the characteristics from the database
+     * 
+     * @param id the id of the resource to be edited
+     */
     public function editarRecurso($id){
         $recurso = $this->recursos->where('resourceID', $id)
                                     ->first();
@@ -525,8 +564,12 @@ class Recursos extends BaseController
         $this->cargarVista("editarRecurso",$data);
     }
 
-    public function mandarEdicion($id)
-    {
+    /**
+     * It updates a resource in the database
+     * 
+     * @param id The id of the resource to be edited
+     */
+    public function mandarEdicion($id){
         $title = $this->request->getPost('title');
         $description = $this->request->getPost('description');
         $nivel = $this->request->getPost('nivel');
@@ -537,6 +580,7 @@ class Recursos extends BaseController
         $mensaje = 'Resultado:<br>';
         $data=(['','']);        
 
+        /* Updating the database with the new information. */
         if( session('role') > 1 ){
             $this->recursos->update( $id, ['title' => $title,
                                     'description' => $description,
@@ -564,20 +608,18 @@ class Recursos extends BaseController
         
         if( $file->isValid() && ! $file->hasMoved() ){
 
-            $fileFormat = $file->guessExtension(); // pdf o vacio
-            if( $fileFormat == "" ) $fileFormat = "docx"; //si es vacio es docx
+            $fileFormat = $file->guessExtension();
+            if( $fileFormat == "" ) $fileFormat = "docx"; 
             $nombreArchivo = $file->getRandomName();
-            // echo($mime);
-            // echo($format);
-            // echo($format2);
 
+            /* Moving the file to the folder "uploads/files" and updating the database with the new
+            file name. */
             $file->move(ROOTPATH."public/uploads/files", $nombreArchivo);
             $this->recursos->update( $recurso['resourceID'], ['fileFormat' => $fileFormat,
                                                                 'file' => $nombreArchivo]);
         }
 
-        
-        //hago este for para ver los checkbox que esta seleccionados de cada tipo
+        /* Checking if the checkboxes are checked and if they are, it is adding them to the database. */
         for ($i = 1; $i <= 3; $i++) {  
             if($i == 1) $vector="pro";
 			if($i == 2) $vector="gra";
@@ -590,7 +632,8 @@ class Recursos extends BaseController
                                                 ->where('charID', $i)
                                                 ->findAll(); 
 
-                // miro todas las relaciones que tiene el recurso y las comparo con las seleccionadas
+                /* Checking if the values in the database are still selected. If they are not, it
+                deletes them. */
                 foreach( $relaciones as $relacion ){
                     $estaSeleccionado = false;
                     foreach($_POST[$vector] as $value){
@@ -606,13 +649,12 @@ class Recursos extends BaseController
                     }
                 }
 
-                // miro todos los seleccionados y los busco en la tabla
+                /* Inserting values into a table if not yet included. */
                 foreach($_POST[$vector] as $value){
                     $busco = $this->compuestos->where('resID', $id)
                                                 ->where("charID", $i)
                                                 ->where("valID", $value)
                                                 ->first(); 
-                    // si no estan en la tabla los añado
                     if( $busco == NULL ){                         
                         $this->compuestos->insert(['resID' => $id, 'charID' => $i, 'valID' => $value ]);
                     } 
@@ -627,8 +669,12 @@ class Recursos extends BaseController
         return redirect()->to(base_url('/recursos'));
     }
 
-    public function nuevaProGra($tipo)
-    {
+    /**
+     * It loads a view with a variable called proGra, which is a collection of objects
+     * 
+     * @param tipo the ID of the characteristic
+     */
+    public function nuevaProGra($tipo){
         $proGra = $this->caracteristicas
                                 ->where('charID', $tipo)
                                 ->first();
@@ -636,7 +682,12 @@ class Recursos extends BaseController
         $this->cargarVista("nuevaProGra",$data);
     }
 
-    public function crearProGra($tipo){
+    /**
+     * Creating a new pronunciation or grammar characteristic.
+     * 
+     * @param tipo the type of the characteristic, in this case, it's "proGra"
+     */
+    public function crearProGra( $tipo ){
         $proGra1 = $this->request->getPost('proGra1');
         $proGra2 = $this->request->getPost('proGra2');
         $proGra3 = $this->request->getPost('proGra3');
@@ -660,12 +711,16 @@ class Recursos extends BaseController
         $proGra = $this->caracteristicas
                                 ->where('charID', $tipo)
                                 ->first();
+
         $data = ['proGra' => $proGra, 'tipo' => $tipo];
         $this->cargarVista("nuevaProGra",$data);
     }
 
-    public function buscarRecursos( )
-    {
+    /**
+     * It takes a bunch of parameters from a form, and then uses them to query the database for
+     * resources that match the parameters
+     */
+    public function buscarRecursos( ){
         //buscamos en titulo o descripcion
         if( isset($_POST['texto1']) ) {
             $texto1 = ['title' => $this->request->getPost('texto1')];
@@ -775,6 +830,11 @@ class Recursos extends BaseController
 
     }
 
+    /**
+     * It creates a CSV file with the data of a resource, and then it downloads it.
+     * 
+     * @param id The id of the resource you want to download.
+     */
     public function crearCSV( $id ){
 
         $url = "../public/tempFiles/rec".$id.".csv";
@@ -852,6 +912,42 @@ class Recursos extends BaseController
         // Download the file to your desktop. Name it "my_backup.zip"
         //$this->zip->download('recursos.zip');
         //$zipFile = new \PhpZip\ZipFile();
+
+    }
+
+    /**
+     * It downloads a file from the server
+     * 
+     * @param id The ID of the resource you want to download.
+     */
+    public function descargarArchivo( $id ){
+
+        $recurso = $this->recursos->where('resourceID', $id)->first(); 
+ 
+        $fileFormat = $recurso['fileFormat'];
+        $file = $recurso['file'];
+
+        $url = "../public/uploads/files/".$file;
+
+        if (file_exists($url)) {
+            header('Content-Description: File Transfer');
+            if( $fileFormat == "pdf" ){ header('Content-Type: application/pdf'); } 
+            else { header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document'); }
+            header('Content-Disposition: attachment; filename=archivoAsociado.'.$fileFormat);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            //header('Content-Length: ' . filesize($file_example));
+            ob_clean();
+            flush();
+            readfile($url);
+            // readfile($file_example);
+            exit;
+        }
+        else {
+            echo 'Archivo no disponible.';
+        }
 
     }
 
