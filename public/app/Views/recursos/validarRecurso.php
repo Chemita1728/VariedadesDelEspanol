@@ -44,13 +44,56 @@
                     <p>Descripción: <?php echo $resultado['description']; ?></p>
                     <p>Nivel de Español: <?php echo cambioNivelEsp($resultado['spanishlvlRes']); ?></p>
                     <p>Variedad del Español: <?php echo cambioVariedad($resultado['variety']); ?></p>
-                    <p>Fichero: <?php echo $resultado['file']; ?></p>
                     <p>Link: <?php echo $resultado['link']; ?></p>
                     <p>Autor: <?php echo $resultado['nombre']." ".$resultado['apellidos']; ?></p>
                     <p>Editor: <?php echo $resultado['respMail']; ?></p>
                 </div>
 			</div>
 		</div>
+
+        <?php if ( $resultado['file'] != NULL ) { ?>
+            <h1 class="h5 mb-4 text-gray-800">Archivo Relacionado</h1>
+            <div id="botonArchivo" class="input-group col-lg-4 mb-4" style="display: block">
+                <button type="button" onclick="verArchivo()" class="btn btn-primary">Ver archivo asociado al resultado</button>
+            </div>
+
+            <?php if ( $resultado['fileFormat'] == "pdf" ) { ?>
+                <div class="mb-4" id="archivo" style="display: none">
+                    <embed src="<?php echo base_url(); ?>/uploads/files/<?php echo $resultado['file'] ?>" type="application/pdf" width="100%" height="600" />
+                </div>
+            <?php } ?> 
+            <?php if ( $resultado['fileFormat'] == "docx" ) { ?>
+                <div class="mb-4" id="archivo" style="display: none">
+                    <h4>El archivo que esta relacionado con este recurso es un .docx</h4>
+                    <h5>No es posible verlo dentro de esta web y tendra que descargarlo si quiere hacerlo.</h5>
+                </div>
+            <?php } ?> 
+            <div class="mb-4" id="botonDescarga" style="display: none">    
+                <a href="<?php echo base_url(); ?>/recursos/descargarArchivo/<?php echo $resultado['resourceID']; ?>" class="btn btn-primary"> Descargar Archivo Asociado</a> 
+            </div>
+        <?php } ?> 
+
+        <?php if ( $resultado['file2'] != NULL ) { ?>
+            <h1 class="h5 mb-4 text-gray-800">Archivo Secundario</h1>
+            <div id="botonArchivoSecundario" class="input-group col-lg-4 mb-4" style="display: block">
+                <button type="button" onclick="verArchivoSecundario()" class="btn btn-primary">Ver archivo secundario</button>
+            </div>
+
+            <?php if ( $resultado['file2Format'] == "pdf" ) { ?>
+                <div class="mb-4" id="archivoSecundario" style="display: none">
+                    <embed src="<?php echo base_url(); ?>/uploads/secondaryFiles/<?php echo $resultado['file2'] ?>" type="application/pdf" width="100%" height="600" />
+                </div>
+            <?php } ?> 
+            <?php if ( $resultado['file2Format'] == "docx" ) { ?>
+                <div class="mb-4" id="archivoSecundario" style="display: none">
+                    <h4>El archivo secundario que esta relacionado con este recurso es un .docx</h4>
+                    <h5>No es posible verlo dentro de esta web y tendra que descargarlo si quiere hacerlo.</h5>
+                </div>
+            <?php } ?> 
+            <div class="mb-4" id="botonDescargaSecundario" style="display: none">    
+                <a href="<?php echo base_url(); ?>/recursos/descargarArchivo/<?php echo $resultado['resourceID']; ?>" class="btn btn-primary"> Descargar Archivo Secundario</a> 
+            </div>
+        <?php } ?> 
 
         <select class="form-control bg-light mb-4" id="parametro" name="parametro" onchange="cargarCaracteristicas()">
             <option disabled selected>Selecciona una opción</option>    
@@ -132,6 +175,17 @@
                     $('#val'+index+'3').html(valor.at3);
                 });
             })
+        }
+
+        function verArchivo() {
+            document.getElementById("archivo").style.display = "block";
+            document.getElementById("botonDescarga").style.display = "block";
+            document.getElementById("botonArchivo").style.display = "none";
+        }
+        function verArchivoSecundario() {
+            document.getElementById("archivoSecundario").style.display = "block";
+            document.getElementById("botonDescargaSecundario").style.display = "block";
+            document.getElementById("botonArchivoSecundario").style.display = "none";
         }
 
     </script>

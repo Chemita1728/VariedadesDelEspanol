@@ -187,23 +187,33 @@ class Recursos extends BaseController
                                     ->where("description", $description)
                                     ->first(); 
 
-        $file = $this->request->getFile('file');        
-        
-
-        if( $file->isValid() && ! $file->hasMoved() ){
-
-            $fileFormat = $file->guessExtension();
-            if( $fileFormat == "" ) $fileFormat = "docx"; 
-            $nombreArchivo = $file->getRandomName();
-
-            /* Moving the file to the folder "uploads/files" and updating the database with the new
-            file name. */
-            $file->move(ROOTPATH."public/uploads/files", $nombreArchivo);
-            $this->recursos->update( $recurso['resourceID'], ['fileFormat' => $fileFormat,
-                                                                'file' => $nombreArchivo]);
+        for( $i = 0; $i<2; $i++){
+            if( $i == 0){
+                $file = $this->request->getFile('file');   
+                $folder = "files";
+                $formatColumn = "fileFormat";
+                $column = "file";
+            } 
+            else{
+                $file = $this->request->getFile('file2'); 
+                $folder = "secondaryFiles";
+                $formatColumn = "file2Format";
+                $column = "file2";
+            }
+            if( $file->isValid() && ! $file->hasMoved() ){
+    
+                $fileFormat = $file->guessExtension();
+                if( $fileFormat == "" ) $fileFormat = "docx"; 
+                $nombreArchivo = $file->getRandomName();
+    
+                /* Moving the file to the folder "uploads/files" and updating the database with the new
+                file name. */
+                $file->move(ROOTPATH."public/uploads/".$folder , $nombreArchivo);
+                $this->recursos->update( $recurso['resourceID'], [$formatColumn => $fileFormat,
+                                                                    $column => $nombreArchivo]);
+            }
         }
 
-       
         /* Inserting the values of the checkboxes into the database. */
         // echo("Pronunciación");
         if(!empty($_POST['pro'])) {
@@ -408,16 +418,38 @@ class Recursos extends BaseController
                                 'link' => $link,
                                 'variety' => $variety]);
 
-        $file = $this->request->getFile('file');    
-        
-        if( $file->isValid() && ! $file->hasMoved() ){
-            $fileFormat = $file->guessExtension(); // pdf o vacio
-            if( $fileFormat == "" ) $fileFormat = "docx"; //si es vacio es docx
-            $nombreArchivo = $file->getRandomName();
+        $recurso = $this->recursos->where('resourceID', $id)->first();   
+        for( $i = 0; $i<2; $i++){
+            if( $i == 0){
+                $file = $this->request->getFile('file');   
+                $folder = "files";
+                $formatColumn = "fileFormat";
+                $column = "file";
+            } 
+            else{
+                $file = $this->request->getFile('file2'); 
+                $folder = "secondaryFiles";
+                $formatColumn = "file2Format";
+                $column = "file2";
+            }
 
-            $file->move(ROOTPATH."public/uploads/files", $nombreArchivo);
-            $this->recursos->update( $id, ['fileFormat' => $fileFormat,
-                                            'file' => $nombreArchivo]);
+            if( $file->isValid() && ! $file->hasMoved() ){
+                
+                /* If the resource already has a file, it is deleted from the server. */
+                if( $recurso[$column] != "" ) {
+                    unlink( ROOTPATH."public/uploads/".$folder."/".$recurso[$column] );
+                }
+
+                $fileFormat = $file->guessExtension();
+                if( $fileFormat == "" ) $fileFormat = "docx"; 
+                $nombreArchivo = $file->getRandomName();
+    
+                /* Moving the file to the folder "uploads/files" and updating the database with the new
+                file name. */
+                $file->move(ROOTPATH."public/uploads/".$folder , $nombreArchivo);
+                $this->recursos->update( $recurso['resourceID'], [$formatColumn => $fileFormat,
+                                                                    $column => $nombreArchivo]);
+            }
         }
 
         /* Checking if the checkboxes are checked and if they are, it is adding them to the database. */
@@ -600,23 +632,39 @@ class Recursos extends BaseController
                                     'variety' => $variety]);
         }
 
-        $recurso = $this->recursos->where('title', $title)
-                                    ->where("description", $description)
-                                    ->first(); 
-
-        $file = $this->request->getFile('file');    
         
-        if( $file->isValid() && ! $file->hasMoved() ){
+        $recurso = $this->recursos->where('resourceID', $id)->first();   
+        for( $i = 0; $i<2; $i++){
+            if( $i == 0){
+                $file = $this->request->getFile('file');   
+                $folder = "files";
+                $formatColumn = "fileFormat";
+                $column = "file";
+            } 
+            else{
+                $file = $this->request->getFile('file2'); 
+                $folder = "secondaryFiles";
+                $formatColumn = "file2Format";
+                $column = "file2";
+            }
 
-            $fileFormat = $file->guessExtension();
-            if( $fileFormat == "" ) $fileFormat = "docx"; 
-            $nombreArchivo = $file->getRandomName();
+            if( $file->isValid() && ! $file->hasMoved() ){
+                
+                /* If the resource already has a file, it is deleted from the server. */
+                if( $recurso[$column] != "" ) {
+                    unlink( ROOTPATH."public/uploads/".$folder."/".$recurso[$column] );
+                }
 
-            /* Moving the file to the folder "uploads/files" and updating the database with the new
-            file name. */
-            $file->move(ROOTPATH."public/uploads/files", $nombreArchivo);
-            $this->recursos->update( $recurso['resourceID'], ['fileFormat' => $fileFormat,
-                                                                'file' => $nombreArchivo]);
+                $fileFormat = $file->guessExtension();
+                if( $fileFormat == "" ) $fileFormat = "docx"; 
+                $nombreArchivo = $file->getRandomName();
+    
+                /* Moving the file to the folder "uploads/files" and updating the database with the new
+                file name. */
+                $file->move(ROOTPATH."public/uploads/".$folder , $nombreArchivo);
+                $this->recursos->update( $recurso['resourceID'], [$formatColumn => $fileFormat,
+                                                                    $column => $nombreArchivo]);
+            }
         }
 
         /* Checking if the checkboxes are checked and if they are, it is adding them to the database. */
@@ -923,11 +971,42 @@ class Recursos extends BaseController
     public function descargarArchivo( $id ){
 
         $recurso = $this->recursos->where('resourceID', $id)->first(); 
- 
+
         $fileFormat = $recurso['fileFormat'];
         $file = $recurso['file'];
 
         $url = "../public/uploads/files/".$file;
+
+        if (file_exists($url)) {
+            header('Content-Description: File Transfer');
+            if( $fileFormat == "pdf" ){ header('Content-Type: application/pdf'); } 
+            else { header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document'); }
+            header('Content-Disposition: attachment; filename=archivoAsociado.'.$fileFormat);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            //header('Content-Length: ' . filesize($file_example));
+            ob_clean();
+            flush();
+            readfile($url);
+            // readfile($file_example);
+            exit;
+        }
+        else {
+            echo 'Archivo no disponible.';
+        }
+
+    }
+
+    public function descargarArchivoSecundario( $id ){
+
+        $recurso = $this->recursos->where('resourceID', $id)->first(); 
+ 
+        $fileFormat = $recurso['file2Format'];
+        $file = $recurso['file2'];
+
+        $url = "../public/uploads/secondaryFiles/".$file;
 
         if (file_exists($url)) {
             header('Content-Description: File Transfer');

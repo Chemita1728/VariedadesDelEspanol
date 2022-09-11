@@ -11,14 +11,19 @@ class Usuarios extends BaseController
     protected $usuarios;
     protected $recursos;
 
-    public function __construct()
-    {
+    /**
+     * The function __construct() is a constructor function that creates a new instance of the
+     * UsuariosModel and RecursosModel classes
+     */
+    public function __construct(){
         $this->usuarios = new UsuariosModel();
         $this->recursos = new RecursosModel();
     }
 
-    public function index()
-    {
+    /**
+    * It gets all the resources from the database and displays them in the view
+    */
+    public function index(){
         $recursos = $this->recursos->where('state', 4)
                                     ->orderBy("created_at", "asc")
                                     ->findAll();     
@@ -30,29 +35,47 @@ class Usuarios extends BaseController
         echo view('footer');
     }
 
-    public function cargarVista($nombre,$data)
-    {
+    /**
+     * It loads a view, and passes it some data
+     * 
+     * @param nombre The name of the view file.
+     * @param data An array of data to be passed to the view.
+     */
+    public function cargarVista($nombre,$data){
         $vista = 'usuarios/'.$nombre;
         echo view('header');
         echo view($vista, $data);
         echo view('footer');
     }
     
+    /**
+     * It loads the view "usuariosActivos" and passes the array  to it
+     */
     public function usuariosActivos(){
         $data = ['titulo' => 'Usuarios Activos'];
         $this->cargarVista("usuariosActivos",$data);
     }
+    /**
+     * It loads the view "usuariosNoActivos" and passes the array  to it
+     */
     public function usuariosNoActivos(){
         $data = ['titulo' => 'Usuarios No Activos'];
         $this->cargarVista("usuariosNoActivos",$data);
     }
+    /**
+     * It loads the view "misColaboradores" and passes the array  to it
+     */
     public function misColaboradores(){
         $data = ['titulo' => 'Mis Colaboradores'];
         $this->cargarVista("misColaboradores",$data);
     }
 
-    public function buscarUsuarios()
-    {
+    /**
+     * It gets all the users from the database, then it separates them into two arrays, one for the
+     * users that are under the logged user's responsibility and another one for the rest of the users.
+     * Then it merges both arrays and returns the result as a JSON object
+     */
+    public function buscarUsuarios(){
         $rolRegistrado = session('role');
         $mailRegistrado = session('email');
 
@@ -105,9 +128,10 @@ class Usuarios extends BaseController
 
     }
 
-    //PAGINA DE USUARIOS NO ACTIVOS
-    public function buscarUsuariosNoActivos()
-    {
+    /**
+     * It returns a list of users that are not active, but only if the user is logged in as an admin
+     */
+    public function buscarUsuariosNoActivos(){
         $rolRegistrado = session('role');
         $mailRegistrado = session('email');
 
@@ -150,9 +174,11 @@ class Usuarios extends BaseController
         echo json_encode($usuarios);
     }
 
-    //PAGINA DE USUARIOS QUE PERTENECEN A UN EXPERTO
-    public function buscarMisColaboradores()
-    {
+    /**
+     * It returns a list of users that are active, have a role of 1, have a respMail that matches the
+     * session email, and have a tempId of 0
+     */
+    public function buscarMisColaboradores(){
         $responsable = session('email');
         if( isset($_POST['palabra']) ) {
             $palabra = $this->request->getPost('palabra');
@@ -175,42 +201,19 @@ class Usuarios extends BaseController
         echo json_encode($usuarios);
     }
 
-    /////////////////////////////////////////////
-
-    //NUEVO USUARIO
-    public function nuevoUsuario()
-    {
+    /**
+     * It loads the view "nuevoUsuario" and passes the variable  to it
+     */
+    public function nuevoUsuario(){
         $data = ['titulo' => 'Nuevo Usuario'];
         $this->cargarVista("nuevoUsuario", $data);
     }
 
-    /*
-    public function mensaje()
-    {
-        $mensaje = 'Resultado:<br>';
-        $data = ['titulo' => 'Nuevo Usuario'];
-
-        $controller = \Config\Services::email();
-        $controller->setTo('chema172839@gmail.com');
-        $controller->setFrom('variedadesesp@gmail.com', "Antonio" );
-
-        $controller->setSubject('Solicitud de Registro');
-        $controller->setMessage("Hola wey");
-        
-        if($controller->send()){
-            $mensaje = $mensaje . "-El usuario ha sido avisado correctamente<br>";
-        } else{
-            $mensaje = $mensaje . "-No va<br>";
-        }
-
-        $session = session();
-        $session->setFlashdata('msg',$mensaje);
-        $this->cargarVista("nuevoUsuario",$data);
-    }
+   /**
+    * It takes the data from the form, checks if the email is already in the database, and if it isn't,
+    * it sends an email to the user with a link to activate the account
     */
-
-    public function registroTemporal()
-    {
+    public function registroTemporal(){
         
         $nombre = $this->request->getPost('nombre');
         $apellidos = $this->request->getPost('apellidos');
@@ -266,8 +269,10 @@ class Usuarios extends BaseController
         
     }
 
-    public function registroParaUsuario()
-    {
+    /**
+     * It gets the user's id from the url and then it gets the user's data from the database
+     */
+    public function registroParaUsuario(){
         $tempId = $_GET["tempId"];
         $usuarios = $this->usuarios->where('tempId', $tempId)->first();
         $data = ['titulo' => 'Registro para el usuario', 'datos' => $usuarios];
@@ -275,8 +280,14 @@ class Usuarios extends BaseController
         $this->cargarVista("registroParaUsuario",$data);
     }
 
-    public function insertar()
-    {
+    /**
+     * It takes the password from the form, hashes it, and then compares it to the password in the
+     * database. If they match, it redirects to the home page, registered. If they don't match, it
+     * displays an error message
+     * 
+     * @return the view of the page.
+     */
+    public function insertar(){
         $pass1 = $this->request->getPost('password');
         $pass2 = $this->request->getPost('password2');
         $id = $this->request->getPost('id');
@@ -305,34 +316,38 @@ class Usuarios extends BaseController
         }  
     }
 
-    /////////////////////////////////////////////
-    
-    //INICIAR SESION
-    public function inicioSesion()
-    {
+    /**
+     * It loads the view "inicioSesion" and passes the array  to it
+     */
+    public function inicioSesion(){
         $data = ['titulo' => 'Inicio de Sesión'];
         $this->cargarVista("inicioSesion",$data);
     }
-    /////////////////////////////////////////////
-
-    //PAGINA DATOS PERSONALES
-    public function datosPersonales()
-    {
+    
+    /**
+     * It loads the view "datosPersonales" with the credentials
+     */
+    public function datosPersonales(){
         $usuario = $this->usuarios->where('id', session('id'))->first();
         $data = ['titulo' => 'Datos Personales', 'datos' => $usuario];
 
         $this->cargarVista("datosPersonales",$data); 
     }
-    //PAGINA PARA CAMBIAR DATOS PERSONALES
-    public function cambioDatosPersonales()
-    {
+    
+    /**
+     * It loads a view called "cambioDatosPersonales" and passes it an array of credentials
+     */
+    public function cambioDatosPersonales(){
         $usuario = $this->usuarios->where('id', session('id'))->first();
         $data = ['titulo' => 'Datos Personales', 'datos' => $usuario];
 
         $this->cargarVista("cambioDatosPersonales",$data);  
     }
-    public function cambiarDatosPersonales()
-    {
+
+    /**
+     * It updates the user's data in the database
+     */
+    public function cambiarDatosPersonales(){
         $mensaje = 'Resultado:<br>';
         $this->usuarios->update( session('id'),
                                     ['nombre' => $this->request->getPost('nombre'),
@@ -350,9 +365,12 @@ class Usuarios extends BaseController
 
         $this->cargarVista("datosPersonales",$data); 
     }
-    //PAGINA PARA CAMBIAR CONTRASEÑA PERSONAL
-    public function cambioPassPersonal()
-    {
+    
+    /**
+     * It loads a view called "cambioPassPersonal" and passes it an array with two elements, "titulo"
+     * and "id"
+     */
+    public function cambioPassPersonal(){
         
         $id = session('id');
         $data = ['titulo' => 'Cambio Contraseña', 'id' => $id];
@@ -360,8 +378,12 @@ class Usuarios extends BaseController
         
         $this->cargarVista("cambioPassPersonal",$data); 
     }
-    public function cambiarPassPersonal()
-    {
+
+    /**
+     * It takes the user's old password, the new password and the new password repeated, and if the old
+     * password is correct, it changes the password to the new one
+     */
+    public function cambiarPassPersonal(){
         $usuario = $this->usuarios->where('id', session('id'))->first();
         $antPass = $this->request->getPost('antPass');
         $nuevaPass = $this->request->getPost('nuevaPass');
@@ -393,22 +415,25 @@ class Usuarios extends BaseController
         
     }
     
-
-
-    //EDICION DE USUARIOS QUE NO SON TU
-    public function editar($id)
-    {
+    /**
+     * It loads a view called "editar" and passes it an array of data
+     * 
+     * @param id The id of the user to edit
+     */
+    public function editar($id){
 
         $usuario = $this->usuarios->where('id',$id)->first();
-        // $data = ['titulo' => 'Editar Usuario', 'datos' => $usuario, 'origen' => $origen];
         $data = ['titulo' => 'Editar Usuario', 'datos' => $usuario];
 
         $this->cargarVista("editar",$data);  
     }
 
-    public function actualizar()
-    {
-
+    /**
+     * It updates the user's information in the database
+     * 
+     * @return the view of the page.
+     */
+    public function actualizar(){
         $this->usuarios->update( $this->request->getPost('id'),
                                     ['nombre' => $this->request->getPost('nombre'),
                                     'apellidos' => $this->request->getPost('apellidos'),
@@ -419,8 +444,12 @@ class Usuarios extends BaseController
         return redirect()->to(base_url().'/usuarios');
     }
 
-    public function activar($id)
-    {
+    /**
+     * It activates a user by setting the `activo` field to `1` in the database
+     * 
+     * @param id The id of the user to be activated
+     */
+    public function activar($id){
         $this->usuarios->update( $id, ['activo' => 1]);
 
         $usuario = $this->usuarios->where('id',$id)->first();
@@ -434,9 +463,12 @@ class Usuarios extends BaseController
         return redirect()->to(base_url().'/usuarios/usuariosNoActivos');
     }
 
-    public function desactivar($id)
-    {
-
+    /**
+     * It desactivates a user
+     * 
+     * @param id The id of the user to be deactivated.
+     */
+    public function desactivar($id){
         $this->usuarios->update( $id, ['activo' => 0]);
         $usuario = $this->usuarios->where('id',$id)->first();
 
@@ -449,8 +481,13 @@ class Usuarios extends BaseController
         return redirect()->to(base_url().'/usuarios/usuariosActivos');
     }
 
-    public function login()
-    {
+    /**
+     * It checks if the password is correct and if the user is active. If so, it creates a session with
+     * the user's data and redirects to the resources page. If not, it shows an error message
+     * 
+     * @return the view of the login page.
+     */
+    public function login(){
         $email = trim($this->request->getPost('email'));
         $password = $this->request->getPost('password');
         $mensaje = 'Resultado:<br>';
@@ -486,23 +523,31 @@ class Usuarios extends BaseController
         }
     }
 
-    public function logout()
-    {
+    /**
+     * It destroys the session and redirects to the base url.
+     * 
+     * @return A redirect to the base url with the path /recursos
+     */
+    public function logout(){
         $session = session();
         $session->destroy();
         return redirect()->to(base_url('/recursos'));
     }
 
-////////////////////////////////////////////////////////////////////////////////////
-/////// Registro masivo y csv ////////
-    public function registroMasivo()
-    {
+    /**
+     * It loads the view "registroMasivo" and passes the array  to it
+     */
+    public function registroMasivo(){
         $data = ['titulo' => 'Registro Masivo de usuarios'];
         $this->cargarVista("registroMasivo",$data);
     }
 
-    public function cargarArchivo()
-    {
+    /**
+    * It reads a CSV file, and for each row, it checks if the email address already exists in the
+    * database. If it does, it adds a message to the  variable. If it doesn't, it adds the user
+    * to the database, and sends an email to the user
+    */
+    public function cargarArchivo(){
 
         $respNombre = $this->request->getPost('respNombre');
         $respApellidos = $this->request->getPost('respApellidos');
@@ -565,5 +610,6 @@ class Usuarios extends BaseController
         $this->cargarVista("registroMasivo",$data);
         
     }
+
 }
 
