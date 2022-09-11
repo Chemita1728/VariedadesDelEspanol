@@ -11,6 +11,9 @@
                 <a href="<?php echo base_url(); ?>/recursos/editarRecurso/<?php echo $resultado['resourceID']; ?>" class="btn btn-dark">
                     <i class="fas fa-pencil-alt"></i>
                 </a> 
+                <a onclick="deleteResourcePopUp()" class="btn btn-dark">
+                    <i class="fas fa-trash"></i>
+                </a> 
             </div>    
         <?php } ?> 
 
@@ -30,6 +33,7 @@
     ?> 
 
     <input type="hidden" type="text" id="idRec"  name="idRec" value="<?php echo $resultado['resourceID']; ?>"/>
+    <input type="hidden" type="text" id="title"  name="title" value="<?php echo $resultado['title']; ?>"/>
 
     <div class="card shadow mb-4">  
         <div class="card-header py-3">
@@ -156,6 +160,23 @@
             document.getElementById("archivoSecundario").style.display = "block";
             document.getElementById("botonDescargaSecundario").style.display = "block";
             document.getElementById("botonArchivoSecundario").style.display = "none";
+        }
+
+        function deleteResourcePopUp() {
+            if( confirm("Estas seguro de que quieres borrar el recurso?")){
+                if( confirm("Si vuelve a aceptar se borrara el recurso permanentemente, estas SEGURO?")){
+                    var id = document.getElementById("idRec").value;
+                    var title = document.getElementById("title").value;
+                    $.ajax({
+                        url: "<?php echo base_url(); ?>/recursos/borrarRecurso",
+                        method: "POST",
+                        data: {id: id, title: title}
+                    }).done(function(res){
+                        alert(res);
+                        window.location.href = "<?php echo base_url(); ?>/recursos/recursos";
+                    });
+                }
+            }
         }
 
     </script>

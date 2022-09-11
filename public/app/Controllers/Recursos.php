@@ -1030,4 +1030,13 @@ class Recursos extends BaseController
 
     }
 
+    public function borrarRecurso(){
+        
+        $id = $this->request->getPost('id');
+        $title = $this->request->getPost('title');
+        $this->recursos->delete( $id );                    
+        echo "El recurso con el titulo \"".utf8_decode($title)."\" se ha borrado";
+
+    }
+
 }
