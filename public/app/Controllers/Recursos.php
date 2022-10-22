@@ -8,7 +8,7 @@ use App\Models\ValoresModel;
 use App\Models\CompuestoModel;
 use App\Models\CaracteristicasModel;
 
-use App\Libraries\ZipFile;
+use App\Libraries\ZipFile; 
 
 class Recursos extends BaseController
 {
@@ -206,20 +206,20 @@ class Recursos extends BaseController
                 $folder = "files";
                 $formatColumn = "fileFormat";
                 $column = "file";
-                $nombreArchivo = "primario_Rec".$recurso['resourceID'];
+                //$nombreArchivo = "primario_Rec".$recurso['resourceID'].".".$recurso["fileFormat"];
             } 
             else{
                 $file = $this->request->getFile('file2'); 
                 $folder = "secondaryFiles";
                 $formatColumn = "file2Format";
                 $column = "file2";
-                $nombreArchivo = "secundario_Rec".$recurso['resourceID'];
+                //$nombreArchivo = "secundario_Rec".$recurso['resourceID'].".".$recurso["file2Format"];
             }
             if( $file->isValid() && ! $file->hasMoved() ){
     
                 $fileFormat = $file->guessExtension();
                 if( $fileFormat == "" ) $fileFormat = "docx"; 
-                //$nombreArchivo = $file->getRandomName();
+                $nombreArchivo = $file->getRandomName();
     
                 /* Moving the file to the folder "uploads/files" and updating the database with the new
                 file name. */
@@ -440,14 +440,14 @@ class Recursos extends BaseController
                 $folder = "files";
                 $formatColumn = "fileFormat";
                 $column = "file";
-                $nombreArchivo = "primario_Rec".$recurso['resourceID'];
+                //$nombreArchivo = "primario_Rec".$recurso['resourceID'];
             } 
             else{
                 $file = $this->request->getFile('file2'); 
                 $folder = "secondaryFiles";
                 $formatColumn = "file2Format";
                 $column = "file2";
-                $nombreArchivo = "secundario_Rec".$recurso['resourceID'];
+                //$nombreArchivo = "secundario_Rec".$recurso['resourceID'];
             }
 
             if( $file->isValid() && ! $file->hasMoved() ){
@@ -459,7 +459,7 @@ class Recursos extends BaseController
 
                 $fileFormat = $file->guessExtension();
                 if( $fileFormat == "" ) $fileFormat = "docx"; 
-                //$nombreArchivo = $file->getRandomName();
+                $nombreArchivo = $file->getRandomName();
     
                 /* Moving the file to the folder "uploads/files" and updating the database with the new
                 file name. */
@@ -650,7 +650,6 @@ class Recursos extends BaseController
                                     'link' => $link,
                                     'variety' => $variety]);
         }
-
         
         $recurso = $this->recursos->where('resourceID', $id)->first();   
         for( $i = 0; $i<2; $i++){
@@ -659,14 +658,14 @@ class Recursos extends BaseController
                 $folder = "files";
                 $formatColumn = "fileFormat";
                 $column = "file";
-                $nombreArchivo = "primario_Rec".$recurso['resourceID'];
+                //$nombreArchivo = "primario_Rec".$recurso['resourceID'];
             } 
             else{
                 $file = $this->request->getFile('file2'); 
                 $folder = "secondaryFiles";
                 $formatColumn = "file2Format";
                 $column = "file2";
-                $nombreArchivo = "secundario_Rec".$recurso['resourceID'];
+                //$nombreArchivo = "secundario_Rec".$recurso['resourceID'];
             }
 
             if( $file->isValid() && ! $file->hasMoved() ){
@@ -678,7 +677,7 @@ class Recursos extends BaseController
 
                 $fileFormat = $file->guessExtension();
                 if( $fileFormat == "" ) $fileFormat = "docx"; 
-                //$nombreArchivo = $file->getRandomName();
+                $nombreArchivo = $file->getRandomName();
     
                 /* Moving the file to the folder "uploads/files" and updating the database with the new
                 file name. */
@@ -940,24 +939,24 @@ class Recursos extends BaseController
 
         fclose($file);
 
-        if (file_exists($url)) {
-            header('Content-Description: File Transfer');
-            header('Content-Type: text/csv');
-            header('Content-Disposition: attachment; filename='.basename($url));
-            header('Content-Transfer-Encoding: binary');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            //header('Content-Length: ' . filesize($file_example));
-            ob_clean();
-            flush();
-            readfile($url);
-            // readfile($file_example);
-            exit;
-        }
-        else {
-            echo 'Archivo no disponible.';
-        }
+        // if (file_exists($url)) {
+        //     header('Content-Description: File Transfer');
+        //     header('Content-Type: text/csv');
+        //     header('Content-Disposition: attachment; filename='.basename($url));
+        //     header('Content-Transfer-Encoding: binary');
+        //     header('Expires: 0');
+        //     header('Cache-Control: must-revalidate');
+        //     header('Pragma: public');
+        //     //header('Content-Length: ' . filesize($file_example));
+        //     ob_clean();
+        //     flush();
+        //     readfile($url);
+        //     // readfile($file_example);
+        //     exit;
+        // }
+        // else {
+        //     echo 'Archivo no disponible.';
+        // }
 
         // Creamos un instancia de la clase ZipArchive
         // $zip = new \ZipArchive();
@@ -984,22 +983,27 @@ class Recursos extends BaseController
         //$this->zip->download('recursos.zip');
         //$zipFile = new \PhpZip\ZipFile();
 
-        // $a = new PharData('archive.tar');
+        $zip = "../public/tempFiles/archivosRecurso.zip";
+        if (file_exists($zip)) unlink( $zip);
 
-        // // ADD FILES TO archive.tar FILE
-        // $a->addFile('../public/tempFiles/rec".$id.".csv');
-    
-        // // COMPRESS archive.tar FILE. COMPRESSED FILE WILL BE archive.tar.gz
-        // $a->compress(Phar::GZ);
-
-        // header("Content-type: application/octet-stream");
-        // header("Content-disposition: attachment; filename=archive.tar");
-        // // leemos el archivo creado
-        // readfile('archive.tar');
-    
-        // // NOTE THAT BOTH FILES WILL EXISTS. SO IF YOU WANT YOU CAN UNLINK archive.tar
-        // unlink('archive.tar');
-
+        $file = $recurso["file"];
+        $fileFormat = $recurso["fileFormat"];
+        $file2 = $recurso["file2"];
+        $file2Format = $recurso["file2Format"];
+        exec("zip -j ".$zip." ../public/tempFiles/rec".$recurso["resourceID"].".csv ../public/uploads/files/".$file." ../public/uploads/secondaryFiles/".$file2);
+        if (file_exists($zip)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/zip');
+            header('Content-Disposition: attachment; filename=pepe.zip');
+            header('Content-Transfer-Encoding: binary');
+            ob_clean();
+            flush();
+            readfile($zip);
+            exit;
+        }
+        else {
+            echo 'Archivo no disponible.';
+        }
     }
 
     /**
@@ -1025,11 +1029,9 @@ class Recursos extends BaseController
             header('Expires: 0');
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
-            //header('Content-Length: ' . filesize($file_example));
             ob_clean();
             flush();
             readfile($url);
-            // readfile($file_example);
             exit;
         }
         else {
@@ -1056,11 +1058,9 @@ class Recursos extends BaseController
             header('Expires: 0');
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
-            //header('Content-Length: ' . filesize($file_example));
             ob_clean();
             flush();
             readfile($url);
-            // readfile($file_example);
             exit;
         }
         else {
