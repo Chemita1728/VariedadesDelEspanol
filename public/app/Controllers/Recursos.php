@@ -51,13 +51,26 @@ class Recursos extends BaseController
     }
 
     /**
-     * It loads a view, and passes it some data
+     * It loads a view from resources, and passes it some data
      * 
      * @param nombre The name of the view file.
      * @param data An array of data that will be passed to the view.
      */
     public function cargarVista($nombre,$data){
         $vista = 'recursos/'.$nombre;
+        echo view('header');
+        echo view($vista, $data);
+        echo view('footer');
+    }
+
+    /**
+     * It loads a view from characteristics, and passes it some data
+     * 
+     * @param nombre The name of the view file.
+     * @param data An array of data that will be passed to the view.
+     */
+    public function cargarVistaCaracteristicas($nombre,$data){
+        $vista = 'caracteristicas/'.$nombre;
         echo view('header');
         echo view($vista, $data);
         echo view('footer');
@@ -193,18 +206,20 @@ class Recursos extends BaseController
                 $folder = "files";
                 $formatColumn = "fileFormat";
                 $column = "file";
+                $nombreArchivo = "primario_Rec".$recurso['resourceID'];
             } 
             else{
                 $file = $this->request->getFile('file2'); 
                 $folder = "secondaryFiles";
                 $formatColumn = "file2Format";
                 $column = "file2";
+                $nombreArchivo = "secundario_Rec".$recurso['resourceID'];
             }
             if( $file->isValid() && ! $file->hasMoved() ){
     
                 $fileFormat = $file->guessExtension();
                 if( $fileFormat == "" ) $fileFormat = "docx"; 
-                $nombreArchivo = $file->getRandomName();
+                //$nombreArchivo = $file->getRandomName();
     
                 /* Moving the file to the folder "uploads/files" and updating the database with the new
                 file name. */
@@ -425,12 +440,14 @@ class Recursos extends BaseController
                 $folder = "files";
                 $formatColumn = "fileFormat";
                 $column = "file";
+                $nombreArchivo = "primario_Rec".$recurso['resourceID'];
             } 
             else{
                 $file = $this->request->getFile('file2'); 
                 $folder = "secondaryFiles";
                 $formatColumn = "file2Format";
                 $column = "file2";
+                $nombreArchivo = "secundario_Rec".$recurso['resourceID'];
             }
 
             if( $file->isValid() && ! $file->hasMoved() ){
@@ -442,7 +459,7 @@ class Recursos extends BaseController
 
                 $fileFormat = $file->guessExtension();
                 if( $fileFormat == "" ) $fileFormat = "docx"; 
-                $nombreArchivo = $file->getRandomName();
+                //$nombreArchivo = $file->getRandomName();
     
                 /* Moving the file to the folder "uploads/files" and updating the database with the new
                 file name. */
@@ -529,10 +546,12 @@ class Recursos extends BaseController
         $significado = $this->request->getPost('sign');
 
         $vocabulario = $this->valores->where('charID', 3)->findAll();
-        $num = count($vocabulario) + 1;
+        foreach( $vocabulario as $value){
+            $last = $value['valID'];
+        }
 
         $this->valores->insert(['charID' => 3,
-                                'valID' => $num,
+                                'valID' => $last+1,
                                 'at1' => $lema,
                                 'at2' => $forma,
                                 'at3' => $significado]);      
@@ -640,12 +659,14 @@ class Recursos extends BaseController
                 $folder = "files";
                 $formatColumn = "fileFormat";
                 $column = "file";
+                $nombreArchivo = "primario_Rec".$recurso['resourceID'];
             } 
             else{
                 $file = $this->request->getFile('file2'); 
                 $folder = "secondaryFiles";
                 $formatColumn = "file2Format";
                 $column = "file2";
+                $nombreArchivo = "secundario_Rec".$recurso['resourceID'];
             }
 
             if( $file->isValid() && ! $file->hasMoved() ){
@@ -657,7 +678,7 @@ class Recursos extends BaseController
 
                 $fileFormat = $file->guessExtension();
                 if( $fileFormat == "" ) $fileFormat = "docx"; 
-                $nombreArchivo = $file->getRandomName();
+                //$nombreArchivo = $file->getRandomName();
     
                 /* Moving the file to the folder "uploads/files" and updating the database with the new
                 file name. */
@@ -727,7 +748,7 @@ class Recursos extends BaseController
                                 ->where('charID', $tipo)
                                 ->first();
         $data = ['proGra' => $proGra, 'tipo' => $tipo];
-        $this->cargarVista("nuevaProGra",$data);
+        $this->cargarVistaCaracteristicas("nuevaProGra",$data);
     }
 
     /**
@@ -743,10 +764,12 @@ class Recursos extends BaseController
         $data=(['','']);
 
         $proGra = $this->valores->where('charID', $tipo)->findAll();
-        $cont = count($proGra) + 1;
+        foreach( $proGra as $value){
+            $last = $value['valID'];
+        }
     
         $this->valores->insert(['charID' => $tipo,
-                                    'valID' => $cont,
+                                    'valID' => $last+1,
                                     'at1' => $proGra1,
                                     'at2' => $proGra2,
                                     'at3' => $proGra3]);
@@ -761,7 +784,7 @@ class Recursos extends BaseController
                                 ->first();
 
         $data = ['proGra' => $proGra, 'tipo' => $tipo];
-        $this->cargarVista("nuevaProGra",$data);
+        $this->cargarVistaCaracteristicas("nuevaProGra",$data);
     }
 
     /**
@@ -961,6 +984,22 @@ class Recursos extends BaseController
         //$this->zip->download('recursos.zip');
         //$zipFile = new \PhpZip\ZipFile();
 
+        // $a = new PharData('archive.tar');
+
+        // // ADD FILES TO archive.tar FILE
+        // $a->addFile('../public/tempFiles/rec".$id.".csv');
+    
+        // // COMPRESS archive.tar FILE. COMPRESSED FILE WILL BE archive.tar.gz
+        // $a->compress(Phar::GZ);
+
+        // header("Content-type: application/octet-stream");
+        // header("Content-disposition: attachment; filename=archive.tar");
+        // // leemos el archivo creado
+        // readfile('archive.tar');
+    
+        // // NOTE THAT BOTH FILES WILL EXISTS. SO IF YOU WANT YOU CAN UNLINK archive.tar
+        // unlink('archive.tar');
+
     }
 
     /**
@@ -1037,6 +1076,34 @@ class Recursos extends BaseController
         $this->recursos->delete( $id );                    
         echo "El recurso con el título \"".utf8_decode($title)."\" se ha borrado.";
 
+    }
+
+    public function listaCaracteristicas($tipo){
+        $valores = $this->valores->where('charID', $tipo)->findAll();
+        $data = ['valores' => $valores, 'tipo' => $tipo];
+        $this->cargarVistaCaracteristicas("listaCaracteristicas",$data);
+    }
+
+    public function borrarPronunciacion(){
+        $valID = $this->request->getPost('valID');
+        $this->valores->where('charID', 1)
+                        ->where('valID', $valID)
+                        ->delete();
+        echo "La caracteristica seleccionada se ha borrado.";
+    }
+    public function borrarGramatica(){
+        $valID = $this->request->getPost('valID');
+        $this->valores->where('charID', 2)
+                        ->where('valID', $valID)
+                        ->delete();
+        echo "La caracteristica seleccionada se ha borrado.";
+    }
+    public function borrarVocabulario(){
+        $valID = $this->request->getPost('valID');
+        $this->valores->where('charID', 3)
+                        ->where('valID', $valID)
+                        ->delete();
+        echo "La caracteristica seleccionada se ha borrado.";
     }
 
 }

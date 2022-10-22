@@ -125,6 +125,9 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaProGra/1">Agregar Pronunciación</a>
                                 <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/nuevaProGra/2">Agregar Gramática</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/listaCaracteristicas/1">Borrar Pronunciación</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/listaCaracteristicas/2">Borrar Gramatica</a>
+                                <a class="collapse-item" href="<?php echo base_url(); ?>/recursos/listaCaracteristicas/3">Borrar Vocabulario</a>
                             </div>
                         </div>
                     </li>

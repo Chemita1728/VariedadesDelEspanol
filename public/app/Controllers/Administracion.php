@@ -10,6 +10,7 @@ use App\Models\CaracteristicasModel;
 
 use App\Libraries\ZipFile;
 
+
 class Administracion extends BaseController
 {    
     /**
@@ -18,7 +19,7 @@ class Administracion extends BaseController
     public function __construct(){
         $this->db = \Config\Database::connect();
     }
-
+    
     /**
      * The function index() is a public function that returns a view of the header, the administration
      * page, and the footer
@@ -28,18 +29,26 @@ class Administracion extends BaseController
         echo view('administracion');
         echo view('footer');
     }
-
+    
     public function getBackup(){
-        // $dbhost = 'http://localhost:3306';
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+        // $dbhost = 'http://bahia.ugr.es:3306';
         // $dbuser = 'root';
         // $dbpass = 'VariedadesDelEspanol';
-        $backup_file = "../public/tempFiles/dbBackup_".date("d_m_y").".sql";
+        $backup_file = "../public/tempFiles/dbBackup1_".date("d_m_y").".sql";
         // $command = "mysqldump --opt -h $dbhost -u $dbuser -p $dbpass ". "test_db | gzip > $backup_file";
         //$command = "mysqldump -u $dbuser -h $dbhost -p $dbpass ". "test_db | gzip > $backup_file";
         //$command = "mysqldump --opt --single-transaction -h=$dbhost --password=$dbpass --user=$dbuser > ".$backup_file;
-        $command = "mysqldump -h localhost -u root -P 3306 VariedadesDelEspanol > ".$backup_file;
+        
+        //$command = "mysqldump -h bahia.ugr.es -P 3306 -u root -pVariedadesDelEspanol -d VariedadesDelEspanol > ".$backup_file;
+        
+        $command = "mysqldump -h bahia.ugr.es:3306 -u root -pVariedadesDelEspanol -d VariedadesDelEspanol > ".$backup_file;
 
-        system($command);
+        exec($command);
+
+        echo "<br />".$command;
     }
 
     public function getBackup2(){
@@ -47,8 +56,8 @@ class Administracion extends BaseController
         $mysqlDatabaseName ='VariedadesDelEspanol';
         $mysqlUserName ='root';
         $mysqlPassword ='VariedadesDelEspanol';
-        $mysqlHostName ='localhost:3306/db';
-        $mysqlExportPath = "../public/tempFiles/dbBackup_".date("d_m_y").".sql";
+        $mysqlHostName ='http://bahia.ugr.es:3306';
+        $mysqlExportPath = "../public/tempFiles/dbBackup2_".date("d_m_y").".sql";
         
         // Backup con mysqldump
         $command='mysqldump --opt -h' .$mysqlHostName .' -u' .$mysqlUserName .' -p' .$mysqlPassword .' ' .$mysqlDatabaseName .' > ' .$mysqlExportPath;
@@ -70,11 +79,11 @@ class Administracion extends BaseController
     }
 
     public function getBackup3(){
-        $dbhost = 'https://localhost:3306';
+        $dbhost = 'http://bahia.ugr.es:3306';
         $dbuser = 'root';
         $dbpass = 'VariedadesDelEspanol';
         
-        $backup_file = "../public/tempFiles/dbBackup_".date("d_m_y").".gz";
+        $backup_file = "../public/tempFiles/dbBackup3_".date("d_m_y").".gz";
         $command = "mysqldump --opt -h $dbhost -u $dbuser -p $dbpass ". "VariedadesDelEspanol | gzip > $backup_file";
         
         system($command);
