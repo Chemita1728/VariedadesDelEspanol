@@ -63,7 +63,7 @@
             <?php if ( $resultado['fileFormat'] == "docx" ) { ?>
                 <div class="mb-4" id="archivo" style="display: none">
                     <h4>El archivo que esta relacionado con este recurso es un .docx</h4>
-                    <h5>No es posible verlo dentro de esta web y tendra que descargarlo si quiere hacerlo.</h5>
+                    <h5>No es posible verlo dentro de esta web y tendrá que descargarlo si quiere hacerlo.</h5>
                 </div>
             <?php } ?> 
             <div class="mb-4" id="botonDescarga" style="display: none">    
@@ -85,7 +85,7 @@
         <?php if ( $resultado['file2Format'] == "docx" ) { ?>
             <div class="mb-4" id="archivoSecundario" style="display: none">
                 <h4>El archivo secundario que esta relacionado con este recurso es un .docx</h4>
-                <h5>No es posible verlo dentro de esta web y tendra que descargarlo si quiere hacerlo.</h5>
+                <h5>No es posible verlo dentro de esta web y tendrá que descargarlo si quiere hacerlo.</h5>
             </div>
         <?php } ?> 
         <div class="mb-4" id="botonDescargaSecundario" style="display: none">    
@@ -163,8 +163,8 @@
         }
 
         function deleteResourcePopUp() {
-            if( confirm("Estas seguro de que quieres borrar el recurso?")){
-                if( confirm("Si vuelve a aceptar se borrara el recurso permanentemente, estas SEGURO?")){
+            if( confirm("¿Estás seguro de que quieres borrar el recurso?")){
+                if( confirm("Si vuelve a aceptar se borrara el recurso permanentemente, ¿Estás SEGURO?")){
                     var id = document.getElementById("idRec").value;
                     var title = document.getElementById("title").value;
                     $.ajax({

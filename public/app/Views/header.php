@@ -200,6 +200,13 @@
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Datos Personales
                                     </a>
+                                    <?php if (session('role') == 3) { ?>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="<?php echo base_url(); ?>/administracion" >
+                                            <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Administración
+                                        </a>
+                                    <?php } ?>  
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="<?php echo base_url(); ?>/usuarios/logout" >
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

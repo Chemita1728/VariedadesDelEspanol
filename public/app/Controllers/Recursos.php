@@ -1002,7 +1002,7 @@ class Recursos extends BaseController
     public function descargarArchivoSecundario( $id ){
 
         $recurso = $this->recursos->where('resourceID', $id)->first(); 
- 
+
         $fileFormat = $recurso['file2Format'];
         $file = $recurso['file2'];
 
@@ -1035,7 +1035,7 @@ class Recursos extends BaseController
         $id = $this->request->getPost('id');
         $title = $this->request->getPost('title');
         $this->recursos->delete( $id );                    
-        echo "El recurso con el titulo \"".utf8_decode($title)."\" se ha borrado";
+        echo "El recurso con el título \"".utf8_decode($title)."\" se ha borrado.";
 
     }
 
